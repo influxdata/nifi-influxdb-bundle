@@ -19,6 +19,7 @@
 
     <properties>
         <nifi.version>1.8.0</nifi.version>
+        <surefire.version>2.22.0</surefire.version>
     </properties>
 
     <parent>
