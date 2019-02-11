@@ -16,15 +16,15 @@
  */
 package org.influxdata.nifi.services;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.ssl.SSLContextService;
 import org.influxdb.InfluxDB;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 import static org.mockito.Mockito.when;
 

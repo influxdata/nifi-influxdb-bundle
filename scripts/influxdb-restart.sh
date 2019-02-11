@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -14,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-#!/bin/bash
+
 
 #
 # The script start two instances of InfluxDB. The first is unsecured and is reachable on http://localhost:8086.
@@ -22,13 +23,19 @@
 #
 set -e
 
+DEFAULT_INFLUXDB_VERSION="1.7"
+INFLUXDB_VERSION="${INFLUXDB_VERSION:-$DEFAULT_INFLUXDB_VERSION}"
+INFLUXDB_IMAGE=influxdb:${INFLUXDB_VERSION}-alpine
+
+SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
 docker kill influxdb || true
 docker rm influxdb || true
 
 docker kill influxdb-secured || true
 docker rm influxdb-secured || true
 
-docker pull influxdb:latest || true
+docker pull ${INFLUXDB_IMAGE} || true
 
 echo "Starting unsecured InfluxDB..."
 
@@ -37,8 +44,8 @@ docker run \
           --name influxdb \
           --publish 8086:8086 \
           --publish 8089:8089/udp \
-          --volume ${PWD}/nifi-influxdb-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
-      influxdb:latest
+          --volume ${SCRIPT_PATH}/../nifi-influxdb-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
+      ${INFLUXDB_IMAGE}
 
 echo "Starting secured InfluxDB..."
 
@@ -47,16 +54,9 @@ docker run \
           --name influxdb-secured \
           --publish 9086:9086 \
           --publish 9089:9089/udp \
-          --volume ${PWD}/nifi-influxdb-services/src/test/resources/influxdb-secured.conf:/etc/influxdb/influxdb.conf \
-          --volume ${PWD}/nifi-influxdb-services/src/test/resources/ssl/influxdb-selfsigned.crt:/etc/influxdb/influxdb-selfsigned.crt \
-          --volume ${PWD}/nifi-influxdb-services/src/test/resources/ssl/influxdb-selfsigned.key:/etc/influxdb/influxdb-selfsigned.key \
-      influxdb:latest
+          --volume ${SCRIPT_PATH}/../nifi-influxdb-services/src/test/resources/influxdb-secured.conf:/etc/influxdb/influxdb.conf \
+          --volume ${SCRIPT_PATH}/../nifi-influxdb-services/src/test/resources/ssl/influxdb-selfsigned.crt:/etc/influxdb/influxdb-selfsigned.crt \
+          --volume ${SCRIPT_PATH}/../nifi-influxdb-services/src/test/resources/ssl/influxdb-selfsigned.key:/etc/influxdb/influxdb-selfsigned.key \
+      ${INFLUXDB_IMAGE}
 
 docker ps
-
-echo "Run maven integration tests..."
-
-mvn clean verify failsafe:integration-test failsafe:verify
-
-docker kill influxdb || true
-docker kill influxdb-secured || true

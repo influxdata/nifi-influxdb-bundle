@@ -16,6 +16,9 @@
  */
 package org.influxdata.nifi.services;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBIOException;
 import org.junit.Assert;
@@ -23,9 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.stubbing.Answer;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 public class TestStandardInfluxDBService extends AbstractTestStandardInfluxDBService {
 

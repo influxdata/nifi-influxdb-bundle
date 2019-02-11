@@ -16,6 +16,12 @@
  */
 package org.influxdata.nifi.services;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.processor.AbstractProcessor;
@@ -32,12 +38,6 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
 
 public abstract class AbstractTestStandardInfluxDBService {
 

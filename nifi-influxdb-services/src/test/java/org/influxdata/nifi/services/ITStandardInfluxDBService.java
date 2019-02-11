@@ -16,12 +16,12 @@
  */
 package org.influxdata.nifi.services;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 public class ITStandardInfluxDBService extends AbstractTestStandardInfluxDBService {
 

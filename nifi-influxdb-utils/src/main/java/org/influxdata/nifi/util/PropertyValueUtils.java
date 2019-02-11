@@ -16,6 +16,10 @@
  */
 package org.influxdata.nifi.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -24,10 +28,6 @@ import org.apache.nifi.context.PropertyContext;
 import org.apache.nifi.flowfile.FlowFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Helper method for operate with {@link PropertyValue}.

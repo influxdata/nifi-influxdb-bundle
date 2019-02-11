@@ -16,6 +16,21 @@
  */
 package org.influxdata.nifi.processors;
 
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import org.influxdata.nifi.processors.WriteOptions.MissingItemsBehaviour;
+import org.influxdata.nifi.processors.WriteOptions.NullValueBehaviour;
+import org.influxdata.nifi.services.InfluxDBService;
+import org.influxdata.nifi.util.PropertyValueUtils;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.BooleanUtils;
@@ -34,31 +49,17 @@ import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.flowfile.attributes.CoreAttributes;
-import org.influxdata.nifi.services.InfluxDBService;
-import org.influxdata.nifi.util.PropertyValueUtils;
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.exception.ProcessException;
 import org.apache.nifi.processor.util.StandardValidators;
-import org.influxdata.nifi.processors.WriteOptions.MissingItemsBehaviour;
-import org.influxdata.nifi.processors.WriteOptions.NullValueBehaviour;
 import org.apache.nifi.serialization.RecordReaderFactory;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDB.ConsistencyLevel;
 import org.influxdb.InfluxDBException;
 import org.influxdb.InfluxDBIOException;
-
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import static org.influxdata.nifi.util.PropertyValueUtils.getEnumValue;
 import static org.influxdb.BatchOptions.DEFAULT_BATCH_INTERVAL_DURATION;

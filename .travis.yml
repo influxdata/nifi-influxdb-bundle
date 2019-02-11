@@ -39,7 +39,8 @@ services:
 install: true
 
 script:
-  - mvn -B clean install
+  - ./scripts/influxdb-restart.sh
+  - mvn -B clean verify failsafe:integration-test failsafe:verify
   - bash <(curl -s https://codecov.io/bash)
 
 after_failure:

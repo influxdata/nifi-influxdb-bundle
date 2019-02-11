@@ -16,6 +16,23 @@
  */
 package org.influxdata.nifi.services;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.ArrayUtils;
@@ -28,23 +45,6 @@ import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.ssl.SSLContextService;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
-
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.GeneralSecurityException;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import static org.influxdata.nifi.util.PropertyValueUtils.getEnumValue;
 

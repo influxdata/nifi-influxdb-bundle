@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,13 +16,9 @@
  */
 package org.influxdata.nifi.processors;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.EOFException;
 import java.net.SocketTimeoutException;
 import java.util.List;
-
-import org.influxdata.nifi.processors.PutInfluxDB;
 
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.util.MockFlowFile;
@@ -33,6 +29,8 @@ import org.influxdb.InfluxDBIOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestPutInfluxDB {
     private TestRunner runner;

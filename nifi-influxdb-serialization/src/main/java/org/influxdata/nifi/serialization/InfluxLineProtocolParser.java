@@ -16,6 +16,12 @@
  */
 package org.influxdata.nifi.serialization;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,12 +29,6 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.influxdb.impl.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Parse for <a href="https://docs.influxdata.com/influxdb/latest/write_protocols/line_protocol_tutorial/">

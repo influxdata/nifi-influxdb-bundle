@@ -16,13 +16,17 @@
  */
 package org.influxdata.nifi.processors;
 
-import avro.shaded.com.google.common.collect.Maps;
-import org.apache.nifi.flowfile.FlowFile;
-import org.apache.nifi.processor.ProcessSession;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.influxdata.nifi.processors.WriteOptions.ComplexFieldBehaviour;
 import org.influxdata.nifi.processors.WriteOptions.MissingItemsBehaviour;
 import org.influxdata.nifi.processors.WriteOptions.NullValueBehaviour;
+
+import avro.shaded.com.google.common.collect.Maps;
+import org.apache.nifi.flowfile.FlowFile;
+import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.serialization.record.RecordFieldType;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
@@ -32,10 +36,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class TestPutInfluxDBRecordSettings extends AbstractTestPutInfluxDBRecord {
 

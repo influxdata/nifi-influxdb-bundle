@@ -16,9 +16,13 @@
  */
 package org.influxdata.nifi.processors;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import org.influxdata.nifi.services.InfluxDBService;
 import org.influxdata.nifi.services.StandardInfluxDBService;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.serialization.record.MockRecordParser;
 import org.apache.nifi.util.MockComponentLog;
@@ -37,11 +41,6 @@ import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
-import org.influxdata.nifi.processors.PutInfluxDBRecord;
 
 public abstract class AbstractTestPutInfluxDBRecord {
 

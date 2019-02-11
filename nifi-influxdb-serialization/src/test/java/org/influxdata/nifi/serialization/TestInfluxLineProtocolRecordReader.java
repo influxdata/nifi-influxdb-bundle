@@ -16,6 +16,13 @@
  */
 package org.influxdata.nifi.serialization;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -33,13 +40,6 @@ import org.influxdb.impl.TimeUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static org.apache.nifi.serialization.record.RecordFieldType.LONG;
 import static org.apache.nifi.serialization.record.RecordFieldType.MAP;

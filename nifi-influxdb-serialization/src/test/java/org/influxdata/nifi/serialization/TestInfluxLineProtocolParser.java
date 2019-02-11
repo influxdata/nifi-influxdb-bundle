@@ -16,6 +16,9 @@
  */
 package org.influxdata.nifi.serialization;
 
+import java.util.Map;
+import java.util.stream.Stream;
+
 import avro.shaded.com.google.common.collect.MapDifference;
 import avro.shaded.com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -24,9 +27,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-import java.util.stream.Stream;
 
 /**
  * The tests comes from https://github.com/influxdata/influxdb/blob/1.6/models/points_test.go.

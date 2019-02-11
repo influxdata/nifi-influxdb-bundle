@@ -16,6 +16,9 @@
  */
 package org.influxdata.nifi.services;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.controller.ControllerService;
@@ -23,9 +26,6 @@ import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.ssl.SSLContextService;
 import org.influxdb.InfluxDB;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 /**
  * This controller service interface providing client connection to InfluxDB.

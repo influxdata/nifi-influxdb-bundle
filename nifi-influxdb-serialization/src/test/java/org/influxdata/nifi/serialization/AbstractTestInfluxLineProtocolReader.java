@@ -16,6 +16,10 @@
  */
 package org.influxdata.nifi.serialization;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Map;
+
 import org.apache.nifi.logging.ComponentLog;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.util.TestRunner;
@@ -24,10 +28,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Map;
 
 
 public abstract class AbstractTestInfluxLineProtocolReader {

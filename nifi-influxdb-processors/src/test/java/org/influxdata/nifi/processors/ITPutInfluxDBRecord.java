@@ -16,12 +16,21 @@
  */
 package org.influxdata.nifi.processors;
 
-import com.google.gson.JsonObject;
-import edu.umd.cs.findbugs.annotations.NonNull;
-import org.apache.commons.lang3.RandomUtils;
+import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
+
 import org.influxdata.nifi.serialization.InfluxLineProtocolReader;
 import org.influxdata.nifi.services.InfluxDBService;
 import org.influxdata.nifi.services.StandardInfluxDBService;
+
+import com.google.gson.JsonObject;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.nifi.json.JsonTreeReader;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.serialization.record.MockRecordParser;
@@ -38,14 +47,6 @@ import org.influxdb.dto.QueryResult;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
 
 import static org.apache.nifi.schema.access.SchemaAccessUtils.SCHEMA_ACCESS_STRATEGY;
 import static org.apache.nifi.schema.access.SchemaAccessUtils.SCHEMA_TEXT;

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,18 +15,6 @@
  * limitations under the License.
  */
 package org.influxdata.nifi.processors;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Assert;
-
-import org.apache.nifi.processor.ProcessContext;
-import org.apache.nifi.util.MockFlowFile;
-import org.apache.nifi.util.TestRunners;
-import org.influxdb.InfluxDB;
-import org.influxdb.dto.QueryResult;
-import org.influxdb.dto.QueryResult.Series;
 
 import java.io.StringReader;
 import java.util.HashMap;
@@ -34,10 +22,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.google.gson.Gson;
+import org.apache.nifi.processor.ProcessContext;
+import org.apache.nifi.util.MockFlowFile;
+import org.apache.nifi.util.TestRunners;
+import org.influxdb.InfluxDB;
+import org.influxdb.dto.QueryResult;
+import org.influxdb.dto.QueryResult.Series;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gson.Gson;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 
 
@@ -115,7 +113,7 @@ public class ITExecuteInfluxDBQuery extends AbstractITInfluxDB {
         Series series = queryResult.getResults().get(0).getSeries().get(0);
         assertEquals("series name should be same", "databases", series.getName());
         assertEquals("series column should be same", "name", series.getColumns().get(0));
-        boolean internal = series.getValues().get(0).stream().anyMatch(o -> o.equals("_internal"));
+        boolean internal = series.getValues().stream().anyMatch(o -> o.contains("_internal"));
         Assert.assertTrue("content should contain _internal " + queryResult, internal);
         boolean test = series.getValues().stream().flatMap(i -> ((List<Object>)i).stream()).anyMatch(o -> o.equals("test"));
         Assert.assertTrue("content should contain test " + queryResult, test);

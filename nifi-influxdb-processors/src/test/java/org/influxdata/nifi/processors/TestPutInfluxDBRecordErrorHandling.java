@@ -16,6 +16,12 @@
  */
 package org.influxdata.nifi.processors;
 
+import java.lang.reflect.Constructor;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.util.List;
+import java.util.Map;
+
 import avro.shaded.com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.processor.Relationship;
@@ -28,12 +34,6 @@ import org.influxdb.InfluxDBIOException;
 import org.influxdb.dto.Point;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.lang.reflect.Constructor;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.util.List;
-import java.util.Map;
 
 import static org.influxdata.nifi.processors.AbstractInfluxDBProcessor.INFLUX_DB_ERROR_MESSAGE;
 import static org.influxdata.nifi.processors.AbstractInfluxDBProcessor.INFLUX_DB_ERROR_MESSAGE_LOG;

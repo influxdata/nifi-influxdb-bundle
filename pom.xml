@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements. See the NOTICE file distributed with
-  this work for additional information regarding copyright ownership.
-  The ASF licenses this file to You under the Apache License, Version 2.0
-  (the "License"); you may not use this file except in compliance with
-  the License. You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <properties>
-        <nifi.version>1.8.0</nifi.version>
-        <surefire.version>2.22.0</surefire.version>
-    </properties>
 
     <parent>
         <groupId>org.apache.nifi</groupId>
@@ -43,6 +42,67 @@
         <module>nifi-influxdb-processors</module>
         <module>nifi-influxdb-nar</module>
     </modules>
+
+    <name>InfluxDB Processors For Apache NiFi</name>
+
+    <url>https://github.com/bonitoo-io/nifi-influxdb-bundle</url>
+    <inceptionYear>2018</inceptionYear>
+
+    <organization>
+        <name>InfluxData, Inc.</name>
+        <url>https://influxdata.com</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache License v2</name>
+            <url>https://raw.githubusercontent.com/bonitoo-io/nifi-influxdb-bundle/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Jakub Bednar</name>
+            <email>jakub.bednar@bonitoo.io</email>
+            <organization>Bonitoo</organization>
+            <organizationUrl>https://www.bonitoo.io</organizationUrl>
+        </developer>
+        <developer>
+            <name>Robert Hajek</name>
+            <email>robert.hajek@bonitoo.io</email>
+            <organization>Bonitoo</organization>
+            <organizationUrl>https://www.bonitoo.io</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/bonitoo-io/nifi-influxdb-bundle.git</connection>
+        <developerConnection>scm:git:ssh://github.com:influxdata/nifi-influxdb-bundle.git</developerConnection>
+        <url>http://github.com/bonitoo-io/nifi-influxdb-bundle/tree/master</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>bonitoo-snapshot</id>
+            <url>https://apitea.com/nexus/content/repositories/bonitoo-snapshot/</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <site>
+            <id>gp</id>
+            <url>https://bonitoo-io.github.io/nifi-influxdb-bundle/</url>
+        </site>
+    </distributionManagement>
+
+    <properties>
+        <nifi.version>1.8.0</nifi.version>
+        <surefire.version>2.22.0</surefire.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -145,5 +205,57 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <configuration>
+                    <header>scripts/license_header.txt</header>
+                    <strictCheck>true</strictCheck>
+                    <failIfUnknown>true</failIfUnknown>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                        <conf>SCRIPT_STYLE</conf>
+                        <cnf>SCRIPT_STYLE</cnf>
+                        <toml>SCRIPT_STYLE</toml>
+                        <yml>SCRIPT_STYLE</yml>
+                        <org.apache.nifi.controller.ControllerService>SCRIPT_STYLE</org.apache.nifi.controller.ControllerService>
+                        <org.apache.nifi.processor.Processor>SCRIPT_STYLE</org.apache.nifi.processor.Processor>
+                    </mapping>
+                    <useDefaultExcludes>false</useDefaultExcludes>
+                    <includes>**, **/META-INF/services/**</includes>
+                    <excludes>**/target/**, **/*.jar, **/.git/**, **/.*, **/*.png, **/*.iml, .idea/**,
+                        **/*nightly*/**, **/.m2/**, **/LICENSE, **/NOTICE, **/*.md, **/PLACEHOLDER, **/test/resources/ssl/*
+                    </excludes>
+                    <properties>
+                        <organizationName>${project.organization.name}</organizationName>
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>3.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+    </build>
 
 </project>

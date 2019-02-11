@@ -16,6 +16,9 @@
  */
 package org.influxdata.nifi.services;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.ssl.SSLContextService;
 import org.apache.nifi.ssl.StandardSSLContextService;
@@ -23,9 +26,6 @@ import org.influxdb.InfluxDBIOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 import static org.apache.nifi.ssl.StandardSSLContextService.KEYSTORE;
 import static org.apache.nifi.ssl.StandardSSLContextService.KEYSTORE_PASSWORD;
