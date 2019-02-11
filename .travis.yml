@@ -51,7 +51,7 @@ jobs:
       script: skip
       deploy:
         provider: script
-        script: mvn clean install github-release:release -s scripts/deploy-settings.xml -N -DskipTests
+        script: ./scripts/deploy.sh
         skip_cleanup: true
         on:
           repo: bonitoo-io/nifi-influxdb-bundle
