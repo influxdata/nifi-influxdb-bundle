@@ -98,10 +98,12 @@
     </distributionManagement>
 
     <properties>
-        <nifi.version>1.8.0</nifi.version>
-        <surefire.version>2.22.0</surefire.version>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <nifi.version>1.8.0</nifi.version>
+
+        <plugin.surefire.version>2.22.0</plugin.surefire.version>
+        <plugin.jacoco.version>0.8.2</plugin.jacoco.version>
     </properties>
 
     <dependencyManagement>
@@ -209,6 +211,7 @@
     <build>
 
         <plugins>
+
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
@@ -242,8 +245,65 @@
                         </goals>
                     </execution>
                 </executions>
-
             </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${plugin.jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report-integration</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <propertyName>jacocoArgLine</propertyName>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${plugin.surefire.version}</version>
+                <configuration>
+                    <argLine>@{jacocoArgLine}</argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${plugin.surefire.version}</version>
+                <configuration>
+                    <argLine>@{jacocoArgLine}</argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
         <pluginManagement>
@@ -257,5 +317,23 @@
         </pluginManagement>
 
     </build>
+
+    <reporting>
+        <plugins>
+           
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${plugin.jacoco.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>
