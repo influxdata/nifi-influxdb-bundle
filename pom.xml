@@ -44,6 +44,7 @@
     </modules>
 
     <name>InfluxDB Processors For Apache NiFi</name>
+    <description/>
 
     <url>https://github.com/bonitoo-io/nifi-influxdb-bundle</url>
     <inceptionYear>2018</inceptionYear>
@@ -77,9 +78,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/bonitoo-io/nifi-influxdb-bundle.git</connection>
+        <connection>scm:git:https://github.com/bonitoo-io/nifi-influxdb-bundle.git</connection>
         <developerConnection>scm:git:ssh://github.com:influxdata/nifi-influxdb-bundle.git</developerConnection>
-        <url>http://github.com/bonitoo-io/nifi-influxdb-bundle/tree/master</url>
+        <url>https://github.com/bonitoo-io/nifi-influxdb-bundle/tree/master</url>
     </scm>
 
     <distributionManagement>
@@ -302,6 +303,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>de.jutzig</groupId>
+                <artifactId>github-release-plugin</artifactId>
+                <version>1.3.0</version>
+                <configuration>
+                    <releaseName>v${project.version}</releaseName>
+                    <tag>v${project.version}</tag>
+                    <deleteRelease>true</deleteRelease>
+                    <artifact>nifi-influxdb-nar/target/nifi-influxdb-nar-${project.version}.nar</artifact>
+                </configuration>
             </plugin>
 
         </plugins>

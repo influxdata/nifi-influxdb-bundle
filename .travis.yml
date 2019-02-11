@@ -43,5 +43,18 @@ script:
   - mvn -B clean verify failsafe:integration-test failsafe:verify
   - bash <(curl -s https://codecov.io/bash)
 
+jobs:
+  include:
+    - stage: deploy
+      jdk: oraclejdk8
+      script: skip
+      deploy:
+        provider: script
+        script: mvn github-release:release -s scripts/deploy-settings.xml -N
+        skip_cleanup: true
+        on:
+          repo: bonitoo-io/nifi-influxdb-bundle
+          branch: master
+
 after_failure:
   - cat target/surefire-reports/*.txt
