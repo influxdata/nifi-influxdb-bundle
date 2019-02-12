@@ -95,6 +95,8 @@ $ cp ~/Downloads/nifi-influx-database-nar-1.0.0.nar.nar $NIFI_HOME/lib
 Parses the InfluxDB Line Protocol into NiFi Record. This allows processing, filtering and
 partitioning data in NiFi obtained from Telegraf agents, IoT devices, InfluxDB subscriptions and other InfluxDB Line protocol devices.
 
+#### Properties
+
 | Property | Description |
 | --- | --- |
 | **Character Set** | The Character Encoding that is used to decode the Line Protocol data |
@@ -102,6 +104,8 @@ partitioning data in NiFi obtained from Telegraf agents, IoT devices, InfluxDB s
 ### InfluxDatabaseService
 
 Allows sharing connection configuration among more NiFi processors. Also support a SSL connection.
+
+#### Properties
 
 | Property | Description |
 | --- | --- |
