@@ -19,7 +19,7 @@
 
 ## About this Project
 
-NiFi in current version has already built-in data `processor org.apache.nifi.processors.influxdb.PutInfluxDB` ([doc](https://nifi.apache.org/docs/nifi-docs/components/org.apache.nifi/nifi-influxdb-nar/1.8.0/org.apache.nifi.processors.influxdb.PutInfluxDB/index.html)) 
+NiFi in current version has already built-in data processor `org.apache.nifi.processors.influxdb.PutInfluxDB` ([doc](https://nifi.apache.org/docs/nifi-docs/components/org.apache.nifi/nifi-influxdb-nar/1.8.0/org.apache.nifi.processors.influxdb.PutInfluxDB/index.html)) 
 that accepts flow-files in [*InfluxDB’s Line Protocol*](https://docs.influxdata.com/influxdb/latest/write_protocols/line_protocol_tutorial) 
 format and stores the data into InfluxDB. 
 
@@ -31,7 +31,7 @@ This motivates us to implement new processor `org.influxdata.nifi.processors.Put
 on NiFi [Record Design](https://blogs.apache.org/nifi/entry/record-oriented-data-with-nifi). This processor allows
 to write any NiFi Record structured data into InfluxDB by `PutInfluxDBRecord`.
 The processor works similarly as others NiFi built-in NiFi Record based
-`Put*Record` processors (`PutDatabaseRecord`, `PutHBase`,`PutMongoRecord`...).
+`Put*Record` processors (`PutDatabaseRecord`, `PutHBase`,`PutMongoRecord`, ...).
 
 ## Installation
 
@@ -53,9 +53,22 @@ $ cp ~/Downloads/nifi-influxdb-nar-1.0.0.nar.nar $NIFI_HOME/lib
 
 ### PutInfluxDBRecord
 
+* Input can be any built-in or custom implemented NiFi RecordReader (json, avro, csv, `InfluxLineProtocolReader`...)
+* Configurable mapping between NiFi Records and InfluxDB measurement, field and tags
+* Configurable timestamp precision 
+* Reusable connection settings (InfluxDB url, password) for more processors via `InfluxDBService` controller
+* Advanced InfluxDB client settings
+  * Gzip compression
+  * Batching, jitter, flush settings
+
 ### InfluxLineProtocolReader
 
+Parses the InfluxDB Line Protocol into NiFi Record. This allows processing, filtering and
+partitioning data in NiFi obtained from Telegraf agents, IoT devices, InfluxDB subscriptions and other InfluxDB Line protocol devices.
+
 ### InfluxDBService
+
+Allows sharing connection configuration among more NiFi processors. Also support a SSL connection.
 
 ## Demo
 
