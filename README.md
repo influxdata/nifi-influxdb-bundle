@@ -77,14 +77,14 @@ $ cp ~/Downloads/nifi-influx-database-nar-1.0.0.nar.nar $NIFI_HOME/lib
 | **Enable InfluxDB batching** | Enabled batching speed up writes significantly but in the cost of loosing reliability. Flow file can be transfered to success releation before the batch buffer is flushed into database. For additional information see processor documentation. |
 | Batch flush duration | Flush at least every specified time |
 | Batch actions | The number of batch actions to collect |
-| Batch flush jitter | Jitters the batch flush interval by a random amount. This is primarily to avoid large write spikes for users running a large number of client instances. ie, a jitter of 5s and flush duration 10s means flushes will happen every 10-15s |
-| Batch flush buffer limit | 	The client maintains a buffer for failed writes so that the writes will be retried later on. This may help to overcome temporary network problems or InfluxDB load spikes. When the buffer is full and new points are written, oldest entries in the buffer are lost. To disable this feature set buffer limit to a value smaller than getActions |
+| Batch flush jitter | Jitters the batch flush interval by a random amount. |
+| Batch flush buffer limit | 	The client maintains a buffer for failed writes so that the writes will be retried later on. |
 | **Measurement** | The name of the measurement. If the Record contains a field with measurement property value, then value of the Record field is use as InfluxDB measurement |
 | Tags | A comma-separated list of record fields stored in InfluxDB as 'tag' |
 | Missing Tag Behavior | If the specified tag is not present in the document, this property specifies how to handle the situation. |
 | **Fields** | A comma-separated list of record fields stored in InfluxDB as 'field'. At least one field must be defined |
 | Missing Field Behavior | If the specified field is not present in the document, this property specifies how to handle the situation |
-| Timestamp field | A name of the record field that used as a 'timestamp'. If it is not specified, current system time is used. The support types of field value are: java.util.Date, java.lang.Number, java.lang.String (parsable to Long). |
+| Timestamp field | A name of the record field that used as a 'timestamp' |
 | **Timestamp precision** | The timestamp precision is ignore when the 'Timestamp field' value is 'java.util.Date' |
 | **Complex Field Behavior** | Indicates how to handle complex fields, i.e. fields that do not have a primitive value |
 | **Null Values Behavior** | Indicates how to handle null fields, i.e. fields that do not have a defined value |
@@ -95,13 +95,22 @@ $ cp ~/Downloads/nifi-influx-database-nar-1.0.0.nar.nar $NIFI_HOME/lib
 Parses the InfluxDB Line Protocol into NiFi Record. This allows processing, filtering and
 partitioning data in NiFi obtained from Telegraf agents, IoT devices, InfluxDB subscriptions and other InfluxDB Line protocol devices.
 
-<img src="assets/InfluxLineProtocolReader.png" width=600 />
+| Property | Description |
+| --- | --- |
+| **Character Set** | The Character Encoding that is used to decode the Line Protocol data |
 
 ### InfluxDatabaseService
 
 Allows sharing connection configuration among more NiFi processors. Also support a SSL connection.
 
-<img src="assets/InfluxDatabaseService.png" width=600 />
+| Property | Description |
+| --- | --- |
+| SSL Context Service | The SSL Context Service used to provide client certificate information for TLS/SSL connections |
+| Client Auth | The client authentication policy to use for the SSL Context. Only used if an SSL Context Service is provided. |
+| **InfluxDB connection URL** | InfluxDB URL to connect to. Eg: http://influxdb:8086 |
+| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
+| Username | Username which is used to authorize against the InfluxDB |
+| Password | Password for the username which is used to authorize against the InfluxDB. If the authorization fail the FlowFile will be penalized and routed to 'retry' relationship. |
 
 ## Demo
 
