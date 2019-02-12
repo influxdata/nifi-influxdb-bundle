@@ -53,6 +53,10 @@ $ cp ~/Downloads/nifi-influx-database-nar-1.0.0.nar.nar $NIFI_HOME/lib
 
 ### PutInfluxDatabaseRecord
 
+Uses a specified RecordReader to write the content of a FlowFile into InfluxDB database.
+
+#### Features
+
 * Input can be any built-in or custom implemented NiFi RecordReader (json, avro, csv, `InfluxLineProtocolReader`...)
 * Configurable mapping between NiFi Records and InfluxDB measurement, field and tags
 * Configurable timestamp precision 
@@ -61,9 +65,39 @@ $ cp ~/Downloads/nifi-influx-database-nar-1.0.0.nar.nar $NIFI_HOME/lib
   * Gzip compression
   * Batching, jitter, flush settings
   
-#### Properties
+#### Mapping Records to InfluxDB Data Point
 
-<img src="assets/PutInfluxDatabaseRecord.png" width=600 />
+##### Measurement
+The value is determined from the field in the Record Schema. If the field is not found in the schema then is used the value of `Measurement property`. 
+Any data type is converted into a String type and used as the value.
+
+##### Tags
+The name of the field in the Record Schema is used as the key of the Tag. The value of the field is used as the value of the Tag.
+Any data type is converted into a String type and used as the Tag value [see also handling complex types](#behavior-of-handling-complex-types-for-tags-and-fields).
+
+##### Timestamp
+The value is determined from the field in the Record Schema. If the field is not found in the schema 
+or field has not defined value the timestamp is not specified for the Data Point. 
+The precision for the supplied time value is determined from the property `Timestamp precision`.
+
+#### Behavior of handling complex types for Tags and Fields
+
+The Apache NiFi complex Record fields are handled by different strategy:
+- `Map` - keys are mapped as keys of Tags or Fields, values are mapped as values of Tags or Fields
+- `Choice` - for the value is used the compatible type from Choice definition
+- `Array`  - based on property the `Complex Field Behavior`
+- `Record` - based on property the `Complex Field Behavior`
+
+#### Batching
+
+Enabled batching will reduce reliability in the cost of better performance. The PutInfluxDatabaseRecord processor 
+uses batching/buffering implemented in influxdb-java client. Processor can route flow file to the success relation 
+before the batch buffer is flushed into the database. The batch buffer is stored in the system memory, 
+so in the case of power failure or process kill, is content of buffer not written into InfluxDB.
+
+Batching is useful when the flow file contains large number of records. Records are sent into InfluxDB in batching points with preconfigured size.
+  
+#### Properties
 
 | Property | Description |
 | --- | --- |
@@ -89,6 +123,15 @@ $ cp ~/Downloads/nifi-influx-database-nar-1.0.0.nar.nar $NIFI_HOME/lib
 | **Complex Field Behavior** | Indicates how to handle complex fields, i.e. fields that do not have a primitive value |
 | **Null Values Behavior** | Indicates how to handle null fields, i.e. fields that do not have a defined value |
 | **Max size of records** | Maximum size of records allowed to be posted in one batch |
+
+#### Relationships
+
+| Property | Description |
+| --- | --- |
+| success | All FlowFiles that are written into InfluxDB are routed to this relationship |
+| retry | A FlowFile is routed to this relationship if the database cannot be updated but attempting the operation again may succeed. |
+| failure | All FlowFiles that cannot be written to InfluxDB are routed to this relationship |
+
 
 ### InfluxLineProtocolReader
 

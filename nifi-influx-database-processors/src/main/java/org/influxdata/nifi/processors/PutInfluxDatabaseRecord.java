@@ -189,7 +189,7 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
 
 
     protected static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
-            .description("All FlowFiles that are written into InlfuxDB are routed to this relationship")
+            .description("All FlowFiles that are written into InfluxDB are routed to this relationship")
             .build();
 
     protected static final Relationship REL_FAILURE = new Relationship.Builder().name("failure")
