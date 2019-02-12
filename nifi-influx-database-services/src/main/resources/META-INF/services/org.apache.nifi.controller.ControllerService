@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -16,12 +15,4 @@
 # limitations under the License.
 #
 
-
-set -e
-
-SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
-
-cd ${SCRIPT_PATH}/..
-
-mvn -B clean install -DskipTests
-mvn -B github-release:release -s scripts/deploy-settings.xml -N
+org.influxdata.nifi.services.StandardInfluxDatabaseService

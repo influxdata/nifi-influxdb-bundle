@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -16,28 +15,48 @@
 # limitations under the License.
 #
 
+#!/usr/bin/env bash
 
-#
-# The script start two instances of InfluxDB. The first is unsecured and is reachable on http://localhost:8086.
-# The second is secured by HTTPS and is reachable on https://localhost:9086
-#
 set -e
+
+#### wait to NiFi startup
+function waitNifiStarted {
+	echo "Waiting to Nifi: $1"
+	repeat=0;
+	timeout=200
+	until $(curl --output /dev/null --silent --head --fail ${1}); do
+	    printf '.'
+	    ((repeat++))
+	    if ((repeat > timeout)) ; then
+	        echo "Server $1 is not alive!"
+	        exit 1;
+        fi
+	    sleep 1
+	done
+	echo "." && echo "NiFi $1 is online"
+}
+
 
 DEFAULT_INFLUXDB_VERSION="1.7"
 INFLUXDB_VERSION="${INFLUXDB_VERSION:-$DEFAULT_INFLUXDB_VERSION}"
 INFLUXDB_IMAGE=influxdb:${INFLUXDB_VERSION}-alpine
 
+DEFAULT_NIFI_VERSION="1.8.0"
+NIFI_VERSION="${NIFI_VERSION:-$DEFAULT_NIFI_VERSION}"
+NIFI_IMAGE=apache/nifi:${NIFI_VERSION}
+
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+echo "Building nifi-influxdata-nar..."
+
+cd ${SCRIPT_PATH}/..
+
+mvn -B clean install -DskipTests
 
 docker kill influxdb || true
 docker rm influxdb || true
 
-docker kill influxdb-secured || true
-docker rm influxdb-secured || true
-
-docker pull ${INFLUXDB_IMAGE} || true
-
-echo "Starting unsecured InfluxDB..."
+echo "Starting InfluxDB..."
 
 docker run \
           --detach \
@@ -47,16 +66,24 @@ docker run \
           --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
       ${INFLUXDB_IMAGE}
 
-echo "Starting secured InfluxDB..."
+docker kill nifi || true
+docker rm nifi || true
+
+echo "Starting Apache NiFi..."
 
 docker run \
-          --detach \
-          --name influxdb-secured \
-          --publish 9086:9086 \
-          --publish 9089:9089/udp \
-          --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/influxdb-secured.conf:/etc/influxdb/influxdb.conf \
-          --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/ssl/influxdb-selfsigned.crt:/etc/influxdb/influxdb-selfsigned.crt \
-          --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/ssl/influxdb-selfsigned.key:/etc/influxdb/influxdb-selfsigned.key \
-      ${INFLUXDB_IMAGE}
+    --detach \
+    --name nifi \
+    --publish 8080:8080 \
+	--publish 8007:8000 \
+	--publish 6666:6666 \
+	--link=influxdb \
+	${NIFI_IMAGE}
+
+docker cp ${SCRIPT_PATH}/../nifi-influx-database-nar/target/nifi-influx-database-nar-*.nar nifi:/opt/nifi/nifi-current/lib
+docker stop nifi
+docker start nifi
 
 docker ps
+
+waitNifiStarted "http://localhost:8080/nifi/"
