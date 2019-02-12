@@ -63,7 +63,7 @@ docker run \
           --name influxdb \
           --publish 8086:8086 \
           --publish 8089:8089/udp \
-          --volume ${SCRIPT_PATH}/../nifi-influxdb-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
+          --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
       ${INFLUXDB_IMAGE}
 
 docker kill nifi || true
@@ -80,7 +80,7 @@ docker run \
 	--link=influxdb \
 	${NIFI_IMAGE}
 
-docker cp ${SCRIPT_PATH}/../nifi-influxdb-nar/target/nifi-influxdb-nar-*.nar nifi:/opt/nifi/nifi-current/lib
+docker cp ${SCRIPT_PATH}/../nifi-influx-database-nar/target/nifi-influx-database-nar-*.nar nifi:/opt/nifi/nifi-current/lib
 docker stop nifi
 docker start nifi
 

@@ -44,7 +44,7 @@ docker run \
           --name influxdb \
           --publish 8086:8086 \
           --publish 8089:8089/udp \
-          --volume ${SCRIPT_PATH}/../nifi-influxdb-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
+          --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
       ${INFLUXDB_IMAGE}
 
 echo "Starting secured InfluxDB..."
@@ -54,9 +54,9 @@ docker run \
           --name influxdb-secured \
           --publish 9086:9086 \
           --publish 9089:9089/udp \
-          --volume ${SCRIPT_PATH}/../nifi-influxdb-services/src/test/resources/influxdb-secured.conf:/etc/influxdb/influxdb.conf \
-          --volume ${SCRIPT_PATH}/../nifi-influxdb-services/src/test/resources/ssl/influxdb-selfsigned.crt:/etc/influxdb/influxdb-selfsigned.crt \
-          --volume ${SCRIPT_PATH}/../nifi-influxdb-services/src/test/resources/ssl/influxdb-selfsigned.key:/etc/influxdb/influxdb-selfsigned.key \
+          --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/influxdb-secured.conf:/etc/influxdb/influxdb.conf \
+          --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/ssl/influxdb-selfsigned.crt:/etc/influxdb/influxdb-selfsigned.crt \
+          --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/ssl/influxdb-selfsigned.key:/etc/influxdb/influxdb-selfsigned.key \
       ${INFLUXDB_IMAGE}
 
 docker ps

@@ -27,20 +27,20 @@
         <version>1.8.0</version>
     </parent>
 
-    <artifactId>nifi-influxdb-bundle</artifactId>
+    <artifactId>nifi-influx-database-bundle</artifactId>
     <groupId>org.influxdata.nifi</groupId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
     <modules>
-        <module>nifi-influxdb-utils</module>
-        <module>nifi-influxdb-services-api</module>
-        <module>nifi-influxdb-services</module>
-        <module>nifi-influxdb-services-nar</module>
-        <module>nifi-influxdb-serialization</module>
-        <module>nifi-influxdb-serialization-nar</module>
-        <module>nifi-influxdb-processors</module>
-        <module>nifi-influxdb-nar</module>
+        <module>nifi-influx-database-utils</module>
+        <module>nifi-influx-database-services-api</module>
+        <module>nifi-influx-database-services</module>
+        <module>nifi-influx-database-services-nar</module>
+        <module>nifi-influx-database-serialization</module>
+        <module>nifi-influx-database-serialization-nar</module>
+        <module>nifi-influx-database-processors</module>
+        <module>nifi-influx-database-nar</module>
     </modules>
 
     <name>InfluxDB Processors For Apache NiFi</name>
@@ -111,27 +111,27 @@
         <dependencies>
             <dependency>
                 <groupId>org.influxdata.nifi</groupId>
-                <artifactId>nifi-influxdb-processors</artifactId>
+                <artifactId>nifi-influx-database-processors</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.influxdata.nifi</groupId>
-                <artifactId>nifi-influxdb-services</artifactId>
+                <artifactId>nifi-influx-database-services</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.influxdata.nifi</groupId>
-                <artifactId>nifi-influxdb-serialization</artifactId>
+                <artifactId>nifi-influx-database-serialization</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.influxdata.nifi</groupId>
-                <artifactId>nifi-influxdb-utils</artifactId>
+                <artifactId>nifi-influx-database-utils</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.influxdata.nifi</groupId>
-                <artifactId>nifi-influxdb-services-api</artifactId>
+                <artifactId>nifi-influx-database-services-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -313,7 +313,7 @@
                     <releaseName>v${project.version}</releaseName>
                     <tag>v${project.version}</tag>
                     <deleteRelease>true</deleteRelease>
-                    <artifact>nifi-influxdb-nar/target/nifi-influxdb-nar-${project.version}.nar</artifact>
+                    <artifact>nifi-influx-database-nar/target/nifi-influx-database-nar-${project.version}.nar</artifact>
                 </configuration>
             </plugin>
 
