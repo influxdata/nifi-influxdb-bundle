@@ -232,7 +232,7 @@
                     <useDefaultExcludes>false</useDefaultExcludes>
                     <includes>**, **/META-INF/services/**</includes>
                     <excludes>**/target/**, **/*.jar, **/.git/**, **/.*, **/*.png, **/*.iml, .idea/**,
-                        **/*nightly*/**, **/.m2/**, **/LICENSE, **/NOTICE, **/*.md, **/PLACEHOLDER, **/test/resources/ssl/*
+                        **/*nightly*/**, **/.m2/**, **/LICENSE, **/NOTICE, **/*.md, **/*.xml.gz, **/PLACEHOLDER, **/test/resources/ssl/*
                     </excludes>
                     <properties>
                         <organizationName>${project.organization.name}</organizationName>

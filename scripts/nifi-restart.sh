@@ -56,7 +56,9 @@ mvn -B clean install -DskipTests
 docker kill influxdb || true
 docker rm influxdb || true
 
+echo
 echo "Starting InfluxDB..."
+echo
 
 docker run \
           --detach \
@@ -69,7 +71,15 @@ docker run \
 docker kill nifi || true
 docker rm nifi || true
 
+echo
+echo "Build Apache NiFi with demo..."
+echo
+
+docker build -t nifi -f ${SCRIPT_PATH}/Dockerfile --build-arg NIFI_IMAGE=${NIFI_IMAGE} .
+
+echo
 echo "Starting Apache NiFi..."
+echo
 
 docker run \
     --detach \
@@ -78,12 +88,6 @@ docker run \
 	--publish 8007:8000 \
 	--publish 6666:6666 \
 	--link=influxdb \
-	${NIFI_IMAGE}
-
-docker cp ${SCRIPT_PATH}/../nifi-influx-database-nar/target/nifi-influx-database-nar-*.nar nifi:/opt/nifi/nifi-current/lib
-docker stop nifi
-docker start nifi
-
-docker ps
+	nifi
 
 waitNifiStarted "http://localhost:8080/nifi/"
