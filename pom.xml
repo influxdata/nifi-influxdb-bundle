@@ -226,6 +226,7 @@
                         <cnf>SCRIPT_STYLE</cnf>
                         <toml>SCRIPT_STYLE</toml>
                         <yml>SCRIPT_STYLE</yml>
+                        <Dockerfile>SCRIPT_STYLE</Dockerfile>
                         <org.apache.nifi.controller.ControllerService>SCRIPT_STYLE</org.apache.nifi.controller.ControllerService>
                         <org.apache.nifi.processor.Processor>SCRIPT_STYLE</org.apache.nifi.processor.Processor>
                     </mapping>
