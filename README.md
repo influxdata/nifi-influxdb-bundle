@@ -163,6 +163,15 @@ Allows sharing connection configuration among more NiFi processors. Also support
 
 ### How to start
 
+The demo requires Docker Engine, GNU gzip and curl on classpath.
+
+1. Download and unpack sources: [download ZIP](https://github.com/bonitoo-io/nifi-influxdb-bundle/archive/master.zip)
+2. Run start script from the source directory:
+    ```bash
+    ./scripts/nifi-restart.sh
+    ```
+3. Open Apache NiFi flow in browser: [http://localhost:8080/nifi/](http://localhost:8080/nifi/)
+
 ### Store complex JSON structure to InfluxDB
 
 As NiFi user we want to put data (complex json structure) to InfluxDB in order to work with time series.
@@ -285,23 +294,23 @@ time                favourites_count followers_count friends_count keyword lang 
 
 ### Processing metrics in NiFI
 
-This example show how process structured metrics from Telegraf in NiFi. 
+This example show how to process structured metrics from Telegraf in NiFi. 
 
 The Telegraf send metrics into NiFi using [SocketWriter](https://github.com/influxdata/telegraf/tree/master/plugins/outputs/socket_writer) output plugin. 
 Metrics data are sent as [InfluxDB’s Line Protocol](https://docs.influxdata.com/influxdb/latest/write_protocols/line_protocol_tutorial).
-The NiFi parse Line Protocol through the `org.influxdata.nifi.serialization.InfluxLineProtocolReader` and allow user to process data with Records processors (`SplitRecord`, `UpdateRecord`, `ValidateRecord`, ...). 
+The NiFi parse Line Protocol through the `org.influxdata.nifi.serialization.InfluxLineProtocolReader` and allow user to process data with Record processors (`SplitRecord`, `UpdateRecord`, `ValidateRecord`, ...). 
 
 #### NiFi flow
 
-The metrics from monitoring Docker containers are filtered in the NiFi. NiFi container metrics are stored in InfluxDB and metrics from other containers are only logged.
+The metrics from monitoring Docker containers are filtered in the NiFi. NiFi container metrics are stored in InfluxDB and metrics from other containers are logged.
 
 <img src="assets/doc/demo2-flow.png" height="250px"> 
 
 1. **ListenTelegraf** -  Listens for incoming TCP connections and transform incoming Line Protocol to NiFi Record
 1. **PartitionRecord** - Group incoming records by container name  
 1. **RouteOnAttribute** - Routes incoming container metrics: NiFi container metrics are routed to `PutInfluxDatabaseRecord` other metrics to `LogAttribute`
-1. **PutInfluxDatabaseRecord** - Writes NiFi container metrics to InfluxDB
-1. **LogAttribute** - Log metrics that aren't written to InfluxDB
+1. **PutInfluxDatabaseRecord** - Writes NiFi container metrics to the InfluxDB
+1. **LogAttribute** - Log metrics that aren't written to the InfluxDB
 
 #### Result
 
@@ -320,7 +329,7 @@ docker_container_net
 docker_container_status
 ```
 
-##### The `docker_container_status` measurement content:
+For example the `docker_container_status` measurement contains:
 
 ```bash
 select * from docker_container_status 

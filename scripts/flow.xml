@@ -35,11 +35,12 @@
       </styles>
       <value>Demo 2 User Story:
 
-As NiFi user I want to reliably monitor multiple environments 
-of J2EE Servers and be able to write data selectively. 
+As NiFi user I want to reliably monitor multiple environments
+and be able to write data selectively. 
+
    
 * AC1: Partition and route metrics data using NiFi "Record Path language" 
-   by type of server (production/testing)
+   by type of measurement (name of container)
 </value>
     </label>
     <label>
@@ -171,7 +172,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{695397b6f74c84e4035ee8595ccbdb440e94fcdb833174e17de9bf975cdce8bacb136d77c17bedb4f0dd0ec84490ec5f4cc3eb5e06bea58d0f899ee6a93b3f67152246fb4fc5408025584ad9a1c26a94}</value>
+          <value>enc{4078989a4f484d846f6f5dcb09a786cc8f05d30dfdab323c322c0dbec10dcedeb98d43d99e57b31945648c4ccd386b7fa9d34630cf5516eb06a7fcd9e5a17906166c6439edbb1116a7b32cd65ec19c70}</value>
         </property>
         <property>
           <name>Access Token</name>
@@ -179,7 +180,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{497c4b324c0d9e05cec5544f58310cf429182e9ffa38b389e85f31416e956f6c5b2b1f67a8809486f584780f5e5b36f7a3d38e25b50774567072f3c7151a0696}</value>
+          <value>enc{348a50e912966d16ceb24096381c4d6ef3f8d16f71176811d35ee98cf86ae9edcb02d9b214aa6d9645f643d43b7b94efc08e539137b0a2230a5808de1f5f34c8}</value>
         </property>
         <property>
           <name>Languages</name>
