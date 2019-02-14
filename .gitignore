@@ -2,3 +2,4 @@
 *.iml
 /target
 **/target
+**/flow.xml.gz

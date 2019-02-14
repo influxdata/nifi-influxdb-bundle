@@ -45,6 +45,10 @@ DEFAULT_NIFI_VERSION="1.8.0"
 NIFI_VERSION="${NIFI_VERSION:-$DEFAULT_NIFI_VERSION}"
 NIFI_IMAGE=apache/nifi:${NIFI_VERSION}
 
+DEFAULT_TELEGRAF_VERSION="1.9"
+TELEGRAF_VERSION="${TELEGRAF_VERSION:-$DEFAULT_TELEGRAF_VERSION}"
+TELEGRAF_IMAGE=telegraf:${TELEGRAF_VERSION}
+
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 echo "Building nifi-influxdata-nar..."
@@ -53,10 +57,22 @@ cd ${SCRIPT_PATH}/..
 
 mvn -B clean install -DskipTests
 
+echo
+echo "Stoping Docker containers..."
+echo
+
+docker kill telegraf || true
+docker rm telegraf || true
+
+docker kill nifi || true
+docker rm nifi || true
+
 docker kill influxdb || true
 docker rm influxdb || true
 
+echo
 echo "Starting InfluxDB..."
+echo
 
 docker run \
           --detach \
@@ -66,10 +82,28 @@ docker run \
           --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
       ${INFLUXDB_IMAGE}
 
-docker kill nifi || true
-docker rm nifi || true
+sleep 5
 
+#
+# Create database for Twitter demo
+#
+
+docker exec -ti influxdb sh -c "influx -execute 'create database twitter_demo'"
+docker exec -ti influxdb sh -c "influx -execute 'create database telegraf_nifi_demo'"
+
+echo
+echo "Build Apache NiFi with demo..."
+echo
+
+gzip < ${SCRIPT_PATH}/flow.xml > ${SCRIPT_PATH}/flow.xml.gz
+# docker cp nifi:/opt/nifi/nifi-current/conf/flow.xml.gz scripts/
+# gunzip -f scripts/flow.xml.gz
+
+docker build -t nifi -f ${SCRIPT_PATH}/Dockerfile --build-arg NIFI_IMAGE=${NIFI_IMAGE} .
+
+echo
 echo "Starting Apache NiFi..."
+echo
 
 docker run \
     --detach \
@@ -78,12 +112,18 @@ docker run \
 	--publish 8007:8000 \
 	--publish 6666:6666 \
 	--link=influxdb \
-	${NIFI_IMAGE}
-
-docker cp ${SCRIPT_PATH}/../nifi-influx-database-nar/target/nifi-influx-database-nar-*.nar nifi:/opt/nifi/nifi-current/lib
-docker stop nifi
-docker start nifi
-
-docker ps
+	nifi
 
 waitNifiStarted "http://localhost:8080/nifi/"
+
+echo
+echo "Starting Telegraf..."
+echo
+
+docker run \
+    --detach \
+    --name=telegraf \
+    --net=container:nifi \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v ${SCRIPT_PATH}/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
+    ${TELEGRAF_IMAGE}

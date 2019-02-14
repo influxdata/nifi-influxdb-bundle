@@ -161,6 +161,190 @@ Allows sharing connection configuration among more NiFi processors. Also support
 
 ## Demo
 
+### How to start
+
+The demo requires Docker Engine, GNU gzip and curl on classpath.
+
+1. Download and unpack sources: [download ZIP](https://github.com/bonitoo-io/nifi-influxdb-bundle/archive/master.zip)
+2. Run start script from the source directory:
+    ```bash
+    ./scripts/nifi-restart.sh
+    ```
+3. Open Apache NiFi flow in browser: [http://localhost:8080/nifi/](http://localhost:8080/nifi/)
+
+### Store complex JSON structure to InfluxDB
+
+As NiFi user we want to put data (complex json structure) to InfluxDB in order to work with time series.
+
+The demo reads data from Twitter in complex JSON format based on supplied keywords and writes them into InfluxDB.
+Data from Twitter are streamed into NiFi using built-in `org.apache.nifi.processors.twitter.GetTwitter` processor.
+
+#### NiFi flow
+
+<img src="assets/doc/demo1-flow.png" height="250px">
+
+#### GetTwitter processor configuration
+
+Select Twitter Filter Endpoint API, Auth keys and tokens, and fill keywords to be searched in Terms to Filter On
+field. To access the Twitter API you need authorization keys that can be obtained from
+[Twitter Apps](https://developer.twitter.com/en/apps).
+
+>  Note, that the credentials embeded in demo may not work in shared enviroment, it is better to
+   generate new for testing.
+   
+<img src="assets/doc/demo1-gettwitter.png" height="250px"> 
+
+#### PutInfluxDatabaseRecord configuration  
+
+First we need to configure a new controller service called `TwitterJSONReader` that maps Tweets JSON
+into NiFi Records.
+
+##### TwitterJSONReader configuration
+
+<img src="assets/doc/demo1-twitter-reader.png" height="250px"> 
+
+Record schema is specified using Schema Text field. In this demo we use following Apache Avro scheme:
+
+```json
+{
+  "type": "record",
+  "name": "twitter_schema",
+  "namespace": "io.bonitoo.nifi",
+  "doc:" : "AVRO scheme for Tweets",
+  "fields": [
+    { "name": "id",   "type": "long" },
+    { "name": "text", "type": "string" },
+    { "name": "lang", "type": "string" },
+    { "name": "keyword", "type": "string" },
+    { "name": "retweet_count", "type": "int" },
+    { "name": "tweet_id", "type": "string" },
+    { "name": "followers_count", "type": "int" },
+    { "name": "screen_name", "type": "string" },
+    { "name": "friends_count", "type": "int" },
+    { "name": "favourites_count", "type": "int" },
+    { "name": "user_verified",  "type": "boolean" },
+    { "name": "timestamp", "type" : 
+        { "type" : "long", "logicalType" : "timestamp-millis" }
+    }
+  ]
+}
+```
+
+
+The mapping between NiFi Record fields and JSON is configured in dynamic properties.
+
+> `screen_name ->  $.user.screen_name`
+
+##### PutInfluxDatabaseRecord settings
+
+<img src="assets/doc/demo1-putinfuxdatabaserecord.png" height="250px"> 
+
+Next we set mapping between NiFi Record and InfluxDB measurement/tags/field/timestamp).
+
+- **Measurement** - `tweets`
+- **Fields** - record field values: `tweet_id`, `retweet_count`, `followers_count`, `friends_count`, `favourites_count`, `screen_name`, `text`
+- **Tags** - record field values: `lang,keyword`, `user_verified`
+- **Timestamp** - record field value: `timestamp`
+
+#### Result
+
+The InfluxDB has a database **twitter_demo** with measurement **tweets** and schema:
+
+##### Tags
+```bash
+SHOW TAG KEYS ON twitter_demo FROM tweets
+
+name: tweets
+tagKey
+------
+keyword
+lang
+user_verified
+```
+##### Fields
+```bash
+SHOW FIELD KEYS ON twitter_demo
+
+name: tweets
+fieldKey         fieldType
+--------         ---------
+favourites_count integer
+followers_count  integer
+friends_count    integer
+retweet_count    integer
+screen_name      string
+text             string
+tweet_id         string
+```
+
+##### Content
+```bash
+select * from tweets
+
+name: tweets
+time                favourites_count followers_count friends_count keyword lang retweet_count screen_name     text
+----                ---------------- --------------- ------------- ------- ---- ------------- --------------- ----
+1550133996000000000 1651             304             699           truth   en   0             TheeSeanH       ... 
+1550133997000000000 10               12              66                    en   0             black_vadik     ...
+1550133998000000000 0                22              41            BITMEX  nl   0             100btcP         ...
+1550133998000000000 24078            1025            4894                  en   0             SolarCoinNews   ...
+1550133999000000000 12406            474             761                   en   0             Airdrop_BOMBER  ...
+...
+```
+
+### Processing metrics in NiFI
+
+This example show how to process structured metrics from Telegraf in NiFi. 
+
+The Telegraf send metrics into NiFi using [SocketWriter](https://github.com/influxdata/telegraf/tree/master/plugins/outputs/socket_writer) output plugin. 
+Metrics data are sent as [InfluxDB’s Line Protocol](https://docs.influxdata.com/influxdb/latest/write_protocols/line_protocol_tutorial).
+The NiFi parse Line Protocol through the `org.influxdata.nifi.serialization.InfluxLineProtocolReader` and allow user to process data with Record processors (`SplitRecord`, `UpdateRecord`, `ValidateRecord`, ...). 
+
+#### NiFi flow
+
+The metrics from monitoring Docker containers are filtered in the NiFi. NiFi container metrics are stored in InfluxDB and metrics from other containers are logged.
+
+<img src="assets/doc/demo2-flow.png" height="250px"> 
+
+1. **ListenTelegraf** -  Listens for incoming TCP connections and transform incoming Line Protocol to NiFi Record
+1. **PartitionRecord** - Group incoming records by container name  
+1. **RouteOnAttribute** - Routes incoming container metrics: NiFi container metrics are routed to `PutInfluxDatabaseRecord` other metrics to `LogAttribute`
+1. **PutInfluxDatabaseRecord** - Writes NiFi container metrics to the InfluxDB
+1. **LogAttribute** - Log metrics that aren't written to the InfluxDB
+
+#### Result
+
+The InfluxDB has a database **telegraf_nifi_demo** with measurements:
+
+```bash
+show measurements
+
+name: measurements
+name
+----
+docker_container_blkio
+docker_container_cpu
+docker_container_mem
+docker_container_net
+docker_container_status
+```
+
+For example the `docker_container_status` measurement contains:
+
+```bash
+select * from docker_container_status 
+
+name: docker_container_status
+time                container_image container_name container_status container_version engine_host           exitcode host         maintainer                        oomkilled pid   server_version site                    started_at
+----                --------------- -------------- ---------------- ----------------- -----------           -------- ----         ----------                        --------- ---   -------------- ----                    ----------
+1550148042000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+1550148052000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+1550148062000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+1550148072000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+1550148082000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+...
+```
+
 ## Contributing
 
 If you would like to contribute code you can do through GitHub by forking the repository and sending a pull request into the `master` branch.
