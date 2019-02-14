@@ -53,6 +53,13 @@ cd ${SCRIPT_PATH}/..
 
 mvn -B clean install -DskipTests
 
+echo
+echo "Stoping Docker containers..."
+echo
+
+docker kill nifi || true
+docker rm nifi || true
+
 docker kill influxdb || true
 docker rm influxdb || true
 
@@ -68,12 +75,21 @@ docker run \
           --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
       ${INFLUXDB_IMAGE}
 
-docker kill nifi || true
-docker rm nifi || true
+sleep 5
+
+#
+# Create database for Twitter demo
+#
+
+docker exec -ti influxdb sh -c "influx -execute 'create database twitter_demo'"
 
 echo
 echo "Build Apache NiFi with demo..."
 echo
+
+gzip < ${SCRIPT_PATH}/flow.xml > ${SCRIPT_PATH}/flow.xml.gz
+# docker cp nifi:/opt/nifi/nifi-current/conf/flow.xml.gz scripts/
+# gunzip -f scripts/flow.xml.gz
 
 docker build -t nifi -f ${SCRIPT_PATH}/Dockerfile --build-arg NIFI_IMAGE=${NIFI_IMAGE} .
 

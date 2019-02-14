@@ -161,6 +161,16 @@ Allows sharing connection configuration among more NiFi processors. Also support
 
 ## Demo
 
+### Store complex JSON structure to InfluxDB
+
+As NiFi user We want to put data (complex json structure) to InfluxDB in order to work with time series.
+
+>
+> Count twitter messages, grouping by keywords and languages
+> 
+
+<img src="assets/doc/demo1.png" height="250px">
+
 ## Contributing
 
 If you would like to contribute code you can do through GitHub by forking the repository and sending a pull request into the `master` branch.
