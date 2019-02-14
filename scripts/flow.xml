@@ -23,7 +23,7 @@
   <registries/>
   <rootGroup>
     <id>d347f265-0162-1000-bd0e-fbf9109cf0b1</id>
-    <name>InfluxDB Demo Flow</name>
+    <name>InfluxDB Demo</name>
     <position x="0.0" y="0.0"/>
     <comment/>
     <label>
@@ -171,7 +171,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{6ab5401e611d1ac9fa8aaa41456b229dbb8d1685ce102991ffaca7d5948dc523b992cef3ee07818d8237d6b921ce8451d7327ae05984743b8464beef5b0f070907d2c2aeb16fbfc7b1ac0a6221aac5a1}</value>
+          <value>enc{695397b6f74c84e4035ee8595ccbdb440e94fcdb833174e17de9bf975cdce8bacb136d77c17bedb4f0dd0ec84490ec5f4cc3eb5e06bea58d0f899ee6a93b3f67152246fb4fc5408025584ad9a1c26a94}</value>
         </property>
         <property>
           <name>Access Token</name>
@@ -179,7 +179,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{72ef3416b6a08785cb0c3ae582e9621d055286c96a2327bf86f4e18e7ea62e8d5cdb2fe385e4295be560838d3b260ca870bd8ffba02ccaca23443ca96077c926}</value>
+          <value>enc{497c4b324c0d9e05cec5544f58310cf429182e9ffa38b389e85f31416e956f6c5b2b1f67a8809486f584780f5e5b36f7a3d38e25b50774567072f3c7151a0696}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -415,7 +415,7 @@ InfluxDB in order to work with time series.
       <processor>
         <id>5ea1e9b1-0163-1000-d88e-eecbd44bb920</id>
         <name>LogAttribute</name>
-        <position x="1457.7388988508371" y="405.6189427758301"/>
+        <position x="1484.7763744367746" y="394.6037145043457"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.LogAttribute</class>
@@ -444,7 +444,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Attributes to Log</name>
-          <value>host</value>
+          <value>container_name</value>
         </property>
         <property>
           <name>attributes-to-log-regex</name>
@@ -496,15 +496,15 @@ InfluxDB in order to work with time series.
           <value>4e5c0c97-0163-1000-54a6-5c1fd2473b42</value>
         </property>
         <property>
-          <name>host</name>
-          <value>/tags['host']</value>
+          <name>container_name</name>
+          <value>/tags['container_name']</value>
         </property>
         <autoTerminatedRelationship>original</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>4e5db836-0163-1000-1118-1b4cbc65e367</id>
         <name>PutInfluxDatabaseRecord</name>
-        <position x="469.7191162109375" y="394.30047607421875"/>
+        <position x="476.58453369140625" y="394.30047607421875"/>
         <styles/>
         <comment/>
         <class>org.influxdata.nifi.processors.PutInfluxDatabaseRecord</class>
@@ -533,7 +533,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>influxdb-dbname</name>
-          <value>telegraf-nifi-demo</value>
+          <value>telegraf_nifi_demo</value>
         </property>
         <property>
           <name>influxdb-enable-gzip</name>
@@ -616,7 +616,7 @@ InfluxDB in order to work with time series.
       <processor>
         <id>5e7b1a3d-0163-1000-92bd-215d0d973049</id>
         <name>RouteOnAttribute</name>
-        <position x="1011.0257096144476" y="113.37669783795178"/>
+        <position x="1030.0520768019476" y="113.37669783795178"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.RouteOnAttribute</class>
@@ -640,14 +640,13 @@ InfluxDB in order to work with time series.
           <value>Route to Property name</value>
         </property>
         <property>
-          <name>production</name>
-          <value>${host:equals('tomcat1')}</value>
+          <name>other_containers</name>
+          <value>${container_name:equals('nifi'):not()}</value>
         </property>
         <property>
-          <name>testing</name>
-          <value>${host:equals('tomcat2')}</value>
+          <name>nifi_container</name>
+          <value>${container_name:equals('nifi')}</value>
         </property>
-        <autoTerminatedRelationship>unmatched</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>4e6785e3-0163-1000-d555-63c86866c915</id>
@@ -719,7 +718,7 @@ InfluxDB in order to work with time series.
         <yieldPeriod>1 sec</yieldPeriod>
         <bulletinLevel>WARN</bulletinLevel>
         <lossTolerant>false</lossTolerant>
-        <scheduledState>STOPPED</scheduledState>
+        <scheduledState>RUNNING</scheduledState>
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
@@ -767,26 +766,6 @@ InfluxDB in order to work with time series.
         </property>
       </processor>
       <connection>
-        <id>5ea20938-0163-1000-246b-c949e01913b0</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>5e7b1a3d-0163-1000-92bd-215d0d973049</sourceId>
-        <sourceGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>5ea1e9b1-0163-1000-d88e-eecbd44bb920</destinationId>
-        <destinationGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>testing</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
         <id>5e7da2e1-0163-1000-c3c0-3365c5b4cb8b</id>
         <name/>
         <bendPoints>
@@ -833,8 +812,8 @@ InfluxDB in order to work with time series.
         <id>4e685590-0163-1000-c399-4e6f531adf22</id>
         <name/>
         <bendPoints>
-          <bendPoint x="924.7191162109375" y="434.30047607421875"/>
-          <bendPoint x="924.7191162109375" y="484.30047607421875"/>
+          <bendPoint x="931.5845336914062" y="434.30047607421875"/>
+          <bendPoint x="931.5845336914062" y="484.30047607421875"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -853,11 +832,30 @@ InfluxDB in order to work with time series.
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>5ea01c90-0163-1000-13b0-e4eb0dc0ce9c</id>
+        <id>ebeda35f-0168-1000-3a8c-4562f3635f1e</id>
         <name/>
-        <bendPoints>
-          <bendPoint x="911.8932869361302" y="340.55684867483524"/>
-        </bendPoints>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>5e7b1a3d-0163-1000-92bd-215d0d973049</sourceId>
+        <sourceGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>5ea1e9b1-0163-1000-d88e-eecbd44bb920</destinationId>
+        <destinationGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>other_containers</relationship>
+        <relationship>unmatched</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>ebece362-0168-1000-8c10-86a9855a0684</id>
+        <name/>
+        <bendPoints/>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>5e7b1a3d-0163-1000-92bd-215d0d973049</sourceId>
@@ -866,7 +864,7 @@ InfluxDB in order to work with time series.
         <destinationId>4e5db836-0163-1000-1118-1b4cbc65e367</destinationId>
         <destinationGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
-        <relationship>production</relationship>
+        <relationship>nifi_container</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>

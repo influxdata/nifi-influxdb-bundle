@@ -232,10 +232,10 @@ The mapping between NiFi Record fields and JSON is configured in dynamic propert
 
 Next we set mapping between NiFi Record and InfluxDB measurement/tags/field/timestamp).
 
-- Measurement - `tweets`
-- Fields - record field values: `tweet_id`, `retweet_count`, `followers_count`, `friends_count`, `favourites_count`, `screen_name`, `text`
-- Tags - record field values: `lang,keyword`, `user_verified`
-- Timestamp - record field value: `timestamp`
+- **Measurement** - `tweets`
+- **Fields** - record field values: `tweet_id`, `retweet_count`, `followers_count`, `friends_count`, `favourites_count`, `screen_name`, `text`
+- **Tags** - record field values: `lang,keyword`, `user_verified`
+- **Timestamp** - record field value: `timestamp`
 
 #### Result
 
@@ -281,7 +281,59 @@ time                favourites_count followers_count friends_count keyword lang 
 1550133998000000000 24078            1025            4894                  en   0             SolarCoinNews   ...
 1550133999000000000 12406            474             761                   en   0             Airdrop_BOMBER  ...
 ...
+```
 
+### Processing metrics in NiFI
+
+This example show how process structured metrics from Telegraf in NiFi. 
+
+The Telegraf send metrics into NiFi using [SocketWriter](https://github.com/influxdata/telegraf/tree/master/plugins/outputs/socket_writer) output plugin. 
+Metrics data are sent as [InfluxDB’s Line Protocol](https://docs.influxdata.com/influxdb/latest/write_protocols/line_protocol_tutorial).
+The NiFi parse Line Protocol through the `org.influxdata.nifi.serialization.InfluxLineProtocolReader` and allow user to process data with Records processors (`SplitRecord`, `UpdateRecord`, `ValidateRecord`, ...). 
+
+#### NiFi flow
+
+The metrics from monitoring Docker containers are filtered in the NiFi. NiFi container metrics are stored in InfluxDB and metrics from other containers are only logged.
+
+<img src="assets/doc/demo2-flow.png" height="250px"> 
+
+1. **ListenTelegraf** -  Listens for incoming TCP connections and transform incoming Line Protocol to NiFi Record
+1. **PartitionRecord** - Group incoming records by container name  
+1. **RouteOnAttribute** - Routes incoming container metrics: NiFi container metrics are routed to `PutInfluxDatabaseRecord` other metrics to `LogAttribute`
+1. **PutInfluxDatabaseRecord** - Writes NiFi container metrics to InfluxDB
+1. **LogAttribute** - Log metrics that aren't written to InfluxDB
+
+#### Result
+
+The InfluxDB has a database **telegraf_nifi_demo** with measurements:
+
+```bash
+show measurements
+
+name: measurements
+name
+----
+docker_container_blkio
+docker_container_cpu
+docker_container_mem
+docker_container_net
+docker_container_status
+```
+
+##### The `docker_container_status` measurement content:
+
+```bash
+select * from docker_container_status 
+
+name: docker_container_status
+time                container_image container_name container_status container_version engine_host           exitcode host         maintainer                        oomkilled pid   server_version site                    started_at
+----                --------------- -------------- ---------------- ----------------- -----------           -------- ----         ----------                        --------- ---   -------------- ----                    ----------
+1550148042000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+1550148052000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+1550148062000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+1550148072000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+1550148082000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
+...
 ```
 
 ## Contributing

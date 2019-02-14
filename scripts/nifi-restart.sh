@@ -45,6 +45,10 @@ DEFAULT_NIFI_VERSION="1.8.0"
 NIFI_VERSION="${NIFI_VERSION:-$DEFAULT_NIFI_VERSION}"
 NIFI_IMAGE=apache/nifi:${NIFI_VERSION}
 
+DEFAULT_TELEGRAF_VERSION="1.9"
+TELEGRAF_VERSION="${TELEGRAF_VERSION:-$DEFAULT_TELEGRAF_VERSION}"
+TELEGRAF_IMAGE=telegraf:${TELEGRAF_VERSION}
+
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 echo "Building nifi-influxdata-nar..."
@@ -56,6 +60,9 @@ mvn -B clean install -DskipTests
 echo
 echo "Stoping Docker containers..."
 echo
+
+docker kill telegraf || true
+docker rm telegraf || true
 
 docker kill nifi || true
 docker rm nifi || true
@@ -82,6 +89,7 @@ sleep 5
 #
 
 docker exec -ti influxdb sh -c "influx -execute 'create database twitter_demo'"
+docker exec -ti influxdb sh -c "influx -execute 'create database telegraf_nifi_demo'"
 
 echo
 echo "Build Apache NiFi with demo..."
@@ -107,3 +115,15 @@ docker run \
 	nifi
 
 waitNifiStarted "http://localhost:8080/nifi/"
+
+echo
+echo "Starting Telegraf..."
+echo
+
+docker run \
+    --detach \
+    --name=telegraf \
+    --net=container:nifi \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v ${SCRIPT_PATH}/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
+    ${TELEGRAF_IMAGE}
