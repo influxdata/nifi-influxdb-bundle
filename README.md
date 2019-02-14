@@ -165,7 +165,7 @@ Allows sharing connection configuration among more NiFi processors. Also support
 
 ### Store complex JSON structure to InfluxDB
 
-As NiFi user We want to put data (complex json structure) to InfluxDB in order to work with time series.
+As NiFi user we want to put data (complex json structure) to InfluxDB in order to work with time series.
 
 The demo reads data from Twitter in complex JSON format based on supplied keywords and writes them into InfluxDB.
 Data from Twitter are streamed into NiFi using built-in `org.apache.nifi.processors.twitter.GetTwitter` processor.
@@ -233,8 +233,8 @@ The mapping between NiFi Record fields and JSON is configured in dynamic propert
 Next we set mapping between NiFi Record and InfluxDB measurement/tags/field/timestamp).
 
 - Measurement - `tweets`
-- Fields - record field values: `tweet_id,retweet_count,followers_count,friends_count,favourites_count,screen_name,text`
-- Tags - record field values: `lang,keyword,user_verified`
+- Fields - record field values: `tweet_id`, `retweet_count`, `followers_count`, `friends_count`, `favourites_count`, `screen_name`, `text`
+- Tags - record field values: `lang,keyword`, `user_verified`
 - Timestamp - record field value: `timestamp`
 
 #### Result
