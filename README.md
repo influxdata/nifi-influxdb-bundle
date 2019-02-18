@@ -171,6 +171,7 @@ The demo requires Docker Engine, GNU gzip and curl on classpath.
     ./scripts/nifi-restart.sh
     ```
 3. Open Apache NiFi flow in browser: [http://localhost:8080/nifi/](http://localhost:8080/nifi/)
+4. Open Telegraf Dashboards in browser: [Twitter](http://localhost:8888/sources/0/dashboards/2) or [NiFi Container](http://localhost:8888/sources/0/dashboards/1)
 
 ### Store complex JSON structure to InfluxDB
 

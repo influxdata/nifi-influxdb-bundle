@@ -3,3 +3,4 @@
 /target
 **/target
 **/flow.xml.gz
+**/copy_dashboard.sh

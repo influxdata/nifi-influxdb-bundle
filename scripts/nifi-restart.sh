@@ -31,6 +31,10 @@ DEFAULT_TELEGRAF_VERSION="1.9"
 TELEGRAF_VERSION="${TELEGRAF_VERSION:-$DEFAULT_TELEGRAF_VERSION}"
 TELEGRAF_IMAGE=telegraf:${TELEGRAF_VERSION}
 
+DEFAULT_CHRONOGRAF_VERSION="1.7"
+CHRONOGRAF_VERSION="${CHRONOGRAF_VERSION:-$DEFAULT_CHRONOGRAF_VERSION}"
+CHRONOGRAF_IMAGE=chronograf:${CHRONOGRAF_VERSION}
+
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 echo "Building nifi-influxdata-nar..."
@@ -42,6 +46,9 @@ mvn -B clean install -DskipTests
 echo
 echo "Stoping Docker containers..."
 echo
+
+docker kill chronograf || true
+docker rm chronograf || true
 
 docker kill telegraf || true
 docker rm telegraf || true
@@ -72,6 +79,17 @@ sleep 5
 
 docker exec -ti influxdb sh -c "influx -execute 'create database twitter_demo'"
 docker exec -ti influxdb sh -c "influx -execute 'create database telegraf_nifi_demo'"
+
+echo
+echo "Starting Chronograf..."
+echo
+
+docker run \
+    --detach \
+    --name chronograf \
+    --publish 8888:8888 \
+	--link=influxdb \
+	${CHRONOGRAF_IMAGE} --influxdb-url=http://influxdb:8086
 
 echo
 echo "Build Apache NiFi with demo..."
@@ -109,3 +127,10 @@ docker run \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ${SCRIPT_PATH}/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
     ${TELEGRAF_IMAGE}
+
+echo
+echo "Import Chronograf settings..."
+echo
+
+curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/nifi-dashboard.json
+curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/twitter-dashboard.json
