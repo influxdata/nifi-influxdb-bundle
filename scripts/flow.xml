@@ -206,7 +206,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.0</version>
+          <version>1.1-SNAPSHOT</version>
         </bundle>
         <maxConcurrentTasks>10</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -382,7 +382,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.0</version>
+          <version>1.1-SNAPSHOT</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -512,7 +512,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.0</version>
+          <version>1.1-SNAPSHOT</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -922,7 +922,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.0</version>
+          <version>1.1-SNAPSHOT</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1070,7 +1070,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.0</version>
+          <version>1.1-SNAPSHOT</version>
         </bundle>
         <enabled>true</enabled>
         <property>

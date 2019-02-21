@@ -1,4 +1,6 @@
-## v1.0.0 [unreleased]
+## v1.1 [unreleased]
+
+## v1.0 [2019-02-21]
 
 ### Features
 * [PutInfluxDatabaseRecord](https://github.com/bonitoo-io/nifi-influxdb-bundle#putinfluxdatabaserecord): Uses a specified RecordReader to write the content of a FlowFile into InfluxDB database.
