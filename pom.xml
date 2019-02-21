@@ -331,6 +331,35 @@
                     <goals/>
                     <pushChanges>true</pushChanges>
                     <localCheckout>true</localCheckout>
+                    <preparationGoals>-Prelease -DfromVersion="${project.version}" -DtoVersion="${releaseVersion}" clean replacer:replace scm:checkin verify</preparationGoals>
+                    <completionGoals>-Prelease -DfromVersion="${releaseVersion}" -DtoVersion="${developmentVersion}" clean replacer:replace scm:checkin verify</completionGoals>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <configuration>
+                    <includes>
+                        <include>${basedir}/scripts/flow.xml</include>
+                    </includes>
+                    <replacements>
+                        <replacement>
+                            <token><![CDATA[<version>${fromVersion}</version>]]></token>
+                            <value><![CDATA[<version>${toVersion}</version>]]></value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <configuration>
+                    <includes>${basedir}/scripts/flow.xml</includes>
+                    <message>[maven-scm-plugin] set ${toVersion} version in flow.xml</message>
+                    <pushChanges>true</pushChanges>
                 </configuration>
             </plugin>
 
