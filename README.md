@@ -41,12 +41,12 @@ The Nar compatibility matrix:
 
 Nar Version                                                                                                                             | NiFi Version
 ----------------------------------------------------------------------------------------------------------------------------------------| ------------
-[nifi-influx-database-nar-1.0.0.nar](https://github.com/bonitoo-io/nifi-influxdb-bundle/releases/download/v1.0.0/nifi-influx-database-nar-1.0.0.nar)  | 1.8
+[nifi-influx-database-nar-1.0.nar](https://github.com/bonitoo-io/nifi-influxdb-bundle/releases/download/v1.0/nifi-influx-database-nar-1.0.nar)  | 1.8
 
 For example, to install the nar after download it to `~/Downloads`:
 
 ```bash
-$ cp ~/Downloads/nifi-influx-database-nar-1.0.0.nar.nar $NIFI_HOME/lib
+$ cp ~/Downloads/nifi-influx-database-nar-1.0.nar.nar $NIFI_HOME/lib
 ```
 
 ## How To Use
