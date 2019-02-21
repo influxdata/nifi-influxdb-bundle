@@ -30,7 +30,7 @@
     <artifactId>nifi-influx-database-bundle</artifactId>
     <groupId>org.influxdata.nifi</groupId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <modules>
         <module>nifi-influx-database-utils</module>
