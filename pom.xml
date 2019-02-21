@@ -30,7 +30,7 @@
     <artifactId>nifi-influx-database-bundle</artifactId>
     <groupId>org.influxdata.nifi</groupId>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
     <modules>
         <module>nifi-influx-database-utils</module>
@@ -79,7 +79,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/bonitoo-io/nifi-influxdb-bundle.git</connection>
-        <developerConnection>scm:git:ssh://github.com:influxdata/nifi-influxdb-bundle.git</developerConnection>
+        <developerConnection>scm:git:ssh://github.com/bonitoo-io/nifi-influxdb-bundle.git</developerConnection>
         <url>https://github.com/bonitoo-io/nifi-influxdb-bundle/tree/master</url>
     </scm>
 
@@ -233,7 +233,8 @@
                     <useDefaultExcludes>false</useDefaultExcludes>
                     <includes>**, **/META-INF/services/**</includes>
                     <excludes>**/target/**, **/*.jar, **/.git/**, **/.*, **/*.png, **/*.iml, .idea/**,
-                        **/*nightly*/**, **/.m2/**, **/LICENSE, **/NOTICE, **/*.md, **/*.json, **/*.xml.gz, **/PLACEHOLDER, **/test/resources/ssl/*
+                        **/*nightly*/**, **/.m2/**, **/LICENSE, **/NOTICE, **/*.md, **/*.json, **/*.xml.gz, **/PLACEHOLDER,
+                        **/test/resources/ssl/*, **/pom.xml.tag, **/pom.xml.releaseBackup, **/pom.xml.next, release.properties
                     </excludes>
                     <properties>
                         <organizationName>${project.organization.name}</organizationName>
@@ -315,6 +316,29 @@
                     <tag>v${project.version}</tag>
                     <deleteRelease>true</deleteRelease>
                     <artifact>nifi-influx-database-nar/target/nifi-influx-database-nar-${project.version}.nar</artifact>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <tagNameFormat>v${project.version}</tagNameFormat>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <releaseProfiles/>
+                    <goals/>
+                    <pushChanges>true</pushChanges>
+                    <localCheckout>true</localCheckout>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
 

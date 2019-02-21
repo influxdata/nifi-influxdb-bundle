@@ -4,3 +4,7 @@
 **/target
 **/flow.xml.gz
 **/copy_dashboard.sh
+**/pom.xml.tag
+**/pom.xml.releaseBackup
+**/pom.xml.next
+release.properties
