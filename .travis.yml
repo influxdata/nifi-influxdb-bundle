@@ -53,7 +53,7 @@ jobs:
         - sleep 30
         - ./scripts/end-to-end.sh
     - stage: deploy
-      if: branch = master AND repo = bonitoo-io/nifi-influxdb-bundle AND type IN (push, pull_request)
+      if: branch = master AND repo = bonitoo-io/nifi-influxdb-bundle AND type IN (push)
       jdk: oraclejdk8
       script: skip
       deploy:
