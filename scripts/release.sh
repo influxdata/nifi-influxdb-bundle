@@ -69,6 +69,9 @@ mvn replacer:replace -DtoVersion=${releaseVersion}
 #
 mvn org.codehaus.mojo:versions-maven-plugin:2.1:set -DnewVersion=${releaseVersion} -DgenerateBackupPoms=false
 
+prompt_confirm "Mark ${releaseVersion} as released in CHANGELOG.md" || exit 0
+prompt_confirm "Update links in README.md compatibility matrix to ${releaseVersion}" || exit 0
+
 git add --all
 git commit -am "release nifi-influx-database-bundle-${releaseVersion}"
 
@@ -95,7 +98,8 @@ echo "Next steps"
 echo
 echo "  1. wait for finish build on Travis CI: https://travis-ci.org/bonitoo-io/nifi-influxdb-bundle"
 echo "  2. add ${developmentVersion} iteration to CHANGELOG.md"
-echo "  3. commit changes: git commit -am \"prepare for next development iteration ${developmentVersion}\""
-echo "  4. push changes: git push origin master"
-echo "  5. delete old snapshot release from: https://github.com/bonitoo-io/nifi-influxdb-bundle/releases"
-echo "  6. delete old snapshot tag: git push --delete origin v${releaseVersion}-SNAPSHOT"
+echo "  3. add ${developmentVersion} iteration to README.md compatibility matrix"
+echo "  4. commit changes: git commit -am \"prepare for next development iteration ${developmentVersion}\""
+echo "  5. push changes: git push origin master"
+echo "  6. delete old snapshot release from: https://github.com/bonitoo-io/nifi-influxdb-bundle/releases"
+echo "  7. delete old snapshot tag: git push --delete origin v${releaseVersion}-SNAPSHOT"
