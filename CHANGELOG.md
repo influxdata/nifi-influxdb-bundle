@@ -1,7 +1,8 @@
 ## v1.1 [unreleased]
 
-### Features
+### Others
 * [11](https://github.com/bonitoo-io/nifi-influxdb-bundle/issues/11): Updated to Apache NiFi 1.9.0
+* [12](https://github.com/bonitoo-io/nifi-influxdb-bundle/issues/13): Updated to influxdb-java 2.15
 
 ## v1.0 [2019-02-21]
 
