@@ -46,7 +46,7 @@
     <name>InfluxDB Processors For Apache NiFi</name>
     <description />
 
-    <url>https://github.com/bonitoo-io/nifi-influxdb-bundle</url>
+    <url>https://github.com/influxdata/nifi-influxdb-bundle</url>
     <inceptionYear>2018</inceptionYear>
 
     <organization>
@@ -57,7 +57,7 @@
     <licenses>
         <license>
             <name>Apache License v2</name>
-            <url>https://raw.githubusercontent.com/bonitoo-io/nifi-influxdb-bundle/master/LICENSE</url>
+            <url>https://raw.githubusercontent.com/influxdata/nifi-influxdb-bundle/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -78,9 +78,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/bonitoo-io/nifi-influxdb-bundle.git</connection>
-        <developerConnection>scm:git:ssh://github.com/bonitoo-io/nifi-influxdb-bundle.git</developerConnection>
-        <url>https://github.com/bonitoo-io/nifi-influxdb-bundle/tree/master</url>
+        <connection>scm:git:https://github.com/influxdata/nifi-influxdb-bundle.git</connection>
+        <developerConnection>scm:git:ssh://github.com/influxdata/nifi-influxdb-bundle.git</developerConnection>
+        <url>https://github.com/influxdata/nifi-influxdb-bundle/tree/master</url>
     </scm>
 
     <distributionManagement>
@@ -94,7 +94,7 @@
         </repository>
         <site>
             <id>gp</id>
-            <url>https://bonitoo-io.github.io/nifi-influxdb-bundle/</url>
+            <url>https://influxdata.github.io/nifi-influxdb-bundle/</url>
         </site>
     </distributionManagement>
 

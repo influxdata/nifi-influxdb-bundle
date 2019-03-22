@@ -1,10 +1,10 @@
 # InfluxDB Processors For Apache NiFi
 
-[![Build Status](https://travis-ci.org/bonitoo-io/nifi-influxdb-bundle.svg?branch=master)](https://travis-ci.org/bonitoo-io/nifi-influxdb-bundle)
-[![codecov](https://codecov.io/gh/bonitoo-io/nifi-influxdb-bundle/branch/master/graph/badge.svg)](https://codecov.io/gh/bonitoo-io/nifi-influxdb-bundle)
-[![License](https://img.shields.io/github/license/bonitoo-io/nifi-influxdb-bundle.svg)](https://github.com/bonitoo-io/nifi-influxdb-bundle/blob/master/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues-raw/bonitoo-io/nifi-influxdb-bundle.svg)](https://github.com/bonitoo-io/nifi-influxdb-bundle/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/bonitoo-io/nifi-influxdb-bundle.svg)](https://github.com/bonitoo-io/nifi-influxdb-bundle/pulls)
+[![Build Status](https://travis-ci.org/influxdata/nifi-influxdb-bundle.svg?branch=master)](https://travis-ci.org/influxdata/nifi-influxdb-bundle)
+[![codecov](https://codecov.io/gh/influxdata/nifi-influxdb-bundle/branch/master/graph/badge.svg)](https://codecov.io/gh/influxdata/nifi-influxdb-bundle)
+[![License](https://img.shields.io/github/license/influxdata/nifi-influxdb-bundle.svg)](https://github.com/influxdata/nifi-influxdb-bundle/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues-raw/influxdata/nifi-influxdb-bundle.svg)](https://github.com/influxdata/nifi-influxdb-bundle/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/influxdata/nifi-influxdb-bundle.svg)](https://github.com/influxdata/nifi-influxdb-bundle/pulls)
 
 
 - [About this Project](#about-this-project)
@@ -41,8 +41,8 @@ The Nar compatibility matrix:
 
 Nar Version                                                                                                                             | NiFi Version
 ----------------------------------------------------------------------------------------------------------------------------------------| ------------
-[nifi-influx-database-nar-1.1-SNAPSHOT.nar](https://github.com/bonitoo-io/nifi-influxdb-bundle/releases/download/v1.1-SNAPSHOT/nifi-influx-database-nar-1.1-SNAPSHOT.nar)  | 1.9
-[nifi-influx-database-nar-1.0.nar](https://github.com/bonitoo-io/nifi-influxdb-bundle/releases/download/v1.0/nifi-influx-database-nar-1.0.nar)  | 1.8
+[nifi-influx-database-nar-1.1-SNAPSHOT.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.1-SNAPSHOT/nifi-influx-database-nar-1.1-SNAPSHOT.nar)  | 1.9
+[nifi-influx-database-nar-1.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.0/nifi-influx-database-nar-1.0.nar)  | 1.8
 
 For example, to install the nar after download it to `~/Downloads`:
 
@@ -166,7 +166,7 @@ Allows sharing connection configuration among more NiFi processors. Also support
 
 The demo requires Docker Engine, GNU gzip and curl on classpath.
 
-1. Download and unpack sources: [download ZIP](https://github.com/bonitoo-io/nifi-influxdb-bundle/archive/master.zip)
+1. Download and unpack sources: [download ZIP](https://github.com/influxdata/nifi-influxdb-bundle/archive/master.zip)
 2. Run start script from the source directory:
     ```bash
     ./scripts/nifi-restart.sh

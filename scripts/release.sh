@@ -96,10 +96,10 @@ echo "Prepared the next development iteration ${developmentVersion}!"
 echo
 echo "Next steps"
 echo
-echo "  1. wait for finish build on Travis CI: https://travis-ci.org/bonitoo-io/nifi-influxdb-bundle"
+echo "  1. wait for finish build on Travis CI: https://travis-ci.org/influxdata/nifi-influxdb-bundle"
 echo "  2. add ${developmentVersion} iteration to CHANGELOG.md"
 echo "  3. add ${developmentVersion} iteration to README.md compatibility matrix"
 echo "  4. commit changes: git commit -am \"prepare for next development iteration ${developmentVersion}\""
 echo "  5. push changes: git push origin master"
-echo "  6. delete old snapshot release from: https://github.com/bonitoo-io/nifi-influxdb-bundle/releases"
+echo "  6. delete old snapshot release from: https://github.com/influxdata/nifi-influxdb-bundle/releases"
 echo "  7. delete old snapshot tag: git push --delete origin v${releaseVersion}-SNAPSHOT"
