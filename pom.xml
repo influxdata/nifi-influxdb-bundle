@@ -211,6 +211,7 @@
 
     <build>
 
+        <finalName>WhatEverYouLikey</finalName>
         <plugins>
 
             <plugin>
@@ -234,7 +235,8 @@
                     <includes>**, **/META-INF/services/**</includes>
                     <excludes>**/target/**, **/*.jar, **/.git/**, **/.*, **/*.png, **/*.iml, .idea/**,
                         **/*nightly*/**, **/.m2/**, **/LICENSE, **/NOTICE, **/*.md, **/*.json, **/*.xml.gz, **/PLACEHOLDER,
-                        **/test/resources/ssl/*, **/pom.xml.tag, **/pom.xml.releaseBackup, **/pom.xml.next, release.properties
+                        **/test/resources/ssl/*, **/pom.xml.tag, **/pom.xml.releaseBackup, **/pom.xml.next, release.properties,
+                        **/PULL_REQUEST_TEMPLATE
                     </excludes>
                     <properties>
                         <organizationName>${project.organization.name}</organizationName>
