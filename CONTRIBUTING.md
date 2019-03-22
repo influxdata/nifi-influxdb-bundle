@@ -76,7 +76,7 @@ Make sure you have `docker` and `maven` installed and the project structure as s
   ./scripts/build.sh
 ```
 
-The nar file will be located in `$HOME/nifi-influxdb-bundle/nifi-influx-database-nar/target/`.
+The NiFi NAR file will be located in `$HOME/nifi-influxdb-bundle/nifi-influx-database-nar/target/`.
 
 To run the tests, execute the following command:
 
