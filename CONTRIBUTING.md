@@ -47,4 +47,48 @@ To assist in review for the PR, please add the following to your pull request co
 If you are going to be contributing back to the project please take a second to sign our CLA, which can be found
 [on our website](https://influxdata.com/community/cla/).
 
+## Getting the source
+
+Setup the project structure and fetch the repo like so:
+
+```bash
+  mkdir $HOME/nifi-influxdb-bundle
+  cd $HOME/nifi-influxdb-bundle
+  git clone git@github.com:influxdata/nifi-influxdb-bundle .
+```
+
+## Cloning a fork
+
+If you wish to work with fork of InfluxDB-NiFi bundle, your own fork for example, you must still follow the directory structure above. But instead of cloning the main repo, instead clone your fork. Follow the steps below to work with a fork:
+
+```bash
+  mkdir $HOME/nifi-influxdb-bundle
+  cd $HOME/nifi-influxdb-bundle
+  git clone git@github.com:<username>/nifi-influxdb-bundle .
+```
+
+## Build and Test
+
+Make sure you have `docker` and `maven` installed and the project structure as shown above. We provide a `scripts/build.sh` to quickly build and test InfluxDB-NiFi bundle, so all you'll need to do is run the following:
+
+```bash
+  cd $HOME/nifi-influxdb-bundle
+  ./scripts/build.sh
+```
+
+The NiFi NAR file will be located in `$HOME/nifi-influxdb-bundle/nifi-influx-database-nar/target/`.
+
+To run the tests, execute the following command:
+
+```bash
+  cd $HOME/nifi-influxdb-bundle
+  make clean test
+```
+
+For convenience we provide a small shell script which starts InfluxDB server locally:
+
+```bash
+  cd $HOME/nifi-influxdb-bundle
+  ./scripts/influxdb-restart.sh
+```
 
