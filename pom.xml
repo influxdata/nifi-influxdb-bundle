@@ -210,8 +210,6 @@
     </dependencyManagement>
 
     <build>
-
-        <finalName>WhatEverYouLikey</finalName>
         <plugins>
 
             <plugin>
