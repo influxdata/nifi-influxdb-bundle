@@ -98,7 +98,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -150,7 +150,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-social-media-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -423,7 +423,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -476,7 +476,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -624,7 +624,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -659,7 +659,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -711,7 +711,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -938,7 +938,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <enabled>false</enabled>
         <property>
@@ -996,7 +996,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1037,7 +1037,7 @@ InfluxDB in order to work with time series.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.9.0</version>
+          <version>1.9.2</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1104,7 +1104,7 @@ InfluxDB in order to work with time series.
       <bundle>
         <group>org.apache.nifi</group>
         <artifact>nifi-record-serialization-services-nar</artifact>
-        <version>1.9.0</version>
+        <version>1.9.2</version>
       </bundle>
       <enabled>true</enabled>
       <property>
@@ -1281,7 +1281,7 @@ InfluxDB in order to work with time series.
             <bundle>
                 <artifact>nifi-standard-nar</artifact>
                 <group>org.apache.nifi</group>
-                <version>1.9.0</version>
+                <version>1.9.2</version>
             </bundle>
             <config>
                 <bulletinLevel>WARN</bulletinLevel>
@@ -1399,7 +1399,7 @@ InfluxDB in order to work with time series.
             <bundle>
                 <artifact>nifi-social-media-nar</artifact>
                 <group>org.apache.nifi</group>
-                <version>1.9.0</version>
+                <version>1.9.2</version>
             </bundle>
             <config>
                 <bulletinLevel>WARN</bulletinLevel>

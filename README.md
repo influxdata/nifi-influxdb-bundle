@@ -19,7 +19,7 @@
 
 ## About this Project
 
-NiFi in current version has already built-in data processor `org.apache.nifi.processors.influxdb.PutInfluxDB` ([doc](https://nifi.apache.org/docs/nifi-docs/components/org.apache.nifi/nifi-influxdb-nar/1.9.0/org.apache.nifi.processors.influxdb.PutInfluxDB/index.html)) 
+NiFi in current version has already built-in data processor `org.apache.nifi.processors.influxdb.PutInfluxDB` ([doc](https://nifi.apache.org/docs/nifi-docs/components/org.apache.nifi/nifi-influxdb-nar/1.9.2/org.apache.nifi.processors.influxdb.PutInfluxDB/index.html)) 
 that accepts flow-files in [*InfluxDB’s Line Protocol*](https://docs.influxdata.com/influxdb/latest/write_protocols/line_protocol_tutorial) 
 format and stores the data into InfluxDB. 
 
