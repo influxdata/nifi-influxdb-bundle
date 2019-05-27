@@ -13,6 +13,7 @@
     - [PutInfluxDatabaseRecord](#putinfluxdatabaserecord)
     - [InfluxLineProtocolReader](#influxlineprotocolreader)
     - [InfluxDatabaseService](#influxdatabaseservice)
+    - [PutInfluxDatabase](#putinfluxdatabase)
 - [Demo](#demo)
 - [Contributing](#contributing)
 - [License](#license)
@@ -159,6 +160,25 @@ Allows sharing connection configuration among more NiFi processors. Also support
 | **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
 | Username | Username which is used to authorize against the InfluxDB |
 | Password | Password for the username which is used to authorize against the InfluxDB. If the authorization fail the FlowFile will be penalized and routed to 'retry' relationship. |
+
+### PutInfluxDatabase
+
+Processor to write the content of a FlowFile in 'line protocol'. Please check details of the 'line protocol' in InfluxDB documentation (https://www.influxdb.com/). The flow file can contain single measurement point or multiple measurement points separated by line seperator. The timestamp (last field) should be in nano-seconds resolution.
+
+#### Properties
+
+| Property | Description |
+| --- | --- |
+| **Database Name** | InfluxDB database to connect to |
+| **InfluxDB connection URL** | InfluxDB URL to connect to. Eg: http://influxdb:8086 |
+| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
+| Username | Username for accessing InfluxDB |
+| Password | Password for user |
+| **Character Set** | Specifies the character set of the document data. |
+| **Consistency Level** | InfluxDB consistency level |
+| **Retention Policy** | Retention policy for the saving the records |
+| **Max size of records** | Maximum size of records allowed to be posted in one batch |
+
 
 ## Demo
 
