@@ -39,9 +39,9 @@ import org.junit.Test;
 
 import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
 import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE_LOG;
-import static org.influxdata.nifi.processors.PutInfluxDatabaseRecord.AT_LEAST_ONE_FIELD_DEFINED_MESSAGE;
 import static org.influxdata.nifi.processors.PutInfluxDatabaseRecord.DATABASE_NAME_EMPTY_MESSAGE;
-import static org.influxdata.nifi.processors.PutInfluxDatabaseRecord.MEASUREMENT_NAME_EMPTY_MESSAGE;
+import static org.influxdata.nifi.util.InfluxDBUtils.AT_LEAST_ONE_FIELD_DEFINED_MESSAGE;
+import static org.influxdata.nifi.util.InfluxDBUtils.MEASUREMENT_NAME_EMPTY_MESSAGE;
 import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour.FAIL;
 import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour.IGNORE;
 
@@ -215,7 +215,7 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
 
         Assert.assertEquals(1, failures.size());
 
-        String message = String.format(PutInfluxDatabaseRecord.REQUIRED_FIELD_MISSING, "nifi-field-missing");
+        String message = String.format(InfluxDBUtils.REQUIRED_FIELD_MISSING, "nifi-field-missing");
         Assert.assertEquals(message, failures.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
     }
 
@@ -272,7 +272,7 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
         List<MockFlowFile> failures = testRunner.getFlowFilesForRelationship(PutInfluxDatabaseRecord.REL_FAILURE);
         Assert.assertEquals(1, failures.size());
 
-        String message = String.format(PutInfluxDatabaseRecord.REQUIRED_FIELD_MISSING, "nifi-tag-missing");
+        String message = String.format(InfluxDBUtils.REQUIRED_FIELD_MISSING, "nifi-tag-missing");
         Assert.assertEquals(message, failures.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
     }
 

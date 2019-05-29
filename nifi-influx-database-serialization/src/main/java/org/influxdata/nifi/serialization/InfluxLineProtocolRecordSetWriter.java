@@ -21,13 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.influxdata.nifi.processors.MapperOptions;
 import org.influxdata.nifi.util.InfluxDBUtils;
+import org.influxdata.nifi.util.PropertyValueUtils;
 
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
+import org.apache.nifi.annotation.lifecycle.OnEnabled;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.controller.AbstractControllerService;
+import org.apache.nifi.controller.ConfigurationContext;
+import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.logging.ComponentLog;
+import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.serialization.RecordSetWriter;
 import org.apache.nifi.serialization.RecordSetWriterFactory;
 import org.apache.nifi.serialization.record.RecordSchema;
@@ -41,6 +47,19 @@ import org.apache.nifi.serialization.record.RecordSchema;
         + "that are available in a Record. Each record in the RecordSet will be separated "
         + "by a single newline character. The Record Schema is read from the incoming FlowFile.")
 public class InfluxLineProtocolRecordSetWriter extends AbstractControllerService implements RecordSetWriterFactory {
+
+    private static final PropertyDescriptor CHARSET = new PropertyDescriptor.Builder()
+            .name("influxdb-character-set")
+            .displayName("Character Set")
+            .description("The Character Encoding that is used to encode/decode the Line Protocol")
+            .expressionLanguageSupported(ExpressionLanguageScope.NONE)
+            .addValidator(StandardValidators.CHARACTER_SET_VALIDATOR)
+            .defaultValue("UTF-8")
+            .required(true)
+            .build();
+
+    private String charSet;
+    private MapperOptions mapperOptions;
 
     @Override
     protected List<PropertyDescriptor> getSupportedPropertyDescriptors() {
@@ -56,8 +75,15 @@ public class InfluxLineProtocolRecordSetWriter extends AbstractControllerService
         properties.add(InfluxDBUtils.TIMESTAMP_PRECISION);
         properties.add(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR);
         properties.add(InfluxDBUtils.NULL_VALUE_BEHAVIOR);
+        properties.add(CHARSET);
 
         return properties;
+    }
+
+    @OnEnabled
+    public void storeMapperOptions(final ConfigurationContext context) throws PropertyValueUtils.IllegalConfigurationException {
+        this.charSet = context.getProperty(CHARSET).getValue();
+        this.mapperOptions = PropertyValueUtils.getMapperOptions(context, null);
     }
 
     @Override
@@ -67,6 +93,6 @@ public class InfluxLineProtocolRecordSetWriter extends AbstractControllerService
 
     @Override
     public RecordSetWriter createWriter(final ComponentLog componentLog, final RecordSchema recordSchema, final OutputStream outputStream) {
-        return null;
+        return new WriteInfluxLineProtocolResult(outputStream, recordSchema, componentLog, mapperOptions, charSet);
     }
 }

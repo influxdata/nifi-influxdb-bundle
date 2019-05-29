@@ -29,6 +29,21 @@ import org.apache.nifi.processor.util.StandardValidators;
  */
 public final class InfluxDBUtils {
 
+    public static final String MEASUREMENT_NAME_EMPTY_MESSAGE =
+            "Cannot write FlowFile to InfluxDB because Measurement Name is null or empty.";
+
+    public static final String AT_LEAST_ONE_FIELD_DEFINED_MESSAGE =
+            "Cannot write FlowFile to InfluxDB because at least one field must be defined.";
+
+    public static final String REQUIRED_FIELD_MISSING =
+            "Cannot write FlowFile to InfluxDB because the required field '%s' is not present in Record.";
+
+    public static final String UNSUPPORTED_FIELD_TYPE =
+            "Cannot write FlowFile to InfluxDB because the field '%s' has a unsupported type '%s'.";
+
+    public static final String FIELD_NULL_VALUE =
+            "Cannot write FlowFile to InfluxDB because the field '%s' has null value.";
+
     public static final TimeUnit PRECISION_DEFAULT = TimeUnit.NANOSECONDS;
     public static final MissingItemsBehaviour MISSING_FIELDS_BEHAVIOUR_DEFAULT = MissingItemsBehaviour.IGNORE;
     public static final MissingItemsBehaviour MISSING_TAGS_BEHAVIOUR_DEFAULT = MissingItemsBehaviour.IGNORE;
@@ -87,7 +102,6 @@ public final class InfluxDBUtils {
          */
         FAIL
     }
-
 
     /**
      * Missing items behaviour.

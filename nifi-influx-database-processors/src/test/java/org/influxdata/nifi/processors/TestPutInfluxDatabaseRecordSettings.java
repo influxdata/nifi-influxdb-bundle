@@ -20,10 +20,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.influxdata.nifi.util.InfluxDBUtils;
 import org.influxdata.nifi.util.InfluxDBUtils.ComplexFieldBehaviour;
 import org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour;
 import org.influxdata.nifi.util.InfluxDBUtils.NullValueBehaviour;
-import org.influxdata.nifi.util.InfluxDBUtils;
+import org.influxdata.nifi.util.PropertyValueUtils;
 
 import avro.shaded.com.google.common.collect.Maps;
 import org.apache.nifi.flowfile.FlowFile;
@@ -38,7 +39,8 @@ import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import static org.influxdata.nifi.util.InfluxDBUtils.*;
+import static org.influxdata.nifi.util.InfluxDBUtils.DEFAULT_RETENTION_POLICY;
+import static org.influxdata.nifi.util.InfluxDBUtils.TIMESTAMP_FIELD;
 
 public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDatabaseRecord {
 
@@ -260,7 +262,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     }
 
     @Test
-    public void writeOptions() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void writeOptions() throws PropertyValueUtils.IllegalConfigurationException {
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -274,47 +276,47 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
         Assert.assertEquals("autogen", writeOptions.getRetentionPolicy());
 
         // Timestamp field
-        Assert.assertEquals("timestamp", writeOptions.getTimestamp());
+        Assert.assertEquals("timestamp", writeOptions.getMapperOptions().getTimestamp());
 
         // Timestamp precision
-        Assert.assertEquals(TimeUnit.NANOSECONDS, writeOptions.getPrecision());
+        Assert.assertEquals(TimeUnit.NANOSECONDS, writeOptions.getMapperOptions().getPrecision());
 
         // Measurement
-        Assert.assertEquals("nifi-measurement", writeOptions.getMeasurement());
+        Assert.assertEquals("nifi-measurement", writeOptions.getMapperOptions().getMeasurement());
 
         // Fields
-        Assert.assertEquals(1, writeOptions.getFields().size());
-        Assert.assertEquals("nifi-field", writeOptions.getFields().get(0));
+        Assert.assertEquals(1, writeOptions.getMapperOptions().getFields().size());
+        Assert.assertEquals("nifi-field", writeOptions.getMapperOptions().getFields().get(0));
 
         // Missing Fields
-        Assert.assertEquals(MissingItemsBehaviour.IGNORE, writeOptions.getMissingFields());
+        Assert.assertEquals(MissingItemsBehaviour.IGNORE, writeOptions.getMapperOptions().getMissingFields());
 
         // Tags
-        Assert.assertEquals(1, writeOptions.getTags().size());
-        Assert.assertEquals("tags", writeOptions.getTags().get(0));
+        Assert.assertEquals(1, writeOptions.getMapperOptions().getTags().size());
+        Assert.assertEquals("tags", writeOptions.getMapperOptions().getTags().get(0));
 
         // Missing Tags
-        Assert.assertEquals(MissingItemsBehaviour.IGNORE, writeOptions.getMissingTags());
+        Assert.assertEquals(MissingItemsBehaviour.IGNORE, writeOptions.getMapperOptions().getMissingTags());
 
         // Complex fields behaviour
-        Assert.assertEquals(ComplexFieldBehaviour.TEXT, writeOptions.getComplexFieldBehaviour());
+        Assert.assertEquals(ComplexFieldBehaviour.TEXT, writeOptions.getMapperOptions().getComplexFieldBehaviour());
 
         // Null Field Behavior
-        Assert.assertEquals(NullValueBehaviour.IGNORE, writeOptions.getNullValueBehaviour());
+        Assert.assertEquals(NullValueBehaviour.IGNORE, writeOptions.getMapperOptions().getNullValueBehaviour());
     }
 
     @Test
-    public void timestamp() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void timestamp() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(TIMESTAMP_FIELD, "createdAt");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals("createdAt", writeOptions.getTimestamp());
+        Assert.assertEquals("createdAt", writeOptions.getMapperOptions().getTimestamp());
     }
 
     @Test
-    public void timestampOverFlowFileAttributes() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void timestampOverFlowFileAttributes() throws PropertyValueUtils.IllegalConfigurationException {
 
         ProcessSession processSession = testRunner.getProcessSessionFactory().createSession();
 
@@ -329,141 +331,141 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), flowFile);
 
-        Assert.assertEquals("createdTimestamp", writeOptions.getTimestamp());
+        Assert.assertEquals("createdTimestamp", writeOptions.getMapperOptions().getTimestamp());
     }
 
     @Test
-    public void timestampPrecision() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void timestampPrecision() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.TIMESTAMP_PRECISION, TimeUnit.MINUTES.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(TimeUnit.MINUTES, writeOptions.getPrecision());
+        Assert.assertEquals(TimeUnit.MINUTES, writeOptions.getMapperOptions().getPrecision());
     }
 
     @Test
-    public void measurement() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void measurement() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.MEASUREMENT, "another-measurement");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals("another-measurement", writeOptions.getMeasurement());
+        Assert.assertEquals("another-measurement", writeOptions.getMapperOptions().getMeasurement());
     }
 
     @Test
-    public void measurementEmpty() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void measurementEmpty() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.MEASUREMENT, "");
 
-        expectedException.expect(new TypeOfExceptionMatcher<>(PutInfluxDatabaseRecord.IllegalConfigurationException.class));
+        expectedException.expect(new TypeOfExceptionMatcher<>(PropertyValueUtils.IllegalConfigurationException.class));
 
         processor.writeOptions(testRunner.getProcessContext(), null);
     }
 
     @Test
-    public void fields() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void fields() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.FIELDS, "user-id, user-screen-name ");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(2, writeOptions.getFields().size());
-        Assert.assertEquals("user-id", writeOptions.getFields().get(0));
-        Assert.assertEquals("user-screen-name", writeOptions.getFields().get(1));
+        Assert.assertEquals(2, writeOptions.getMapperOptions().getFields().size());
+        Assert.assertEquals("user-id", writeOptions.getMapperOptions().getFields().get(0));
+        Assert.assertEquals("user-screen-name", writeOptions.getMapperOptions().getFields().get(1));
     }
 
     @Test
-    public void fieldsTrailingComma() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void fieldsTrailingComma() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.FIELDS, "user-id, ");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(1, writeOptions.getFields().size());
-        Assert.assertEquals("user-id", writeOptions.getFields().get(0));
+        Assert.assertEquals(1, writeOptions.getMapperOptions().getFields().size());
+        Assert.assertEquals("user-id", writeOptions.getMapperOptions().getFields().get(0));
     }
 
     @Test
-    public void fieldsEmpty() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void fieldsEmpty() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.FIELDS, " ");
 
-        expectedException.expect(new TypeOfExceptionMatcher<>(PutInfluxDatabaseRecord.IllegalConfigurationException.class));
+        expectedException.expect(new TypeOfExceptionMatcher<>(PropertyValueUtils.IllegalConfigurationException.class));
 
         processor.writeOptions(testRunner.getProcessContext(), null);
     }
 
     @Test
-    public void missingFields() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void missingFields() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.MISSING_FIELD_BEHAVIOR, MissingItemsBehaviour.FAIL.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(MissingItemsBehaviour.FAIL, writeOptions.getMissingFields());
+        Assert.assertEquals(MissingItemsBehaviour.FAIL, writeOptions.getMapperOptions().getMissingFields());
     }
 
     @Test
-    public void missingFieldsUnsupported() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void missingFieldsUnsupported() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.MISSING_FIELD_BEHAVIOR, "wrong_name");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(MissingItemsBehaviour.IGNORE, writeOptions.getMissingFields());
+        Assert.assertEquals(MissingItemsBehaviour.IGNORE, writeOptions.getMapperOptions().getMissingFields());
     }
 
     @Test
-    public void tags() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void tags() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.TAGS, "lang,keyword");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(2, writeOptions.getTags().size());
-        Assert.assertEquals("lang", writeOptions.getTags().get(0));
-        Assert.assertEquals("keyword", writeOptions.getTags().get(1));
+        Assert.assertEquals(2, writeOptions.getMapperOptions().getTags().size());
+        Assert.assertEquals("lang", writeOptions.getMapperOptions().getTags().get(0));
+        Assert.assertEquals("keyword", writeOptions.getMapperOptions().getTags().get(1));
     }
 
     @Test
-    public void missingTags() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void missingTags() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.MISSING_TAG_BEHAVIOR, MissingItemsBehaviour.FAIL.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(MissingItemsBehaviour.FAIL, writeOptions.getMissingTags());
+        Assert.assertEquals(MissingItemsBehaviour.FAIL, writeOptions.getMapperOptions().getMissingTags());
     }
 
     @Test
-    public void complexFieldBehaviour() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void complexFieldBehaviour() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, ComplexFieldBehaviour.IGNORE.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(ComplexFieldBehaviour.IGNORE, writeOptions.getComplexFieldBehaviour());
+        Assert.assertEquals(ComplexFieldBehaviour.IGNORE, writeOptions.getMapperOptions().getComplexFieldBehaviour());
     }
 
     @Test
-    public void complexFieldBehaviourUnsupported() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void complexFieldBehaviourUnsupported() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, "wrong_name");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(ComplexFieldBehaviour.TEXT, writeOptions.getComplexFieldBehaviour());
+        Assert.assertEquals(ComplexFieldBehaviour.TEXT, writeOptions.getMapperOptions().getComplexFieldBehaviour());
     }
 
     @Test
-    public void nullValueBehavior() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
+    public void nullValueBehavior() throws PropertyValueUtils.IllegalConfigurationException {
 
         testRunner.setProperty(InfluxDBUtils.NULL_VALUE_BEHAVIOR, NullValueBehaviour.FAIL.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
-        Assert.assertEquals(NullValueBehaviour.FAIL, writeOptions.getNullValueBehaviour());
+        Assert.assertEquals(NullValueBehaviour.FAIL, writeOptions.getMapperOptions().getNullValueBehaviour());
     }
 }

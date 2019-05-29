@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.influxdata.nifi.services.InfluxDatabaseService;
 import org.influxdata.nifi.util.PropertyValueUtils;
+import org.influxdata.nifi.util.PropertyValueUtils.IllegalConfigurationException;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -59,19 +60,12 @@ import org.influxdb.InfluxDBException;
 import org.influxdb.InfluxDBIOException;
 
 import static org.influxdata.nifi.util.InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR;
-import static org.influxdata.nifi.util.InfluxDBUtils.COMPLEX_FIELD_BEHAVIOUR_DEFAULT;
-import static org.influxdata.nifi.util.InfluxDBUtils.ComplexFieldBehaviour;
 import static org.influxdata.nifi.util.InfluxDBUtils.DEFAULT_RETENTION_POLICY;
 import static org.influxdata.nifi.util.InfluxDBUtils.FIELDS;
 import static org.influxdata.nifi.util.InfluxDBUtils.MEASUREMENT;
-import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_FIELDS_BEHAVIOUR_DEFAULT;
 import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_FIELD_BEHAVIOR;
-import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_TAGS_BEHAVIOUR_DEFAULT;
 import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_TAG_BEHAVIOR;
-import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour;
 import static org.influxdata.nifi.util.InfluxDBUtils.NULL_VALUE_BEHAVIOR;
-import static org.influxdata.nifi.util.InfluxDBUtils.NullValueBehaviour;
-import static org.influxdata.nifi.util.InfluxDBUtils.PRECISION_DEFAULT;
 import static org.influxdata.nifi.util.InfluxDBUtils.TAGS;
 import static org.influxdata.nifi.util.InfluxDBUtils.TIMESTAMP_FIELD;
 import static org.influxdata.nifi.util.InfluxDBUtils.TIMESTAMP_PRECISION;
@@ -93,21 +87,6 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
 
     protected static final String DATABASE_NAME_EMPTY_MESSAGE =
             "Cannot configure InfluxDB client because Database Name is null or empty.";
-
-    protected static final String MEASUREMENT_NAME_EMPTY_MESSAGE =
-            "Cannot write FlowFile to InfluxDB because Measurement Name is null or empty.";
-
-    protected static final String AT_LEAST_ONE_FIELD_DEFINED_MESSAGE =
-            "Cannot write FlowFile to InfluxDB because at least one field must be defined.";
-
-    protected static final String REQUIRED_FIELD_MISSING =
-            "Cannot write FlowFile to InfluxDB because the required field '%s' is not present in Record.";
-
-    protected static final String UNSUPPORTED_FIELD_TYPE =
-            "Cannot write FlowFile to InfluxDB because the field '%s' has a unsupported type '%s'.";
-
-    protected static final String FIELD_NULL_VALUE =
-            "Cannot write FlowFile to InfluxDB because the field '%s' has null value.";
 
     /**
      * Influx consistency levels.
@@ -364,7 +343,7 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
             WriteOptions writeOptions = writeOptions(context, flowFile);
 
             // Init Mapper
-            RecordToPointMapper pointMapper = RecordToPointMapper
+            FlowFileToPointMapper pointMapper = FlowFileToPointMapper
                     .createMapper(session, context, getLogger(), writeOptions);
 
             // Write to InfluxDB
@@ -503,54 +482,12 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
             retentionPolicy = DEFAULT_RETENTION_POLICY;
         }
 
-        // Timestamp
-        String timestamp = context.getProperty(TIMESTAMP_FIELD).evaluateAttributeExpressions(flowFile).getValue();
-
-        // Timestamp precision
-        TimeUnit precision = getEnumValue(TIMESTAMP_PRECISION, context, TimeUnit.class, PRECISION_DEFAULT);
-
-        // Measurement
-        String measurement = context.getProperty(MEASUREMENT).evaluateAttributeExpressions(flowFile).getValue();
-        if (StringUtils.isEmpty(measurement)) {
-            throw new IllegalConfigurationException(MEASUREMENT_NAME_EMPTY_MESSAGE);
-        }
-
-        // Fields
-        List<String> fields = PropertyValueUtils.getList(FIELDS, context, flowFile);
-        if (fields.isEmpty()) {
-            throw new IllegalConfigurationException(AT_LEAST_ONE_FIELD_DEFINED_MESSAGE);
-        }
-
-        // Missing fields
-        MissingItemsBehaviour missingFields = getEnumValue(MISSING_FIELD_BEHAVIOR, context, MissingItemsBehaviour.class,
-                MISSING_FIELDS_BEHAVIOUR_DEFAULT);
-
-        // Tags
-        List<String> tags = PropertyValueUtils.getList(TAGS, context, flowFile);
-
-        // Missing tags
-        MissingItemsBehaviour missingTags = getEnumValue(MISSING_TAG_BEHAVIOR, context, MissingItemsBehaviour.class,
-                MISSING_TAGS_BEHAVIOUR_DEFAULT);
-
-        // Complex fields behaviour
-        ComplexFieldBehaviour complexFieldBehaviour = getEnumValue(COMPLEX_FIELD_BEHAVIOR, context,
-                ComplexFieldBehaviour.class, COMPLEX_FIELD_BEHAVIOUR_DEFAULT);
-
-        // Null Field Value Behaviour
-        NullValueBehaviour nullValueBehaviour = getEnumValue(NULL_VALUE_BEHAVIOR, context, NullValueBehaviour.class, NullValueBehaviour.IGNORE);
+        MapperOptions mapperOptions = PropertyValueUtils.getMapperOptions(context, flowFile);
 
         return new WriteOptions()
                 .database(database)
                 .setRetentionPolicy(retentionPolicy)
-                .timestamp(timestamp)
-                .precision(precision)
-                .measurement(measurement)
-                .fields(fields)
-                .missingFields(missingFields)
-                .tags(tags)
-                .missingTags(missingTags)
-                .complexFieldBehaviour(complexFieldBehaviour)
-                .nullValueBehaviour(nullValueBehaviour);
+                .mapperOptions(mapperOptions);
     }
 
     @NonNull
@@ -567,13 +504,5 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
         getLogger().error(INFLUX_DB_ERROR_MESSAGE_LOG, new Object[]{flowFileName, e.getLocalizedMessage()}, e);
 
         return session.putAttribute(flowFile, AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE, String.valueOf(e.getMessage()));
-    }
-
-    protected class IllegalConfigurationException extends Exception {
-
-        protected IllegalConfigurationException(final String message) {
-
-            super(message);
-        }
     }
 }
