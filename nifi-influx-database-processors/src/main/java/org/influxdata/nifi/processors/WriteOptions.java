@@ -21,19 +21,24 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import org.influxdata.nifi.util.InfluxDBUtils;
+import org.influxdata.nifi.util.InfluxDBUtils.ComplexFieldBehaviour;
+import org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour;
+import org.influxdata.nifi.util.InfluxDBUtils.NullValueBehaviour;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+import static org.influxdata.nifi.util.InfluxDBUtils.COMPLEX_FIELD_BEHAVIOUR_DEFAULT;
+import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_FIELDS_BEHAVIOUR_DEFAULT;
+import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_TAGS_BEHAVIOUR_DEFAULT;
+import static org.influxdata.nifi.util.InfluxDBUtils.NULL_FIELD_VALUE_BEHAVIOUR_DEFAULT;
+import static org.influxdata.nifi.util.InfluxDBUtils.PRECISION_DEFAULT;
+
 public final class WriteOptions implements Cloneable {
 
-    public static final TimeUnit PRECISION_DEFAULT = TimeUnit.NANOSECONDS;
-    public static final MissingItemsBehaviour MISSING_FIELDS_BEHAVIOUR_DEFAULT = MissingItemsBehaviour.IGNORE;
-    public static final MissingItemsBehaviour MISSING_TAGS_BEHAVIOUR_DEFAULT = MissingItemsBehaviour.IGNORE;
-    public static final ComplexFieldBehaviour COMPLEX_FIELD_BEHAVIOUR_DEFAULT = ComplexFieldBehaviour.TEXT;
-    public static final NullValueBehaviour NULL_FIELD_VALUE_BEHAVIOUR_DEFAULT = NullValueBehaviour.IGNORE;
-    public static final String DEFAULT_RETENTION_POLICY = "autogen";
-
     private String database;
+
     private String retentionPolicy;
     private String timestamp;
     private TimeUnit precision = PRECISION_DEFAULT;
@@ -44,58 +49,6 @@ public final class WriteOptions implements Cloneable {
     private MissingItemsBehaviour missingTags = MISSING_TAGS_BEHAVIOUR_DEFAULT;
     private ComplexFieldBehaviour complexFieldBehaviour = COMPLEX_FIELD_BEHAVIOUR_DEFAULT;
     private NullValueBehaviour nullValueBehaviour = NULL_FIELD_VALUE_BEHAVIOUR_DEFAULT;
-
-    /**
-     * @see PutInfluxDatabaseRecord#MISSING_FIELD_BEHAVIOR
-     * @see PutInfluxDatabaseRecord#MISSING_TAG_BEHAVIOR
-     */
-    public enum MissingItemsBehaviour {
-
-        /**
-         * @see PutInfluxDatabaseRecord#MISSING_ITEMS_BEHAVIOUR_IGNORE
-         */
-        IGNORE,
-
-        /**
-         * @see PutInfluxDatabaseRecord#MISSING_ITEMS_BEHAVIOUR_FAIL
-         */
-        FAIL,
-    }
-
-    public enum ComplexFieldBehaviour {
-
-        /**
-         * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_IGNORE
-         */
-        IGNORE,
-
-        /**
-         * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_FAIL
-         */
-        FAIL,
-
-        /**
-         * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_WARN
-         */
-        WARN,
-
-        /**
-         * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_VALUE
-         */
-        TEXT,
-    }
-
-    public enum NullValueBehaviour {
-        /**
-         * @see PutInfluxDatabaseRecord#NULL_VALUE_BEHAVIOUR_IGNORE
-         */
-        IGNORE,
-
-        /**
-         * @see PutInfluxDatabaseRecord#NULL_VALUE_BEHAVIOUR_FAIL
-         */
-        FAIL
-    }
 
 
     /**
@@ -133,7 +86,7 @@ public final class WriteOptions implements Cloneable {
     /**
      * @param timestamp A name of the record field that used as a 'timestamp'
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#TIMESTAMP_FIELD
+     * @see InfluxDBUtils#TIMESTAMP_FIELD
      */
     @NonNull
     public WriteOptions timestamp(@Nullable final String timestamp) {
@@ -147,7 +100,7 @@ public final class WriteOptions implements Cloneable {
     /**
      * @param precision Precision of timestamp
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#TIMESTAMP_PRECISION
+     * @see InfluxDBUtils#TIMESTAMP_PRECISION
      */
     @NonNull
     public WriteOptions precision(@NonNull final TimeUnit precision) {
@@ -163,7 +116,7 @@ public final class WriteOptions implements Cloneable {
     /**
      * @param measurement Name of the measurement
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#MEASUREMENT
+     * @see InfluxDBUtils#MEASUREMENT
      */
     @NonNull
     public WriteOptions measurement(@NonNull final String measurement) {
@@ -179,7 +132,7 @@ public final class WriteOptions implements Cloneable {
     /**
      * @param fields Name of the fields
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#FIELDS
+     * @see InfluxDBUtils#FIELDS
      */
     @NonNull
     public WriteOptions fields(@NonNull final List<String> fields) {
@@ -195,7 +148,7 @@ public final class WriteOptions implements Cloneable {
     /**
      * @param missingFields Missing fields behaviour
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#MISSING_FIELD_BEHAVIOR
+     * @see InfluxDBUtils#MISSING_FIELD_BEHAVIOR
      */
     @NonNull
     public WriteOptions missingFields(@NonNull final MissingItemsBehaviour missingFields) {
@@ -211,7 +164,7 @@ public final class WriteOptions implements Cloneable {
     /**
      * @param tags Evaluated names of the tags
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#TAGS
+     * @see InfluxDBUtils#TAGS
      */
     @NonNull
     public WriteOptions tags(@NonNull final List<String> tags) {
@@ -227,7 +180,7 @@ public final class WriteOptions implements Cloneable {
     /**
      * @param missingTags Missing tags behaviour
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#MISSING_TAG_BEHAVIOR
+     * @see InfluxDBUtils#MISSING_TAG_BEHAVIOR
      */
     @NonNull
     public WriteOptions missingTags(@NonNull final MissingItemsBehaviour missingTags) {
@@ -243,7 +196,7 @@ public final class WriteOptions implements Cloneable {
     /**
      * @param complexFieldBehaviour Complex field behaviour
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_BEHAVIOR
+     * @see InfluxDBUtils#COMPLEX_FIELD_BEHAVIOR
      */
     @NonNull
     public WriteOptions complexFieldBehaviour(@NonNull final ComplexFieldBehaviour complexFieldBehaviour) {
@@ -259,7 +212,7 @@ public final class WriteOptions implements Cloneable {
     /**
      * @param nullValueBehaviour Null Value Behaviour
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#NULL_VALUE_BEHAVIOR
+     * @see InfluxDBUtils#NULL_VALUE_BEHAVIOR
      */
     @NonNull
     public WriteOptions nullValueBehaviour(@NonNull final NullValueBehaviour nullValueBehaviour) {
@@ -290,7 +243,7 @@ public final class WriteOptions implements Cloneable {
 
     /**
      * @return Evaluated timestamp name
-     * @see PutInfluxDatabaseRecord#TIMESTAMP_FIELD
+     * @see InfluxDBUtils#TIMESTAMP_FIELD
      */
     @Nullable
     public String getTimestamp() {
@@ -300,7 +253,7 @@ public final class WriteOptions implements Cloneable {
 
     /**
      * @return Evaluated timestamp precision
-     * @see PutInfluxDatabaseRecord#TIMESTAMP_PRECISION
+     * @see InfluxDBUtils#TIMESTAMP_PRECISION
      */
     @NonNull
     public TimeUnit getPrecision() {
@@ -309,7 +262,7 @@ public final class WriteOptions implements Cloneable {
 
     /**
      * @return Evaluated measurement name
-     * @see PutInfluxDatabaseRecord#MEASUREMENT
+     * @see InfluxDBUtils#MEASUREMENT
      */
     @NonNull
     public String getMeasurement() {
@@ -318,7 +271,7 @@ public final class WriteOptions implements Cloneable {
 
     /**
      * @return Evaluated fields names
-     * @see PutInfluxDatabaseRecord#FIELDS
+     * @see InfluxDBUtils#FIELDS
      */
     @NonNull
     public List<String> getFields() {
@@ -326,7 +279,7 @@ public final class WriteOptions implements Cloneable {
     }
 
     /**
-     * @see PutInfluxDatabaseRecord#MISSING_FIELD_BEHAVIOR
+     * @see InfluxDBUtils#MISSING_FIELD_BEHAVIOR
      */
     @NonNull
     public MissingItemsBehaviour getMissingFields() {
@@ -335,7 +288,7 @@ public final class WriteOptions implements Cloneable {
 
     /**
      * @return Evaluated tags names
-     * @see PutInfluxDatabaseRecord#TAGS
+     * @see InfluxDBUtils#TAGS
      */
     @NonNull
     public List<String> getTags() {
@@ -343,7 +296,7 @@ public final class WriteOptions implements Cloneable {
     }
 
     /**
-     * @see PutInfluxDatabaseRecord#MISSING_TAG_BEHAVIOR
+     * @see InfluxDBUtils#MISSING_TAG_BEHAVIOR
      */
     @NonNull
     public MissingItemsBehaviour getMissingTags() {
@@ -351,7 +304,7 @@ public final class WriteOptions implements Cloneable {
     }
 
     /**
-     * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_BEHAVIOR
+     * @see InfluxDBUtils#COMPLEX_FIELD_BEHAVIOR
      */
     @NonNull
     public ComplexFieldBehaviour getComplexFieldBehaviour() {
@@ -359,7 +312,7 @@ public final class WriteOptions implements Cloneable {
     }
 
     /**
-     * @see PutInfluxDatabaseRecord#NULL_VALUE_BEHAVIOR
+     * @see InfluxDBUtils#NULL_VALUE_BEHAVIOR
      */
     @NonNull
     public NullValueBehaviour getNullValueBehaviour() {

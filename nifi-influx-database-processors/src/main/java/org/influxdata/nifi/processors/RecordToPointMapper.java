@@ -26,7 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import org.influxdata.nifi.processors.WriteOptions.MissingItemsBehaviour;
+import org.influxdata.nifi.util.InfluxDBUtils;
+import org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -54,6 +55,7 @@ import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.influxdata.nifi.util.InfluxDBUtils.*;
 
 public final class RecordToPointMapper {
 
@@ -582,7 +584,7 @@ public final class RecordToPointMapper {
 
         Objects.requireNonNull(fieldName, "Field name is required");
 
-        if (WriteOptions.NullValueBehaviour.FAIL.equals(options.getNullValueBehaviour())) {
+        if (NullValueBehaviour.FAIL.equals(options.getNullValueBehaviour())) {
             String message = String.format(PutInfluxDatabaseRecord.FIELD_NULL_VALUE, fieldName);
 
             throw new IllegalStateException(message);

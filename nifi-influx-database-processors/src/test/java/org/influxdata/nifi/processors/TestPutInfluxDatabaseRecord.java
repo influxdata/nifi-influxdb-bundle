@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.influxdata.nifi.util.InfluxDBUtils;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -46,6 +48,8 @@ import org.influxdb.dto.Point;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import static org.influxdata.nifi.util.InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR;
 
 public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRecord {
 
@@ -270,7 +274,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addArrayFieldText() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.TEXT.name());
+        testRunner.setProperty(COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.TEXT.name());
 
         DataType dataType = RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.LONG.getDataType());
 
@@ -280,7 +284,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addArrayFieldIgnore() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.IGNORE.name());
+        testRunner.setProperty(COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.IGNORE.name());
 
         DataType dataType = RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.LONG.getDataType());
 
@@ -290,7 +294,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addArrayFieldWarn() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.WARN.name());
+        testRunner.setProperty(COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.WARN.name());
 
         DataType dataType = RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.LONG.getDataType());
 
@@ -304,7 +308,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addArrayFieldFail() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.FAIL.name());
 
         DataType dataType = RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.LONG.getDataType());
 
@@ -318,7 +322,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addRecordFieldText() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.TEXT.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.TEXT.name());
 
         addFieldRecordType(true, PutInfluxDatabaseRecord.REL_SUCCESS);
     }
@@ -326,7 +330,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addRecordFieldIgnore() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.IGNORE.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.IGNORE.name());
 
         addFieldRecordType(false, PutInfluxDatabaseRecord.REL_SUCCESS);
     }
@@ -334,7 +338,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addRecordFieldWarn() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.WARN.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.WARN.name());
 
         addFieldRecordType(false, PutInfluxDatabaseRecord.REL_SUCCESS);
 
@@ -346,7 +350,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addRecordFieldFail() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.FAIL.name());
 
         addFieldRecordType(false, PutInfluxDatabaseRecord.REL_FAILURE);
 
@@ -376,7 +380,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void timestampDefined() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "nifi-timestamp");
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "nifi-timestamp");
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-timestamp", RecordFieldType.LONG);
@@ -397,7 +401,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void timestampDefinedButEmpty() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "nifi-timestamp");
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "nifi-timestamp");
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-timestamp", RecordFieldType.LONG);
@@ -418,7 +422,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void timestampDefinedAsString() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "nifi-timestamp");
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "nifi-timestamp");
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-timestamp", RecordFieldType.STRING);
@@ -441,7 +445,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
 
         Date dateValue = new Date();
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "nifi-timestamp");
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "nifi-timestamp");
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-timestamp", RecordFieldType.DATE);
@@ -462,8 +466,8 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void timestampPrecisionDefined() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "nifi-timestamp");
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_PRECISION, TimeUnit.HOURS.name());
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "nifi-timestamp");
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_PRECISION, TimeUnit.HOURS.name());
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-timestamp", RecordFieldType.LONG);
@@ -486,8 +490,8 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
 
         Date dateValue = new Date();
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "nifi-timestamp");
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_PRECISION, TimeUnit.HOURS.name());
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "nifi-timestamp");
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_PRECISION, TimeUnit.HOURS.name());
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-timestamp", RecordFieldType.LONG);
@@ -553,7 +557,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addMoreTags() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TAGS, "nifi-tag1,nifi-tag2");
+        testRunner.setProperty(InfluxDBUtils.TAGS, "nifi-tag1,nifi-tag2");
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-tag1", RecordFieldType.STRING);
@@ -578,7 +582,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addMapTags() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TAGS, "nifi-tags");
+        testRunner.setProperty(InfluxDBUtils.TAGS, "nifi-tags");
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-tags", RecordFieldType.MAP);
@@ -617,7 +621,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addArrayTagText() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.TEXT.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.TEXT.name());
 
         DataType dataType = RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.LONG.getDataType());
 
@@ -627,7 +631,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addArrayTagIgnore() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.IGNORE.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.IGNORE.name());
 
         DataType dataType = RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.LONG.getDataType());
 
@@ -637,7 +641,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addArrayTagWarn() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.WARN.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.WARN.name());
 
         DataType dataType = RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.LONG.getDataType());
 
@@ -651,7 +655,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addArrayTagFail() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.FAIL.name());
 
         DataType dataType = RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.LONG.getDataType());
 
@@ -665,7 +669,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addRecordTagText() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.TEXT.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.TEXT.name());
 
         addTagRecordType(true, PutInfluxDatabaseRecord.REL_SUCCESS);
     }
@@ -673,7 +677,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addRecordTagIgnore() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.IGNORE.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.IGNORE.name());
 
         addTagRecordType(false, PutInfluxDatabaseRecord.REL_SUCCESS);
     }
@@ -681,7 +685,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addRecordTagWarn() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.WARN.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.WARN.name());
 
         addTagRecordType(false, PutInfluxDatabaseRecord.REL_SUCCESS);
 
@@ -693,7 +697,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void addRecordTagFail() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, WriteOptions.ComplexFieldBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, InfluxDBUtils.ComplexFieldBehaviour.FAIL.name());
 
         addTagRecordType(false, PutInfluxDatabaseRecord.REL_FAILURE);
 
@@ -739,8 +743,8 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void nullValueBehaviourIgnoredTag() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TAGS, "nifi-not-exist-tag");
-        testRunner.setProperty(PutInfluxDatabaseRecord.NULL_VALUE_BEHAVIOR, WriteOptions.NullValueBehaviour.IGNORE.name());
+        testRunner.setProperty(InfluxDBUtils.TAGS, "nifi-not-exist-tag");
+        testRunner.setProperty(InfluxDBUtils.NULL_VALUE_BEHAVIOR, InfluxDBUtils.NullValueBehaviour.IGNORE.name());
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-not-exist-tag", RecordFieldType.STRING);
@@ -760,8 +764,8 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void nullValueBehaviourFailTag() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TAGS, "nifi-not-exist-tag");
-        testRunner.setProperty(PutInfluxDatabaseRecord.NULL_VALUE_BEHAVIOR, WriteOptions.NullValueBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.TAGS, "nifi-not-exist-tag");
+        testRunner.setProperty(InfluxDBUtils.NULL_VALUE_BEHAVIOR, InfluxDBUtils.NullValueBehaviour.FAIL.name());
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-not-exist-tag", RecordFieldType.STRING);
@@ -780,8 +784,8 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void nullValueBehaviourIgnoredField() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.FIELDS, "nifi-field,nifi-not-exist-field");
-        testRunner.setProperty(PutInfluxDatabaseRecord.NULL_VALUE_BEHAVIOR, WriteOptions.NullValueBehaviour.IGNORE.name());
+        testRunner.setProperty(InfluxDBUtils.FIELDS, "nifi-field,nifi-not-exist-field");
+        testRunner.setProperty(InfluxDBUtils.NULL_VALUE_BEHAVIOR, InfluxDBUtils.NullValueBehaviour.IGNORE.name());
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-not-exist-field", RecordFieldType.STRING);
@@ -799,8 +803,8 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
     @Test
     public void nullValueBehaviourFailField() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.FIELDS, "nifi-field,nifi-not-exist-field");
-        testRunner.setProperty(PutInfluxDatabaseRecord.NULL_VALUE_BEHAVIOR, WriteOptions.NullValueBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.FIELDS, "nifi-field,nifi-not-exist-field");
+        testRunner.setProperty(InfluxDBUtils.NULL_VALUE_BEHAVIOR, InfluxDBUtils.NullValueBehaviour.FAIL.name());
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-not-exist-field", RecordFieldType.STRING);
@@ -835,7 +839,7 @@ public class TestPutInfluxDatabaseRecord extends AbstractTestPutInfluxDatabaseRe
                               @NonNull final Boolean isValueExpected,
                               @NonNull final Relationship expectedRelations) {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TAGS, "nifi-tag");
+        testRunner.setProperty(InfluxDBUtils.TAGS, "nifi-tag");
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-tag", dataType.getFieldType());

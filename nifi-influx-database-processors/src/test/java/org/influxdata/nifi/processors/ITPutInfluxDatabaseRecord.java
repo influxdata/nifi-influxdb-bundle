@@ -27,6 +27,7 @@ import java.util.stream.IntStream;
 import org.influxdata.nifi.serialization.InfluxLineProtocolReader;
 import org.influxdata.nifi.services.InfluxDatabaseService;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService;
+import org.influxdata.nifi.util.InfluxDBUtils;
 
 import com.google.gson.JsonObject;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -70,7 +71,7 @@ public class ITPutInfluxDatabaseRecord extends AbstractITInfluxDB {
 
         runner = TestRunners.newTestRunner(processor);
         runner.setProperty(PutInfluxDatabaseRecord.DB_NAME, dbName);
-        runner.setProperty(PutInfluxDatabaseRecord.MEASUREMENT, "testRecordMeasurement");
+        runner.setProperty(InfluxDBUtils.MEASUREMENT, "testRecordMeasurement");
         runner.setProperty(PutInfluxDatabaseRecord.RECORD_READER_FACTORY, "recordReader");
         runner.setProperty(PutInfluxDatabaseRecord.INFLUX_DB_SERVICE, "influxdb-service");
 
@@ -90,9 +91,9 @@ public class ITPutInfluxDatabaseRecord extends AbstractITInfluxDB {
     @Test
     public void storeComplexData() throws ParseException {
 
-        runner.setProperty(PutInfluxDatabaseRecord.TAGS, "lang,keyword");
-        runner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "timestamp");
-        runner.setProperty(PutInfluxDatabaseRecord.FIELDS,
+        runner.setProperty(InfluxDBUtils.TAGS, "lang,keyword");
+        runner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "timestamp");
+        runner.setProperty(InfluxDBUtils.FIELDS,
                 "retweet_count,tweet_id,followers_count,screen_name,friends_count,favourites_count,user_verified,raw");
 
         recordReader.addSchemaField("lang", RecordFieldType.STRING);
@@ -150,8 +151,8 @@ public class ITPutInfluxDatabaseRecord extends AbstractITInfluxDB {
     @Test
     public void fieldTypeConflict() throws InitializationException {
 
-        runner.setProperty(PutInfluxDatabaseRecord.TAGS, "success");
-        runner.setProperty(PutInfluxDatabaseRecord.FIELDS, "orderTime,healthy");
+        runner.setProperty(InfluxDBUtils.TAGS, "success");
+        runner.setProperty(InfluxDBUtils.FIELDS, "orderTime,healthy");
 
         recordReader.addSchemaField("success", RecordFieldType.STRING);
         recordReader.addSchemaField("orderTime", RecordFieldType.DATE);
@@ -207,8 +208,8 @@ public class ITPutInfluxDatabaseRecord extends AbstractITInfluxDB {
         runner.setProperty(jsonReader, SCHEMA_TEXT, schema);
         runner.setProperty(PutInfluxDatabaseRecord.RECORD_READER_FACTORY, "jsonReader");
 
-        runner.setProperty(PutInfluxDatabaseRecord.TAGS, "car_type");
-        runner.setProperty(PutInfluxDatabaseRecord.FIELDS, "loc_x,loc_y");
+        runner.setProperty(InfluxDBUtils.TAGS, "car_type");
+        runner.setProperty(InfluxDBUtils.FIELDS, "loc_x,loc_y");
 
         runner.enableControllerService(jsonReader);
 
@@ -256,8 +257,8 @@ public class ITPutInfluxDatabaseRecord extends AbstractITInfluxDB {
         runner.setProperty(PutInfluxDatabaseRecord.ENABLE_BATCHING, "true");
         runner.setProperty(PutInfluxDatabaseRecord.BATCH_ACTIONS, "50");
 
-        runner.setProperty(PutInfluxDatabaseRecord.TAGS, "botanical_category");
-        runner.setProperty(PutInfluxDatabaseRecord.FIELDS, "total_size,delta_size");
+        runner.setProperty(InfluxDBUtils.TAGS, "botanical_category");
+        runner.setProperty(InfluxDBUtils.FIELDS, "total_size,delta_size");
 
         recordReader.addSchemaField("botanical_category", RecordFieldType.STRING);
         recordReader.addSchemaField("total_size", RecordFieldType.INT);
@@ -296,9 +297,9 @@ public class ITPutInfluxDatabaseRecord extends AbstractITInfluxDB {
         runner.enableControllerService(readerFactory);
 
         runner.setProperty(PutInfluxDatabaseRecord.RECORD_READER_FACTORY, "inline-reader");
-        runner.setProperty(PutInfluxDatabaseRecord.TAGS, "tags");
-        runner.setProperty(PutInfluxDatabaseRecord.FIELDS, "fields");
-        runner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "timestamp");
+        runner.setProperty(InfluxDBUtils.TAGS, "tags");
+        runner.setProperty(InfluxDBUtils.FIELDS, "fields");
+        runner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "timestamp");
 
         runner.enqueue(data);
         runner.run();

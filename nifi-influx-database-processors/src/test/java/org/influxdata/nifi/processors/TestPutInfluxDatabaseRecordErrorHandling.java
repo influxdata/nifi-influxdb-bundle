@@ -22,6 +22,8 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 
+import org.influxdata.nifi.util.InfluxDBUtils;
+
 import avro.shaded.com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.processor.Relationship;
@@ -40,8 +42,8 @@ import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.INF
 import static org.influxdata.nifi.processors.PutInfluxDatabaseRecord.AT_LEAST_ONE_FIELD_DEFINED_MESSAGE;
 import static org.influxdata.nifi.processors.PutInfluxDatabaseRecord.DATABASE_NAME_EMPTY_MESSAGE;
 import static org.influxdata.nifi.processors.PutInfluxDatabaseRecord.MEASUREMENT_NAME_EMPTY_MESSAGE;
-import static org.influxdata.nifi.processors.WriteOptions.MissingItemsBehaviour.FAIL;
-import static org.influxdata.nifi.processors.WriteOptions.MissingItemsBehaviour.IGNORE;
+import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour.FAIL;
+import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour.IGNORE;
 
 @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInfluxDatabaseRecord {
@@ -69,7 +71,7 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
     @Test
     public void measurementNotDefined() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.MEASUREMENT, "${measurementProperty}");
+        testRunner.setProperty(InfluxDBUtils.MEASUREMENT, "${measurementProperty}");
 
         prepareData();
 
@@ -90,7 +92,7 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
     @Test
     public void fieldsNotDefined() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.FIELDS, "${fieldsProperty}");
+        testRunner.setProperty(InfluxDBUtils.FIELDS, "${fieldsProperty}");
 
         prepareData();
 
@@ -201,8 +203,8 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
     @Test
     public void missingFieldFail() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.FIELDS, "nifi-field,nifi-field-missing");
-        testRunner.setProperty(PutInfluxDatabaseRecord.MISSING_FIELD_BEHAVIOR, FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.FIELDS, "nifi-field,nifi-field-missing");
+        testRunner.setProperty(InfluxDBUtils.MISSING_FIELD_BEHAVIOR, FAIL.name());
 
         prepareData();
 
@@ -220,8 +222,8 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
     @Test
     public void missingFieldIgnore() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.FIELDS, "nifi-field,nifi-field-missing");
-        testRunner.setProperty(PutInfluxDatabaseRecord.MISSING_FIELD_BEHAVIOR, IGNORE.name());
+        testRunner.setProperty(InfluxDBUtils.FIELDS, "nifi-field,nifi-field-missing");
+        testRunner.setProperty(InfluxDBUtils.MISSING_FIELD_BEHAVIOR, IGNORE.name());
 
         prepareData();
 
@@ -237,8 +239,8 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
     @Test
     public void missingTagIgnore() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.MISSING_TAG_BEHAVIOR, WriteOptions.MissingItemsBehaviour.IGNORE.name());
-        testRunner.setProperty(PutInfluxDatabaseRecord.TAGS, "nifi-tag,nifi-tag-missing");
+        testRunner.setProperty(InfluxDBUtils.MISSING_TAG_BEHAVIOR, InfluxDBUtils.MissingItemsBehaviour.IGNORE.name());
+        testRunner.setProperty(InfluxDBUtils.TAGS, "nifi-tag,nifi-tag-missing");
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-tag", RecordFieldType.STRING);
@@ -257,8 +259,8 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
     @Test
     public void missingTagFail() {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.MISSING_TAG_BEHAVIOR, WriteOptions.MissingItemsBehaviour.FAIL.name());
-        testRunner.setProperty(PutInfluxDatabaseRecord.TAGS, "nifi-tag,nifi-tag-missing");
+        testRunner.setProperty(InfluxDBUtils.MISSING_TAG_BEHAVIOR, InfluxDBUtils.MissingItemsBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.TAGS, "nifi-tag,nifi-tag-missing");
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addSchemaField("nifi-tag", RecordFieldType.STRING);

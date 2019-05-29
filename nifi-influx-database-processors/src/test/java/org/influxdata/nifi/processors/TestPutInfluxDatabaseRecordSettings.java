@@ -20,9 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.influxdata.nifi.processors.WriteOptions.ComplexFieldBehaviour;
-import org.influxdata.nifi.processors.WriteOptions.MissingItemsBehaviour;
-import org.influxdata.nifi.processors.WriteOptions.NullValueBehaviour;
+import org.influxdata.nifi.util.InfluxDBUtils.ComplexFieldBehaviour;
+import org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour;
+import org.influxdata.nifi.util.InfluxDBUtils.NullValueBehaviour;
+import org.influxdata.nifi.util.InfluxDBUtils;
 
 import avro.shaded.com.google.common.collect.Maps;
 import org.apache.nifi.flowfile.FlowFile;
@@ -36,6 +37,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+
+import static org.influxdata.nifi.util.InfluxDBUtils.*;
 
 public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDatabaseRecord {
 
@@ -131,7 +134,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
         testRunner.enqueue("");
         testRunner.run();
 
-        Assert.assertEquals(WriteOptions.DEFAULT_RETENTION_POLICY, pointCapture.getValue().getRetentionPolicy());
+        Assert.assertEquals(DEFAULT_RETENTION_POLICY, pointCapture.getValue().getRetentionPolicy());
     }
 
     @Test
@@ -303,7 +306,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void timestamp() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "createdAt");
+        testRunner.setProperty(TIMESTAMP_FIELD, "createdAt");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -322,7 +325,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
 
         flowFile = processSession.putAllAttributes(flowFile, props);
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_FIELD, "${createdProperty}");
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "${createdProperty}");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), flowFile);
 
@@ -332,7 +335,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void timestampPrecision() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TIMESTAMP_PRECISION, TimeUnit.MINUTES.name());
+        testRunner.setProperty(InfluxDBUtils.TIMESTAMP_PRECISION, TimeUnit.MINUTES.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -342,7 +345,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void measurement() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.MEASUREMENT, "another-measurement");
+        testRunner.setProperty(InfluxDBUtils.MEASUREMENT, "another-measurement");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -352,7 +355,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void measurementEmpty() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.MEASUREMENT, "");
+        testRunner.setProperty(InfluxDBUtils.MEASUREMENT, "");
 
         expectedException.expect(new TypeOfExceptionMatcher<>(PutInfluxDatabaseRecord.IllegalConfigurationException.class));
 
@@ -362,7 +365,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void fields() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.FIELDS, "user-id, user-screen-name ");
+        testRunner.setProperty(InfluxDBUtils.FIELDS, "user-id, user-screen-name ");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -374,7 +377,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void fieldsTrailingComma() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.FIELDS, "user-id, ");
+        testRunner.setProperty(InfluxDBUtils.FIELDS, "user-id, ");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -385,7 +388,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void fieldsEmpty() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.FIELDS, " ");
+        testRunner.setProperty(InfluxDBUtils.FIELDS, " ");
 
         expectedException.expect(new TypeOfExceptionMatcher<>(PutInfluxDatabaseRecord.IllegalConfigurationException.class));
 
@@ -395,7 +398,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void missingFields() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.MISSING_FIELD_BEHAVIOR, MissingItemsBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.MISSING_FIELD_BEHAVIOR, MissingItemsBehaviour.FAIL.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -405,7 +408,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void missingFieldsUnsupported() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.MISSING_FIELD_BEHAVIOR, "wrong_name");
+        testRunner.setProperty(InfluxDBUtils.MISSING_FIELD_BEHAVIOR, "wrong_name");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -415,7 +418,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void tags() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.TAGS, "lang,keyword");
+        testRunner.setProperty(InfluxDBUtils.TAGS, "lang,keyword");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -427,7 +430,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void missingTags() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.MISSING_TAG_BEHAVIOR, MissingItemsBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.MISSING_TAG_BEHAVIOR, MissingItemsBehaviour.FAIL.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -437,7 +440,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void complexFieldBehaviour() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, ComplexFieldBehaviour.IGNORE.name());
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, ComplexFieldBehaviour.IGNORE.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -447,7 +450,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void complexFieldBehaviourUnsupported() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.COMPLEX_FIELD_BEHAVIOR, "wrong_name");
+        testRunner.setProperty(InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR, "wrong_name");
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
@@ -457,7 +460,7 @@ public class TestPutInfluxDatabaseRecordSettings extends AbstractTestPutInfluxDa
     @Test
     public void nullValueBehavior() throws PutInfluxDatabaseRecord.IllegalConfigurationException {
 
-        testRunner.setProperty(PutInfluxDatabaseRecord.NULL_VALUE_BEHAVIOR, NullValueBehaviour.FAIL.name());
+        testRunner.setProperty(InfluxDBUtils.NULL_VALUE_BEHAVIOR, NullValueBehaviour.FAIL.name());
 
         WriteOptions writeOptions = processor.writeOptions(testRunner.getProcessContext(), null);
 
