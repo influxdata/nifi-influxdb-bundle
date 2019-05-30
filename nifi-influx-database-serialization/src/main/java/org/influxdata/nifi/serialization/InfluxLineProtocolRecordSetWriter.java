@@ -17,6 +17,7 @@
 package org.influxdata.nifi.serialization;
 
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class InfluxLineProtocolRecordSetWriter extends AbstractControllerService
             .description("The Character Encoding that is used to encode/decode the Line Protocol")
             .expressionLanguageSupported(ExpressionLanguageScope.NONE)
             .addValidator(StandardValidators.CHARACTER_SET_VALIDATOR)
-            .defaultValue("UTF-8")
+            .defaultValue(StandardCharsets.UTF_8.name())
             .required(true)
             .build();
 
