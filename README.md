@@ -388,6 +388,13 @@ time                container_image container_name container_status container_ve
 
 This example show how to store NiFi Record as a LineProtocol into multiple environments: InfluxDB and Kafka. 
 
+#### NiFi flow
+
+<img src="assets/doc/demo3-flow.png" height="250px">    
+
+##### InfluxLineProtocolRecordSetWriter settings
+
+<img src="assets/doc/demo3-setwriter.png" height="250px">    
 
 ## Contributing
 

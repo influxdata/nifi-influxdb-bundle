@@ -53,6 +53,9 @@ docker rm chronograf || true
 docker kill telegraf || true
 docker rm telegraf || true
 
+docker kill kafka || true
+docker rm kafka || true
+
 docker kill nifi || true
 docker rm nifi || true
 
@@ -92,6 +95,19 @@ docker run \
 	--link=influxdb \
 	${CHRONOGRAF_IMAGE} --influxdb-url=http://influxdb:8086
 
+
+echo
+echo "Starting Kafka..."
+echo
+
+docker run \
+    --detach \
+    --name kafka \
+    --publish 2181:2181 \
+    --publish 9092:9092 \
+    --env ADVERTISED_PORT=9092 \
+	spotify/kafka
+
 echo
 echo "Build Apache NiFi with demo..."
 echo
@@ -113,6 +129,7 @@ docker run \
 	--publish 8007:8000 \
 	--publish 6666:6666 \
 	--link=influxdb \
+	--link=kafka \
 	nifi
 
 wget -S --spider --tries=20 --retry-connrefused --waitretry=5 http://localhost:8080/nifi/
