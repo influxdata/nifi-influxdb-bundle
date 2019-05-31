@@ -386,7 +386,7 @@ time                container_image container_name container_status container_ve
 
 ### Write LineProtocol to multiple storage
 
-This example show how to store NiFi Record as a LineProtocol into multiple environments: InfluxDB and Kafka. 
+This example show how to store NiFi Records as a LineProtocol into multiple environments: InfluxDB and Kafka. 
 
 #### NiFi flow
 

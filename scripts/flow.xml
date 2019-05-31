@@ -185,19 +185,19 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>enc{9ac3d9d13264a88028c2075ea0861ae4ab3795e48c674b8f6d68542a2f80f7dc9d9c5bc7b6168d787fa930ed6e0f427b}</value>
+          <value>enc{cf9eabbd7487e222a956f69a1eb81bdd734303b69507201deb896ffe577bf2f821a8a63de54b073ba6a428f1ca1b7ad3}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{6b65b8bb1198022a4b5359def5be0f0541efd7f40ec5e29e807e01b76b481defb2bdd63d3bc6e2850523e8ae31eb7d28a1a04f77412133b693dd3ddb6c07681bf9391f67e6fedcec8ddec4520063df35}</value>
+          <value>enc{8409bf0a3c1186860d036b86482f111f4736d7ec7c1837bab8c411fe01deecc775f3843461169a83f74f53f626282379edb0dad0327fa721e88613000300d9add754ea90648877e62ede6f87c9c7336b}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{f888c51b15153f1cf71304c8401a14df6677c7dab95b9953e99e84a9b46078b9baf6167e31fcb7125cfd2557c2c6273592ea9a7c4ee86284150ef55fa8f36ecddaa62a3b0f0d2a97ba32a504474212ee}</value>
+          <value>enc{85a3794348d2bcd8b6db888d955c54a9960232d568b6b7a0668c3307315265113ddcbd37f7467d9dced52499ce0853b8fdf2a155394e1ed71c62f129600f8898c8eddf125c5c290545f3d56975f34aff}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{9a9d4af0b70df156d2ec78c6567c43a7c1d5d8763ab02d5b6e69e07c446711b584fd7d10764d75c6dacfb8bd34c5accca8fc14b9f7717e1d1edbccc2576faef2}</value>
+          <value>enc{0e789197ff549b4933285b323f656114d48c46fc1d5c28cb84456ff48bff22137de3c74ec136ef33f032a5bd800d557d3237013e7d78dfe2a2525d7566135bb4}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -542,7 +542,7 @@ InfluxDB in order to work with time series.
       <processor>
         <id>0da4cb96-016b-1000-471a-93377cc20d0d</id>
         <name>PublishKafka_0_10</name>
-        <position x="1403.560119525563" y="657.1014342338615"/>
+        <position x="1403.560119525563" y="662.185296538549"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.kafka.pubsub.PublishKafka_0_10</class>
@@ -1025,7 +1025,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>influxdb-timestamp-field</name>
-          <value>timestamp2</value>
+          <value>timestamp</value>
         </property>
         <property>
           <name>influxdb-timestamp-precision</name>
@@ -1110,7 +1110,10 @@ InfluxDB in order to work with time series.
 "type": "record",
 "name": "nifi_logs",
 "fields": [
-   { "name": "timestamp", "type": "string" },
+   { "name": "timestamp", "type" : {
+        "type" : "long",
+        "logicalType" : "timestamp-millis"
+      } },
    { "name": "level", "type": "string" },
    { "name": "thread", "type": "string" },
    { "name": "class", "type": "string" },
