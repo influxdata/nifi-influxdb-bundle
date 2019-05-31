@@ -48,3 +48,19 @@ else
     echo "> check: fail..."  `(echo ${docker_container_status} | jq '.results[0].series[0].values[0][1]')`
     exit 1
 fi
+
+echo
+echo "Querying data by 'SELECT count(message) AS count_message FROM kafka_influxdb_demo.autogen.nifi_logs'"
+echo
+
+nifi_logs=`(curl -s 'http://localhost:8086/query' --data-urlencode "db=telegraf_nifi_demo" --data-urlencode "q=SELECT count(message) AS count_message FROM kafka_influxdb_demo.autogen.nifi_logs")`
+
+echo "Query result: " ${nifi_logs}
+
+echo ${nifi_logs} | jq '.results[0].series[0].values[0][1] > 0' | grep -q 'true'
+if [[ $? -eq 0 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  `(echo ${nifi_logs} | jq '.results[0].series[0].values[0][1]')`
+    exit 1
+fi

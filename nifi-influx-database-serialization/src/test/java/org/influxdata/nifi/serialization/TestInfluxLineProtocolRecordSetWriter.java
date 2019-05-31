@@ -59,6 +59,7 @@ public class TestInfluxLineProtocolRecordSetWriter {
         convertRunner.setProperty("record-reader", "record-reader");
         convertRunner.setProperty("record-writer", "record-writer");
 
+
         convertRunner.enqueue(content);
         convertRunner.run();
         convertRunner.assertAllFlowFilesTransferred("success", 1);

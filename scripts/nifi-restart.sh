@@ -79,6 +79,7 @@ sleep 5
 
 docker exec -ti influxdb sh -c "influx -execute 'create database twitter_demo'"
 docker exec -ti influxdb sh -c "influx -execute 'create database telegraf_nifi_demo'"
+docker exec -ti influxdb sh -c "influx -execute 'create database kafka_influxdb_demo'"
 
 echo
 echo "Starting Chronograf..."
@@ -134,3 +135,4 @@ echo
 
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/nifi-dashboard.json
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/twitter-dashboard.json
+curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/nifi-logs-dashboard.json

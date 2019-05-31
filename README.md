@@ -14,7 +14,7 @@
     - [InfluxLineProtocolReader](#influxlineprotocolreader)
     - [InfluxDatabaseService](#influxdatabaseservice)
     - [PutInfluxDatabase](#putinfluxdatabase)
-    - [InfluxLineProtocolRecordSetWriter](#influxdatabaseservice)
+    - [InfluxLineProtocolRecordSetWriter](#influxlineprotocolrecordsetwriter)
 - [Demo](#demo)
 - [Contributing](#contributing)
 - [License](#license)
@@ -209,7 +209,7 @@ The demo requires Docker Engine, GNU gzip and curl on classpath.
     ./scripts/nifi-restart.sh
     ```
 3. Open Apache NiFi flow in browser: [http://localhost:8080/nifi/](http://localhost:8080/nifi/)
-4. Open Telegraf Dashboards in browser: [Twitter](http://localhost:8888/sources/0/dashboards/2) or [NiFi Container](http://localhost:8888/sources/0/dashboards/1)
+4. Open Telegraf Dashboards in browser: [Twitter](http://localhost:8888/sources/0/dashboards/2), [NiFi Container](http://localhost:8888/sources/0/dashboards/1) or [NiFi Logs](http://localhost:8888/sources/0/dashboards/3)
 
 ### Store complex JSON structure to InfluxDB
 
@@ -383,6 +383,11 @@ time                container_image container_name container_status container_ve
 1550148082000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
 ...
 ```
+
+### Write LineProtocol to multiple storage
+
+This example show how to store NiFi Record as a LineProtocol into multiple environments: InfluxDB and Kafka. 
+
 
 ## Contributing
 
