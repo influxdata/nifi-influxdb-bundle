@@ -52,7 +52,7 @@ public class InfluxLineProtocolRecordSetWriter extends AbstractControllerService
     private static final PropertyDescriptor CHARSET = new PropertyDescriptor.Builder()
             .name("influxdb-character-set")
             .displayName("Character Set")
-            .description("The Character Encoding that is used to encode/decode the Line Protocol")
+            .description("The Character Encoding that is used to encode/decode the Line Protocol.")
             .expressionLanguageSupported(ExpressionLanguageScope.NONE)
             .addValidator(StandardValidators.CHARACTER_SET_VALIDATOR)
             .defaultValue(StandardCharsets.UTF_8.name())

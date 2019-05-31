@@ -284,7 +284,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <propertyName>jacocoArgLine</propertyName>
+<!--                    <propertyName>jacocoArgLine</propertyName>-->
                 </configuration>
             </plugin>
 
@@ -293,7 +293,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${plugin.surefire.version}</version>
                 <configuration>
-                    <argLine>@{jacocoArgLine}</argLine>
+<!--                    <argLine>@{jacocoArgLine}</argLine>-->
                 </configuration>
             </plugin>
 
@@ -302,7 +302,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${plugin.surefire.version}</version>
                 <configuration>
-                    <argLine>@{jacocoArgLine}</argLine>
+<!--                    <argLine>@{jacocoArgLine}</argLine>-->
                 </configuration>
                 <executions>
                     <execution>
