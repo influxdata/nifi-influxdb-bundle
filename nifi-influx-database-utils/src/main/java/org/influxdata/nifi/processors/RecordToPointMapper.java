@@ -48,7 +48,7 @@ import static org.influxdata.nifi.util.InfluxDBUtils.UNSUPPORTED_FIELD_TYPE;
 /**
  * @author Jakub Bednar (bednar@github) (29/05/2019 10:52)
  */
-public class RecordToPointMapper {
+public final class RecordToPointMapper {
 
     private final MapperOptions options;
     private final RecordSchema schema;
