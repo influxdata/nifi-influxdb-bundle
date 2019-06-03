@@ -53,6 +53,11 @@ public class TestRecordToPointMapper {
         final List<RecordField> fields = new ArrayList<>();
         fields.add(new RecordField("tag1", RecordFieldType.DATE.getDataType()));
         fields.add(new RecordField("tag2", RecordFieldType.INT.getDataType()));
+        fields.add(new RecordField("tag3", RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.STRING.getDataType())));
+        fields.add(new RecordField("tag4", RecordFieldType.CHOICE.getChoiceDataType(
+                RecordFieldType.BIGINT.getDataType(),
+                RecordFieldType.STRING.getDataType())));
+        fields.add(new RecordField("tag5", RecordFieldType.MAP.getDataType()));
         fields.add(new RecordField("field1", RecordFieldType.DOUBLE.getDataType()));
         fields.add(new RecordField("field2", RecordFieldType.BOOLEAN.getDataType()));
         fields.add(new RecordField("field3", RecordFieldType.LONG.getDataType()));
@@ -63,6 +68,9 @@ public class TestRecordToPointMapper {
         fields.add(new RecordField("field8", RecordFieldType.BIGINT.getDataType()));
         fields.add(new RecordField("field9", RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.LONG.getDataType())));
         fields.add(new RecordField("field10", RecordFieldType.MAP.getDataType()));
+        fields.add(new RecordField("field11", RecordFieldType.CHOICE.getChoiceDataType(
+                RecordFieldType.LONG.getDataType(),
+                RecordFieldType.STRING.getDataType())));
         fields.add(new RecordField("timestamp", RecordFieldType.LONG.getDataType()));
 
         schema = new SimpleRecordSchema(fields);
@@ -396,4 +404,93 @@ public class TestRecordToPointMapper {
         Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789000000", points.get(0).lineProtocol());
     }
 
+    @Test
+    public void tagFieldNull() {
+
+        MapperOptions options = new MapperOptions()
+                .measurement("measurement-test")
+                .fields(Arrays.asList("field1", "field2", "field3", "field4", "field5", "field6", "field7", "field8"))
+                .tags(Arrays.asList("tag1", "tag2", "tagNotExist"))
+                .timestamp("timestamp");
+
+        mapper = new RecordToPointMapper(options, schema, Mockito.mock(ComponentLog.class));
+
+        final Map<String, Object> values = new HashMap<>();
+        values.put("tag1", new Date(123456789));
+        values.put("tag2", null);
+        values.put("field1", 25D);
+        values.put("field2", true);
+        values.put("field3", 10000L);
+        values.put("field4", 50.55F);
+        values.put("field5", BigInteger.valueOf(963258741));
+        values.put("field6", "description");
+        values.put("field7", 8);
+        values.put("timestamp", 123456789);
+
+        final Record record = new MapRecord(schema, values);
+        List<Point> points = mapper.mapRecord(record);
+
+        Assert.assertEquals(1, points.size());
+        Assert.assertEquals("measurement-test,tag1=1970-01-02 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).lineProtocol());
+    }
+
+    @Test
+    public void tagComplex() {
+        MapperOptions options = new MapperOptions()
+                .measurement("measurement-test")
+                .fields(Arrays.asList("field1", "field2"))
+                .tags(Arrays.asList("tag1", "tag2", "tag3", "tag4", "tag5"))
+                .timestamp("timestamp");
+
+        Map<String, Object> mapValues = new HashMap<>();
+        mapValues.put("float", 55.5F);
+        mapValues.put("long", 150L);
+        mapValues.put("boolean", true);
+        mapValues.put("string", "string value");
+
+        mapper = new RecordToPointMapper(options, schema, Mockito.mock(ComponentLog.class));
+
+        final Map<String, Object> values = new HashMap<>();
+        values.put("tag1", new Date(123456789));
+        values.put("tag2", 555);
+        values.put("tag3", new Object[]{"sub-value1", "sub-value2"});
+        values.put("tag4", BigInteger.valueOf(1324567899));
+        values.put("tag5", mapValues);
+        values.put("field1", 25D);
+        values.put("field2", true);
+        values.put("timestamp", 123456789);
+
+        final Record record = new MapRecord(schema, values);
+        List<Point> points = mapper.mapRecord(record);
+
+        Assert.assertEquals(1, points.size());
+        Assert.assertEquals("measurement-test,boolean=true,float=55.5,long=150,string=string\\ value,tag1=1970-01-02,tag2=555,tag3=[sub-value1\\,\\ sub-value2],tag4=1324567899 field1=25.0,field2=true 123456789", points.get(0).lineProtocol());
+    }
+
+    @Test
+    public void choice() {
+
+        MapperOptions options = new MapperOptions()
+                .measurement("measurement-test")
+                .fields(Arrays.asList("field1", "field2", "field3", "field11"))
+                .tags(Arrays.asList("tag1", "tag2", "tagNotExist"))
+                .timestamp("timestamp");
+
+        mapper = new RecordToPointMapper(options, schema, Mockito.mock(ComponentLog.class));
+
+        final Map<String, Object> values = new HashMap<>();
+        values.put("tag1", new Date(123456789));
+        values.put("tag2", null);
+        values.put("field1", 25D);
+        values.put("field2", true);
+        values.put("field3", 10000L);
+        values.put("field11", 888888L);
+        values.put("timestamp", 123456789);
+
+        final Record record = new MapRecord(schema, values);
+        List<Point> points = mapper.mapRecord(record);
+
+        Assert.assertEquals(1, points.size());
+        Assert.assertEquals("measurement-test,tag1=1970-01-02 field1=25.0,field11=888888i,field2=true,field3=10000i 123456789", points.get(0).lineProtocol());
+    }
 }
