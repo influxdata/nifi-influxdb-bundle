@@ -56,12 +56,15 @@ public class TestRecordToPointMapper {
         fields.add(new RecordField("field4", RecordFieldType.FLOAT.getDataType()));
         fields.add(new RecordField("field5", RecordFieldType.BIGINT.getDataType()));
         fields.add(new RecordField("field6", RecordFieldType.STRING.getDataType()));
+        fields.add(new RecordField("field7", RecordFieldType.INT.getDataType()));
+        fields.add(new RecordField("field8", RecordFieldType.BIGINT.getDataType()));
+        fields.add(new RecordField("timestamp", RecordFieldType.LONG.getDataType()));
 
         final RecordSchema schema = new SimpleRecordSchema(fields);
 
         MapperOptions options = new MapperOptions()
                 .measurement("measurement-test")
-                .fields(Arrays.asList("field1", "field2"))
+                .fields(Arrays.asList("field1", "field2", "field3", "field4", "field5", "field6", "field7", "field8"))
                 .tags(Arrays.asList("tag1", "tag2"))
                 .timestamp("timestamp");
 
@@ -76,12 +79,14 @@ public class TestRecordToPointMapper {
         values.put("field4", 50.55F);
         values.put("field5", BigInteger.valueOf(963258741));
         values.put("field6", "description");
+        values.put("field7", 8);
+        values.put("timestamp", 123456789);
 
         final Record record = new MapRecord(schema, values);
 
         List<Point> points = mapper.mapRecord(record);
 
         Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true", points.get(0).lineProtocol());
+        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).lineProtocol());
     }
 }
