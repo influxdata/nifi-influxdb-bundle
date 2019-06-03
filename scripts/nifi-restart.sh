@@ -53,6 +53,9 @@ docker rm chronograf || true
 docker kill telegraf || true
 docker rm telegraf || true
 
+docker kill kafka || true
+docker rm kafka || true
+
 docker kill nifi || true
 docker rm nifi || true
 
@@ -79,6 +82,7 @@ sleep 5
 
 docker exec -ti influxdb sh -c "influx -execute 'create database twitter_demo'"
 docker exec -ti influxdb sh -c "influx -execute 'create database telegraf_nifi_demo'"
+docker exec -ti influxdb sh -c "influx -execute 'create database kafka_influxdb_demo'"
 
 echo
 echo "Starting Chronograf..."
@@ -90,6 +94,19 @@ docker run \
     --publish 8888:8888 \
 	--link=influxdb \
 	${CHRONOGRAF_IMAGE} --influxdb-url=http://influxdb:8086
+
+
+echo
+echo "Starting Kafka..."
+echo
+
+docker run \
+    --detach \
+    --name kafka \
+    --publish 2181:2181 \
+    --publish 9092:9092 \
+    --env ADVERTISED_PORT=9092 \
+	spotify/kafka
 
 echo
 echo "Build Apache NiFi with demo..."
@@ -112,6 +129,7 @@ docker run \
 	--publish 8007:8000 \
 	--publish 6666:6666 \
 	--link=influxdb \
+	--link=kafka \
 	nifi
 
 wget -S --spider --tries=20 --retry-connrefused --waitretry=5 http://localhost:8080/nifi/
@@ -134,3 +152,4 @@ echo
 
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/nifi-dashboard.json
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/twitter-dashboard.json
+curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/nifi-logs-dashboard.json

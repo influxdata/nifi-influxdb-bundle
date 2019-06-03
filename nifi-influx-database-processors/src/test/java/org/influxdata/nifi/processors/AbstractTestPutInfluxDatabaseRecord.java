@@ -21,6 +21,7 @@ import java.security.GeneralSecurityException;
 
 import org.influxdata.nifi.services.InfluxDatabaseService;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService;
+import org.influxdata.nifi.util.InfluxDBUtils;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.nifi.reporting.InitializationException;
@@ -64,8 +65,8 @@ public abstract class AbstractTestPutInfluxDatabaseRecord {
 
         testRunner = TestRunners.newTestRunner(processor);
         testRunner.setProperty(PutInfluxDatabaseRecord.DB_NAME, "nifi-database");
-        testRunner.setProperty(PutInfluxDatabaseRecord.MEASUREMENT, "nifi-measurement");
-        testRunner.setProperty(PutInfluxDatabaseRecord.FIELDS, "nifi-field");
+        testRunner.setProperty(InfluxDBUtils.MEASUREMENT, "nifi-measurement");
+        testRunner.setProperty(InfluxDBUtils.FIELDS, "nifi-field");
         testRunner.setProperty(PutInfluxDatabaseRecord.RECORD_READER_FACTORY, "recordReader");
         testRunner.setProperty(PutInfluxDatabaseRecord.INFLUX_DB_SERVICE, "influxdb-service");
 

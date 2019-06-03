@@ -27,6 +27,19 @@
     <position x="0.0" y="0.0"/>
     <comment/>
     <label>
+      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
+      <position x="1151.566401798875" y="-208.0879260307986"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 3 User Story:
+   
+
+As NiFi user I want to store LineProtocol date into multiple environments
+ - InfluxDB, Kafka, ...</value>
+    </label>
+    <label>
       <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
       <position x="1145.4612992598124" y="-407.1201983696658"/>
       <size height="170.00000762939453" width="416.8000030517578"/>
@@ -34,6 +47,7 @@
         <style name="font-size">12px</style>
       </styles>
       <value>Demo 2 User Story:
+  
 
 As NiFi user I want to reliably monitor multiple environments
 and be able to write data selectively. 
@@ -46,7 +60,7 @@ and be able to write data selectively.
     <label>
       <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
       <position x="268.0609696699687" y="-600.9202250695664"/>
-      <size height="366.8000030517578" width="474.0"/>
+      <size height="561.7161407470703" width="471.0166015625"/>
       <styles>
         <style name="font-size">14px</style>
       </styles>
@@ -56,17 +70,19 @@ and be able to write data selectively.
 This demo shows how InfluxDB can be integrated with the
 NiFi data processing framework. To enable seamless 
 integration we implemented following NiFi extensions:
-
+  
 * InfluxDatabaseService – more NiFi processors in flow can reuse one 
 InfluxDB connection configuration (url, credentials)
-
-
+  
 * PutInfluxDatabaseRecord – processor that puts structured data 
 (json, csv, text, avro) into InfluxDB using NiFi Record readers/writers. 
-
+  
 * InfluxLineProtocolReader – reader parses the InfluxDB Line Protocol 
 into NiFi Record. This allows filtering, partitioning line protocol data in 
-NiFi flow produced by Telegraf.</value>
+NiFi flow produced by Telegraf.
+  
+* InfluxLineProtocolRecordSetWriter – Writes the contents of a Record
+Set as Line Protocol.</value>
     </label>
     <label>
       <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
@@ -76,6 +92,7 @@ NiFi flow produced by Telegraf.</value>
         <style name="font-size">12px</style>
       </styles>
       <value>Demo 1 User Story:
+  
 
 As NiFi user I want to put my data (complex json structure) to 
 InfluxDB in order to work with time series.
@@ -168,19 +185,19 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>KVhlDosQLy1tsNivcSKFSgKgW</value>
+          <value>enc{cf9eabbd7487e222a956f69a1eb81bdd734303b69507201deb896ffe577bf2f821a8a63de54b073ba6a428f1ca1b7ad3}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{4078989a4f484d846f6f5dcb09a786cc8f05d30dfdab323c322c0dbec10dcedeb98d43d99e57b31945648c4ccd386b7fa9d34630cf5516eb06a7fcd9e5a17906166c6439edbb1116a7b32cd65ec19c70}</value>
+          <value>enc{8409bf0a3c1186860d036b86482f111f4736d7ec7c1837bab8c411fe01deecc775f3843461169a83f74f53f626282379edb0dad0327fa721e88613000300d9add754ea90648877e62ede6f87c9c7336b}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>98869084-C45s9NSDcQcSQ5vC9nKDfdaNw2Pt55GG1GrrJ9yCL</value>
+          <value>enc{85a3794348d2bcd8b6db888d955c54a9960232d568b6b7a0668c3307315265113ddcbd37f7467d9dced52499ce0853b8fdf2a155394e1ed71c62f129600f8898c8eddf125c5c290545f3d56975f34aff}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{348a50e912966d16ceb24096381c4d6ef3f8d16f71176811d35ee98cf86ae9edcb02d9b214aa6d9645f643d43b7b94efc08e539137b0a2230a5808de1f5f34c8}</value>
+          <value>enc{0e789197ff549b4933285b323f656114d48c46fc1d5c28cb84456ff48bff22137de3c74ec136ef33f032a5bd800d557d3237013e7d78dfe2a2525d7566135bb4}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -405,6 +422,705 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>influxdb-password</name>
+        </property>
+      </controllerService>
+    </processGroup>
+    <processGroup>
+      <id>0d3a59b3-016b-1000-3219-73ec601dca9c</id>
+      <name>KafkaDemo</name>
+      <position x="754.0775756835938" y="-211.1091766357422"/>
+      <comment/>
+      <processor>
+        <id>bd0efd4c-3086-3c99-dc9e-5811b2c3ca87</id>
+        <name>TailFile</name>
+        <position x="447.2941283146255" y="166.52926883734335"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.TailFile</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>5 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>tail-mode</name>
+          <value>Single file</value>
+        </property>
+        <property>
+          <name>File to Tail</name>
+          <value>./logs/nifi-app.log</value>
+        </property>
+        <property>
+          <name>Rolling Filename Pattern</name>
+        </property>
+        <property>
+          <name>tail-base-directory</name>
+        </property>
+        <property>
+          <name>Initial Start Position</name>
+          <value>Beginning of File</value>
+        </property>
+        <property>
+          <name>File Location</name>
+          <value>Local</value>
+        </property>
+        <property>
+          <name>tailfile-recursive-lookup</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>tailfile-lookup-frequency</name>
+          <value>10 minutes</value>
+        </property>
+        <property>
+          <name>tailfile-maximum-age</name>
+          <value>24 hours</value>
+        </property>
+      </processor>
+      <processor>
+        <id>0d7ad789-016b-1000-952f-d20e18a0390b</id>
+        <name>ErrorLog</name>
+        <position x="1051.1138914982193" y="963.886468413549"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.PutFile</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Directory</name>
+          <value>/opt/nifi/influx-err</value>
+        </property>
+        <property>
+          <name>Conflict Resolution Strategy</name>
+          <value>fail</value>
+        </property>
+        <property>
+          <name>Create Missing Directories</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>Maximum File Count</name>
+        </property>
+        <property>
+          <name>Last Modified Time</name>
+        </property>
+        <property>
+          <name>Permissions</name>
+        </property>
+        <property>
+          <name>Owner</name>
+        </property>
+        <property>
+          <name>Group</name>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+      </processor>
+      <processor>
+        <id>0da4cb96-016b-1000-471a-93377cc20d0d</id>
+        <name>PublishKafka_0_10</name>
+        <position x="1403.560119525563" y="662.185296538549"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.kafka.pubsub.PublishKafka_0_10</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-kafka-0-10-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>bootstrap.servers</name>
+          <value>kafka:9092</value>
+        </property>
+        <property>
+          <name>security.protocol</name>
+          <value>PLAINTEXT</value>
+        </property>
+        <property>
+          <name>sasl.kerberos.service.name</name>
+        </property>
+        <property>
+          <name>kerberos-credentials-service</name>
+        </property>
+        <property>
+          <name>sasl.kerberos.principal</name>
+        </property>
+        <property>
+          <name>sasl.kerberos.keytab</name>
+        </property>
+        <property>
+          <name>ssl.context.service</name>
+        </property>
+        <property>
+          <name>topic</name>
+          <value>nifi-log</value>
+        </property>
+        <property>
+          <name>acks</name>
+          <value>0</value>
+        </property>
+        <property>
+          <name>kafka-key</name>
+        </property>
+        <property>
+          <name>key-attribute-encoding</name>
+          <value>utf-8</value>
+        </property>
+        <property>
+          <name>message-demarcator</name>
+        </property>
+        <property>
+          <name>max.request.size</name>
+          <value>1 MB</value>
+        </property>
+        <property>
+          <name>ack.wait.time</name>
+          <value>5 secs</value>
+        </property>
+        <property>
+          <name>max.block.ms</name>
+          <value>5 sec</value>
+        </property>
+        <property>
+          <name>partitioner.class</name>
+          <value>org.apache.kafka.clients.producer.internals.DefaultPartitioner</value>
+        </property>
+        <property>
+          <name>compression.type</name>
+          <value>none</value>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      </processor>
+      <processor>
+        <id>8e439369-8abd-33e5-8251-df20a0c3a080</id>
+        <name>Set schema.name = nifi-logs</name>
+        <position x="1040.7052611271256" y="168.7992698634639"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.attributes.UpdateAttribute</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-update-attribute-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Delete Attributes Expression</name>
+        </property>
+        <property>
+          <name>Store State</name>
+          <value>Do not store state</value>
+        </property>
+        <property>
+          <name>Stateful Variables Initial Value</name>
+        </property>
+        <property>
+          <name>canonical-value-lookup-cache-size</name>
+          <value>100</value>
+        </property>
+        <property>
+          <name>schema.name</name>
+          <value>nifi-logs</value>
+        </property>
+      </processor>
+      <processor>
+        <id>9993347a-5fbd-1c2b-a6cf-829e9b16c88d</id>
+        <name>PutInfluxDatabase</name>
+        <position x="709.0254515568131" y="662.4194884330802"/>
+        <styles/>
+        <comment/>
+        <class>org.influxdata.nifi.processors.PutInfluxDatabase</class>
+        <bundle>
+          <group>org.influxdata.nifi</group>
+          <artifact>nifi-influx-database-nar</artifact>
+          <version>1.1-SNAPSHOT</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>influxdb-dbname</name>
+          <value>kafka_influxdb_demo</value>
+        </property>
+        <property>
+          <name>influxdb-url</name>
+          <value>http://influxdb:8086</value>
+        </property>
+        <property>
+          <name>InfluxDB Max Connection Time Out (seconds)</name>
+          <value>0 seconds</value>
+        </property>
+        <property>
+          <name>influxdb-username</name>
+        </property>
+        <property>
+          <name>influxdb-password</name>
+        </property>
+        <property>
+          <name>influxdb-charset</name>
+          <value>UTF-8</value>
+        </property>
+        <property>
+          <name>influxdb-consistency-level</name>
+          <value>ONE</value>
+        </property>
+        <property>
+          <name>influxdb-retention-policy</name>
+          <value>autogen</value>
+        </property>
+        <property>
+          <name>influxdb-max-records-size</name>
+          <value>1 MB</value>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      </processor>
+      <processor>
+        <id>99933473-5fbd-1c2b-1678-b21f261c56f6</id>
+        <name>ConvertRecord</name>
+        <position x="1048.9378661075943" y="395.47481680222086"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.ConvertRecord</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>record-reader</name>
+          <value>1bb1d190-8746-3f5b-c093-edce7fa003d3</value>
+        </property>
+        <property>
+          <name>record-writer</name>
+          <value>99933468-5fbd-1c2b-19a4-dd742b4530a2</value>
+        </property>
+        <property>
+          <name>include-zero-record-flowfiles</name>
+          <value>false</value>
+        </property>
+      </processor>
+      <connection>
+        <id>9993347f-5fbd-1c2b-3854-9c3408748d94</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>99933473-5fbd-1c2b-1678-b21f261c56f6</sourceId>
+        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>9993347a-5fbd-1c2b-a6cf-829e9b16c88d</destinationId>
+        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>ff1e4b87-4228-3a21-05f8-ebcbeaec9bf4</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>bd0efd4c-3086-3c99-dc9e-5811b2c3ca87</sourceId>
+        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>8e439369-8abd-33e5-8251-df20a0c3a080</destinationId>
+        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>99933475-5fbd-1c2b-e7b7-3718cf6b038a</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>8e439369-8abd-33e5-8251-df20a0c3a080</sourceId>
+        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>99933473-5fbd-1c2b-1678-b21f261c56f6</destinationId>
+        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>0da6623e-016b-1000-c50c-ff38a280e2c3</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>0da4cb96-016b-1000-471a-93377cc20d0d</sourceId>
+        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>0d7ad789-016b-1000-952f-d20e18a0390b</destinationId>
+        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>0d7bac9c-016b-1000-8f39-f4667f6eb4ee</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>99933473-5fbd-1c2b-1678-b21f261c56f6</sourceId>
+        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>0d7ad789-016b-1000-952f-d20e18a0390b</destinationId>
+        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>9993347e-5fbd-1c2b-e9aa-62ed6628b6f2</id>
+        <name/>
+        <bendPoints>
+          <bendPoint x="659.1967772404068" y="712.8277831108146"/>
+          <bendPoint x="719.8469847599381" y="603.0605711967521"/>
+        </bendPoints>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>9993347a-5fbd-1c2b-a6cf-829e9b16c88d</sourceId>
+        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>9993347a-5fbd-1c2b-a6cf-829e9b16c88d</destinationId>
+        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>retry</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>0da60d67-016b-1000-fa3f-6c52c70f7a53</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>99933473-5fbd-1c2b-1678-b21f261c56f6</sourceId>
+        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>0da4cb96-016b-1000-471a-93377cc20d0d</destinationId>
+        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>0d7bd083-016b-1000-b4e2-03b0a13b70d3</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>9993347a-5fbd-1c2b-a6cf-829e9b16c88d</sourceId>
+        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>0d7ad789-016b-1000-952f-d20e18a0390b</destinationId>
+        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <relationship>failure-max-size</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <controllerService>
+        <id>e1d48f9f-ef95-3ac5-ada4-eaf3b250ff7c</id>
+        <name>JsonRecordSetWriter</name>
+        <comment/>
+        <class>org.apache.nifi.json.JsonRecordSetWriter</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-record-serialization-services-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <enabled>true</enabled>
+        <property>
+          <name>Schema Write Strategy</name>
+          <value>schema-name</value>
+        </property>
+        <property>
+          <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-access-strategy</name>
+          <value>schema-name</value>
+        </property>
+        <property>
+          <name>schema-registry</name>
+          <value>01fe7c27-dec5-320d-fcb4-f913797de2f8</value>
+        </property>
+        <property>
+          <name>schema-name</name>
+          <value>${schema.name}</value>
+        </property>
+        <property>
+          <name>schema-version</name>
+        </property>
+        <property>
+          <name>schema-branch</name>
+        </property>
+        <property>
+          <name>schema-text</name>
+          <value>${avro.schema}</value>
+        </property>
+        <property>
+          <name>Date Format</name>
+        </property>
+        <property>
+          <name>Time Format</name>
+        </property>
+        <property>
+          <name>Timestamp Format</name>
+        </property>
+        <property>
+          <name>Pretty Print JSON</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>suppress-nulls</name>
+          <value>never-suppress</value>
+        </property>
+        <property>
+          <name>output-grouping</name>
+          <value>output-array</value>
+        </property>
+        <property>
+          <name>compression-format</name>
+          <value>none</value>
+        </property>
+        <property>
+          <name>compression-level</name>
+          <value>1</value>
+        </property>
+      </controllerService>
+      <controllerService>
+        <id>99933468-5fbd-1c2b-19a4-dd742b4530a2</id>
+        <name>InfluxLineProtocolRecordSetWriter</name>
+        <comment/>
+        <class>org.influxdata.nifi.serialization.InfluxLineProtocolRecordSetWriter</class>
+        <bundle>
+          <group>org.influxdata.nifi</group>
+          <artifact>nifi-influx-database-nar</artifact>
+          <version>1.1-SNAPSHOT</version>
+        </bundle>
+        <enabled>true</enabled>
+        <property>
+          <name>influxdb-measurement</name>
+          <value>nifi_logs</value>
+        </property>
+        <property>
+          <name>influxdb-tags</name>
+          <value>level,thread</value>
+        </property>
+        <property>
+          <name>influxdb-tags-field-behavior</name>
+          <value>IGNORE</value>
+        </property>
+        <property>
+          <name>influxdb-fields</name>
+          <value>class,message</value>
+        </property>
+        <property>
+          <name>influxdb-fields-field-behavior</name>
+          <value>IGNORE</value>
+        </property>
+        <property>
+          <name>influxdb-timestamp-field</name>
+          <value>timestamp</value>
+        </property>
+        <property>
+          <name>influxdb-timestamp-precision</name>
+          <value>NANOSECONDS</value>
+        </property>
+        <property>
+          <name>influxdb-complex-field-behavior</name>
+          <value>TEXT</value>
+        </property>
+        <property>
+          <name>influxdb-null-behavior</name>
+          <value>IGNORE</value>
+        </property>
+        <property>
+          <name>influxdb-character-set</name>
+          <value>UTF-8</value>
+        </property>
+      </controllerService>
+      <controllerService>
+        <id>1bb1d190-8746-3f5b-c093-edce7fa003d3</id>
+        <name>GrokReader</name>
+        <comment/>
+        <class>org.apache.nifi.grok.GrokReader</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-record-serialization-services-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <enabled>true</enabled>
+        <property>
+          <name>schema-access-strategy</name>
+          <value>schema-name</value>
+        </property>
+        <property>
+          <name>schema-registry</name>
+          <value>01fe7c27-dec5-320d-fcb4-f913797de2f8</value>
+        </property>
+        <property>
+          <name>schema-name</name>
+          <value>${schema.name}</value>
+        </property>
+        <property>
+          <name>schema-version</name>
+        </property>
+        <property>
+          <name>schema-branch</name>
+        </property>
+        <property>
+          <name>schema-text</name>
+          <value>${avro.schema}</value>
+        </property>
+        <property>
+          <name>Grok Pattern File</name>
+        </property>
+        <property>
+          <name>Grok Expression</name>
+          <value>%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:level} \[%{DATA:thread}\] %{DATA:class} %{GREEDYDATA:message}</value>
+        </property>
+        <property>
+          <name>no-match-behavior</name>
+          <value>append-to-previous-message</value>
+        </property>
+      </controllerService>
+      <controllerService>
+        <id>01fe7c27-dec5-320d-fcb4-f913797de2f8</id>
+        <name>AvroSchemaRegistry</name>
+        <comment/>
+        <class>org.apache.nifi.schemaregistry.services.AvroSchemaRegistry</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-registry-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <enabled>true</enabled>
+        <property>
+          <name>avro-reg-validated-field-names</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>nifi-logs</name>
+          <value>{
+"type": "record",
+"name": "nifi_logs",
+"fields": [
+   { "name": "timestamp", "type" : {
+        "type" : "long",
+        "logicalType" : "timestamp-millis"
+      } },
+   { "name": "level", "type": "string" },
+   { "name": "thread", "type": "string" },
+   { "name": "class", "type": "string" },
+   { "name": "message", "type": "string" },
+   { "name": "stackTrace", "type": "string" }
+  ]
+}</value>
         </property>
       </controllerService>
     </processGroup>
@@ -946,6 +1662,9 @@ InfluxDB in order to work with time series.
           <value>schema-name</value>
         </property>
         <property>
+          <name>schema-cache</name>
+        </property>
+        <property>
           <name>schema-access-strategy</name>
           <value>inherit-record-schema</value>
         </property>
@@ -987,6 +1706,14 @@ InfluxDB in order to work with time series.
           <name>output-grouping</name>
           <value>output-array</value>
         </property>
+        <property>
+          <name>compression-format</name>
+          <value>none</value>
+        </property>
+        <property>
+          <name>compression-level</name>
+          <value>1</value>
+        </property>
       </controllerService>
       <controllerService>
         <id>4e5c0c97-0163-1000-54a6-5c1fd2473b42</id>
@@ -1002,6 +1729,9 @@ InfluxDB in order to work with time series.
         <property>
           <name>Schema Write Strategy</name>
           <value>avro-embedded</value>
+        </property>
+        <property>
+          <name>schema-cache</name>
         </property>
         <property>
           <name>schema-access-strategy</name>
@@ -1027,6 +1757,14 @@ InfluxDB in order to work with time series.
         <property>
           <name>compression-format</name>
           <value>NONE</value>
+        </property>
+        <property>
+          <name>cache-size</name>
+          <value>1000</value>
+        </property>
+        <property>
+          <name>encoder-pool-size</name>
+          <value>32</value>
         </property>
       </controllerService>
       <controllerService>
@@ -1060,6 +1798,10 @@ InfluxDB in order to work with time series.
         <property>
           <name>schema-text</name>
           <value>${avro.schema}</value>
+        </property>
+        <property>
+          <name>cache-size</name>
+          <value>1000</value>
         </property>
       </controllerService>
       <controllerService>

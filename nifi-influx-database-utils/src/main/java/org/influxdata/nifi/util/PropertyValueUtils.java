@@ -19,15 +19,36 @@ package org.influxdata.nifi.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import org.influxdata.nifi.processors.MapperOptions;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.components.PropertyValue;
 import org.apache.nifi.context.PropertyContext;
+import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.flowfile.FlowFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.influxdata.nifi.util.InfluxDBUtils.AT_LEAST_ONE_FIELD_DEFINED_MESSAGE;
+import static org.influxdata.nifi.util.InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR;
+import static org.influxdata.nifi.util.InfluxDBUtils.COMPLEX_FIELD_BEHAVIOUR_DEFAULT;
+import static org.influxdata.nifi.util.InfluxDBUtils.FIELDS;
+import static org.influxdata.nifi.util.InfluxDBUtils.MEASUREMENT;
+import static org.influxdata.nifi.util.InfluxDBUtils.MEASUREMENT_NAME_EMPTY_MESSAGE;
+import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_FIELDS_BEHAVIOUR_DEFAULT;
+import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_FIELD_BEHAVIOR;
+import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_TAGS_BEHAVIOUR_DEFAULT;
+import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_TAG_BEHAVIOR;
+import static org.influxdata.nifi.util.InfluxDBUtils.NULL_VALUE_BEHAVIOR;
+import static org.influxdata.nifi.util.InfluxDBUtils.PRECISION_DEFAULT;
+import static org.influxdata.nifi.util.InfluxDBUtils.TAGS;
+import static org.influxdata.nifi.util.InfluxDBUtils.TIMESTAMP_FIELD;
+import static org.influxdata.nifi.util.InfluxDBUtils.TIMESTAMP_PRECISION;
 
 /**
  * Helper method for operate with {@link PropertyValue}.
@@ -108,4 +129,63 @@ public final class PropertyValueUtils {
         return results;
     }
 
+    @NonNull
+    public static MapperOptions getMapperOptions(@NonNull final PropertyContext context,
+                                                 @Nullable final FlowFile flowFile) throws IllegalConfigurationException {
+
+        // Timestamp
+        String timestamp = context.getProperty(TIMESTAMP_FIELD).evaluateAttributeExpressions(flowFile).getValue();
+
+        // Timestamp precision
+        TimeUnit precision = getEnumValue(TIMESTAMP_PRECISION, context, TimeUnit.class, PRECISION_DEFAULT);
+
+        // Measurement
+        String measurement = context.getProperty(MEASUREMENT).evaluateAttributeExpressions(flowFile).getValue();
+        if (StringUtils.isEmpty(measurement)) {
+            throw new IllegalConfigurationException(MEASUREMENT_NAME_EMPTY_MESSAGE);
+        }
+
+        // Fields
+        List<String> fields = PropertyValueUtils.getList(FIELDS, context, flowFile);
+        if (fields.isEmpty()) {
+            throw new IllegalConfigurationException(AT_LEAST_ONE_FIELD_DEFINED_MESSAGE);
+        }
+
+        // Missing fields
+        InfluxDBUtils.MissingItemsBehaviour missingFields = getEnumValue(MISSING_FIELD_BEHAVIOR, context, InfluxDBUtils.MissingItemsBehaviour.class,
+                MISSING_FIELDS_BEHAVIOUR_DEFAULT);
+
+        // Tags
+        List<String> tags = PropertyValueUtils.getList(TAGS, context, flowFile);
+
+        // Missing tags
+        InfluxDBUtils.MissingItemsBehaviour missingTags = getEnumValue(MISSING_TAG_BEHAVIOR, context, InfluxDBUtils.MissingItemsBehaviour.class,
+                MISSING_TAGS_BEHAVIOUR_DEFAULT);
+
+        // Complex fields behaviour
+        InfluxDBUtils.ComplexFieldBehaviour complexFieldBehaviour = getEnumValue(COMPLEX_FIELD_BEHAVIOR, context,
+                InfluxDBUtils.ComplexFieldBehaviour.class, COMPLEX_FIELD_BEHAVIOUR_DEFAULT);
+
+        // Null Field Value Behaviour
+        InfluxDBUtils.NullValueBehaviour nullValueBehaviour = getEnumValue(NULL_VALUE_BEHAVIOR, context, InfluxDBUtils.NullValueBehaviour.class, InfluxDBUtils.NullValueBehaviour.IGNORE);
+
+        return new MapperOptions()
+                .timestamp(timestamp)
+                .precision(precision)
+                .measurement(measurement)
+                .fields(fields)
+                .missingFields(missingFields)
+                .tags(tags)
+                .missingTags(missingTags)
+                .complexFieldBehaviour(complexFieldBehaviour)
+                .nullValueBehaviour(nullValueBehaviour);
+    }
+
+    public static class IllegalConfigurationException extends Exception {
+
+        public IllegalConfigurationException(final String message) {
+
+            super(message);
+        }
+    }
 }

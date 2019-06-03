@@ -16,86 +16,15 @@
  */
 package org.influxdata.nifi.processors;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 
 public final class WriteOptions implements Cloneable {
 
-    public static final TimeUnit PRECISION_DEFAULT = TimeUnit.NANOSECONDS;
-    public static final MissingItemsBehaviour MISSING_FIELDS_BEHAVIOUR_DEFAULT = MissingItemsBehaviour.IGNORE;
-    public static final MissingItemsBehaviour MISSING_TAGS_BEHAVIOUR_DEFAULT = MissingItemsBehaviour.IGNORE;
-    public static final ComplexFieldBehaviour COMPLEX_FIELD_BEHAVIOUR_DEFAULT = ComplexFieldBehaviour.TEXT;
-    public static final NullValueBehaviour NULL_FIELD_VALUE_BEHAVIOUR_DEFAULT = NullValueBehaviour.IGNORE;
-    public static final String DEFAULT_RETENTION_POLICY = "autogen";
-
     private String database;
     private String retentionPolicy;
-    private String timestamp;
-    private TimeUnit precision = PRECISION_DEFAULT;
-    private String measurement;
-    private List<String> fields = new ArrayList<>();
-    private MissingItemsBehaviour missingFields = MISSING_FIELDS_BEHAVIOUR_DEFAULT;
-    private List<String> tags = new ArrayList<>();
-    private MissingItemsBehaviour missingTags = MISSING_TAGS_BEHAVIOUR_DEFAULT;
-    private ComplexFieldBehaviour complexFieldBehaviour = COMPLEX_FIELD_BEHAVIOUR_DEFAULT;
-    private NullValueBehaviour nullValueBehaviour = NULL_FIELD_VALUE_BEHAVIOUR_DEFAULT;
-
-    /**
-     * @see PutInfluxDatabaseRecord#MISSING_FIELD_BEHAVIOR
-     * @see PutInfluxDatabaseRecord#MISSING_TAG_BEHAVIOR
-     */
-    public enum MissingItemsBehaviour {
-
-        /**
-         * @see PutInfluxDatabaseRecord#MISSING_ITEMS_BEHAVIOUR_IGNORE
-         */
-        IGNORE,
-
-        /**
-         * @see PutInfluxDatabaseRecord#MISSING_ITEMS_BEHAVIOUR_FAIL
-         */
-        FAIL,
-    }
-
-    public enum ComplexFieldBehaviour {
-
-        /**
-         * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_IGNORE
-         */
-        IGNORE,
-
-        /**
-         * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_FAIL
-         */
-        FAIL,
-
-        /**
-         * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_WARN
-         */
-        WARN,
-
-        /**
-         * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_VALUE
-         */
-        TEXT,
-    }
-
-    public enum NullValueBehaviour {
-        /**
-         * @see PutInfluxDatabaseRecord#NULL_VALUE_BEHAVIOUR_IGNORE
-         */
-        IGNORE,
-
-        /**
-         * @see PutInfluxDatabaseRecord#NULL_VALUE_BEHAVIOUR_FAIL
-         */
-        FAIL
-    }
+    private MapperOptions mapperOptions = new MapperOptions();
 
 
     /**
@@ -131,143 +60,16 @@ public final class WriteOptions implements Cloneable {
     }
 
     /**
-     * @param timestamp A name of the record field that used as a 'timestamp'
+     * @param mapperOptions The options for {@link RecordToPointMapper}.
      * @return immutable instance
-     * @see PutInfluxDatabaseRecord#TIMESTAMP_FIELD
      */
     @NonNull
-    public WriteOptions timestamp(@Nullable final String timestamp) {
+    public WriteOptions mapperOptions(@NonNull final MapperOptions mapperOptions) {
+
+        Objects.requireNonNull(mapperOptions, "MapperOptions is required");
 
         WriteOptions clone = clone();
-        clone.timestamp = timestamp;
-
-        return clone;
-    }
-
-    /**
-     * @param precision Precision of timestamp
-     * @return immutable instance
-     * @see PutInfluxDatabaseRecord#TIMESTAMP_PRECISION
-     */
-    @NonNull
-    public WriteOptions precision(@NonNull final TimeUnit precision) {
-
-        Objects.requireNonNull(precision, "Precision of timestamp is required");
-
-        WriteOptions clone = clone();
-        clone.precision = precision;
-
-        return clone;
-    }
-
-    /**
-     * @param measurement Name of the measurement
-     * @return immutable instance
-     * @see PutInfluxDatabaseRecord#MEASUREMENT
-     */
-    @NonNull
-    public WriteOptions measurement(@NonNull final String measurement) {
-
-        Objects.requireNonNull(measurement, "Name of the measurement is required");
-
-        WriteOptions clone = clone();
-        clone.measurement = measurement;
-
-        return clone;
-    }
-
-    /**
-     * @param fields Name of the fields
-     * @return immutable instance
-     * @see PutInfluxDatabaseRecord#FIELDS
-     */
-    @NonNull
-    public WriteOptions fields(@NonNull final List<String> fields) {
-
-        Objects.requireNonNull(fields, "Fields are required");
-
-        WriteOptions clone = clone();
-        clone.fields.addAll(fields);
-
-        return clone;
-    }
-
-    /**
-     * @param missingFields Missing fields behaviour
-     * @return immutable instance
-     * @see PutInfluxDatabaseRecord#MISSING_FIELD_BEHAVIOR
-     */
-    @NonNull
-    public WriteOptions missingFields(@NonNull final MissingItemsBehaviour missingFields) {
-
-        Objects.requireNonNull(missingFields, "Missing fields behaviour is required");
-
-        WriteOptions clone = clone();
-        clone.missingFields = missingFields;
-
-        return clone;
-    }
-
-    /**
-     * @param tags Evaluated names of the tags
-     * @return immutable instance
-     * @see PutInfluxDatabaseRecord#TAGS
-     */
-    @NonNull
-    public WriteOptions tags(@NonNull final List<String> tags) {
-
-        Objects.requireNonNull(tags, "Tags are required");
-
-        WriteOptions clone = clone();
-        clone.tags.addAll(tags);
-
-        return clone;
-    }
-
-    /**
-     * @param missingTags Missing tags behaviour
-     * @return immutable instance
-     * @see PutInfluxDatabaseRecord#MISSING_TAG_BEHAVIOR
-     */
-    @NonNull
-    public WriteOptions missingTags(@NonNull final MissingItemsBehaviour missingTags) {
-
-        Objects.requireNonNull(missingTags, "Missing tags behaviour is required");
-
-        WriteOptions clone = clone();
-        clone.missingTags = missingTags;
-
-        return clone;
-    }
-
-    /**
-     * @param complexFieldBehaviour Complex field behaviour
-     * @return immutable instance
-     * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_BEHAVIOR
-     */
-    @NonNull
-    public WriteOptions complexFieldBehaviour(@NonNull final ComplexFieldBehaviour complexFieldBehaviour) {
-
-        Objects.requireNonNull(complexFieldBehaviour, "Missing tags behaviour is required");
-
-        WriteOptions clone = clone();
-        clone.complexFieldBehaviour = complexFieldBehaviour;
-
-        return clone;
-    }
-
-    /**
-     * @param nullValueBehaviour Null Value Behaviour
-     * @return immutable instance
-     * @see PutInfluxDatabaseRecord#NULL_VALUE_BEHAVIOR
-     */
-    @NonNull
-    public WriteOptions nullValueBehaviour(@NonNull final NullValueBehaviour nullValueBehaviour) {
-
-        Objects.requireNonNull(nullValueBehaviour, "Null Value Behavior is required");
-
-        WriteOptions clone = clone();
-        clone.nullValueBehaviour = nullValueBehaviour;
+        clone.mapperOptions = mapperOptions;
 
         return clone;
     }
@@ -289,81 +91,11 @@ public final class WriteOptions implements Cloneable {
     }
 
     /**
-     * @return Evaluated timestamp name
-     * @see PutInfluxDatabaseRecord#TIMESTAMP_FIELD
-     */
-    @Nullable
-    public String getTimestamp() {
-
-        return timestamp;
-    }
-
-    /**
-     * @return Evaluated timestamp precision
-     * @see PutInfluxDatabaseRecord#TIMESTAMP_PRECISION
+     * @return The options for {@link RecordToPointMapper}.
      */
     @NonNull
-    public TimeUnit getPrecision() {
-        return precision;
-    }
-
-    /**
-     * @return Evaluated measurement name
-     * @see PutInfluxDatabaseRecord#MEASUREMENT
-     */
-    @NonNull
-    public String getMeasurement() {
-        return measurement;
-    }
-
-    /**
-     * @return Evaluated fields names
-     * @see PutInfluxDatabaseRecord#FIELDS
-     */
-    @NonNull
-    public List<String> getFields() {
-        return fields;
-    }
-
-    /**
-     * @see PutInfluxDatabaseRecord#MISSING_FIELD_BEHAVIOR
-     */
-    @NonNull
-    public MissingItemsBehaviour getMissingFields() {
-        return missingFields;
-    }
-
-    /**
-     * @return Evaluated tags names
-     * @see PutInfluxDatabaseRecord#TAGS
-     */
-    @NonNull
-    public List<String> getTags() {
-        return tags;
-    }
-
-    /**
-     * @see PutInfluxDatabaseRecord#MISSING_TAG_BEHAVIOR
-     */
-    @NonNull
-    public MissingItemsBehaviour getMissingTags() {
-        return missingTags;
-    }
-
-    /**
-     * @see PutInfluxDatabaseRecord#COMPLEX_FIELD_BEHAVIOR
-     */
-    @NonNull
-    public ComplexFieldBehaviour getComplexFieldBehaviour() {
-        return complexFieldBehaviour;
-    }
-
-    /**
-     * @see PutInfluxDatabaseRecord#NULL_VALUE_BEHAVIOR
-     */
-    @NonNull
-    public NullValueBehaviour getNullValueBehaviour() {
-        return nullValueBehaviour;
+    public MapperOptions getMapperOptions() {
+        return mapperOptions;
     }
 
     @Override

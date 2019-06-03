@@ -40,10 +40,25 @@
             <artifactId>nifi-utils</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-record</artifactId>
+        </dependency>
+
 		<dependency>
 			<groupId>com.github.stephenc.findbugs</groupId>
 			<artifactId>findbugs-annotations</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.influxdb</groupId>
+            <artifactId>influxdb-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.nifi</groupId>

@@ -14,6 +14,7 @@
     - [InfluxLineProtocolReader](#influxlineprotocolreader)
     - [InfluxDatabaseService](#influxdatabaseservice)
     - [PutInfluxDatabase](#putinfluxdatabase)
+    - [InfluxLineProtocolRecordSetWriter](#influxlineprotocolrecordsetwriter)
 - [Demo](#demo)
 - [Contributing](#contributing)
 - [License](#license)
@@ -179,6 +180,22 @@ Processor to write the content of a FlowFile in 'line protocol'. Please check de
 | **Retention Policy** | Retention policy for the saving the records |
 | **Max size of records** | Maximum size of records allowed to be posted in one batch |
 
+### InfluxLineProtocolRecordSetWriter
+
+Writes the contents of a RecordSet as [Line Protocol](https://bit.ly/2QL99fu). The configured writer is able to make [Line Protocol](https://bit.ly/2QL99fu) by the Expression Language that reference each of the fields that are available in a Record. Each record in the RecordSet will be separated by a single newline character. The Record Schema is read from the incoming FlowFile.
+
+| Property | Description |
+| --- | --- |
+| **Measurement** | The name of the measurement. If the Record contains a field with measurement property value, then value of the Record field is use as InfluxDB measurement |
+| Tags | A comma-separated list of record fields stored in InfluxDB as 'tag' |
+| Missing Tag Behavior | If the specified tag is not present in the document, this property specifies how to handle the situation |
+| **Fields** | A comma-separated list of record fields stored in InfluxDB as 'field'. At least one field must be defined |
+| Missing Field Behavior | If the specified field is not present in the document, this property specifies how to handle the situation |
+| Timestamp field | A name of the record field that used as a 'timestamp' |
+| **Timestamp precision** | The timestamp precision is ignore when the 'Timestamp field' value is 'java.util.Date' |
+| **Complex Field Behavior** | Indicates how to handle complex fields, i.e. fields that do not have a primitive value |
+| **Null Values Behavior** | Indicates how to handle null fields, i.e. fields that do not have a defined value |
+| **Character Set** | The Character Encoding that is used to encode/decode the Line Protocol |
 
 ## Demo
 
@@ -192,7 +209,7 @@ The demo requires Docker Engine, GNU gzip and curl on classpath.
     ./scripts/nifi-restart.sh
     ```
 3. Open Apache NiFi flow in browser: [http://localhost:8080/nifi/](http://localhost:8080/nifi/)
-4. Open Telegraf Dashboards in browser: [Twitter](http://localhost:8888/sources/0/dashboards/2) or [NiFi Container](http://localhost:8888/sources/0/dashboards/1)
+4. Open Telegraf Dashboards in browser: [Twitter](http://localhost:8888/sources/0/dashboards/2), [NiFi Container](http://localhost:8888/sources/0/dashboards/1) or [NiFi Logs](http://localhost:8888/sources/0/dashboards/3)
 
 ### Store complex JSON structure to InfluxDB
 
@@ -366,6 +383,18 @@ time                container_image container_name container_status container_ve
 1550148082000000000 nifi            nifi           running          unknown           linuxkit-025000000001 0        0c79c2e451ca Apache NiFi <dev@nifi.apache.org> false     43685 18.09.1        https://nifi.apache.org 1550147980248481800
 ...
 ```
+
+### Write LineProtocol to multiple storage
+
+This example show how to store NiFi Records as a LineProtocol into multiple environments: InfluxDB and Kafka. 
+
+#### NiFi flow
+
+<img src="assets/doc/demo3-flow.png" height="250px">    
+
+##### InfluxLineProtocolRecordSetWriter settings
+
+<img src="assets/doc/demo3-setwriter.png" height="250px">    
 
 ## Contributing
 

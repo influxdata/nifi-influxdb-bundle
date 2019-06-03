@@ -16,3 +16,4 @@
 #
 
 org.influxdata.nifi.serialization.InfluxLineProtocolReader
+org.influxdata.nifi.serialization.InfluxLineProtocolRecordSetWriter

@@ -18,7 +18,6 @@ package org.influxdata.nifi.processors;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -26,10 +25,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.influxdata.nifi.processors.WriteOptions.MissingItemsBehaviour;
-import org.influxdata.nifi.processors.WriteOptions.NullValueBehaviour;
 import org.influxdata.nifi.services.InfluxDatabaseService;
 import org.influxdata.nifi.util.PropertyValueUtils;
+import org.influxdata.nifi.util.PropertyValueUtils.IllegalConfigurationException;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -61,6 +59,16 @@ import org.influxdb.InfluxDB.ConsistencyLevel;
 import org.influxdb.InfluxDBException;
 import org.influxdb.InfluxDBIOException;
 
+import static org.influxdata.nifi.util.InfluxDBUtils.COMPLEX_FIELD_BEHAVIOR;
+import static org.influxdata.nifi.util.InfluxDBUtils.DEFAULT_RETENTION_POLICY;
+import static org.influxdata.nifi.util.InfluxDBUtils.FIELDS;
+import static org.influxdata.nifi.util.InfluxDBUtils.MEASUREMENT;
+import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_FIELD_BEHAVIOR;
+import static org.influxdata.nifi.util.InfluxDBUtils.MISSING_TAG_BEHAVIOR;
+import static org.influxdata.nifi.util.InfluxDBUtils.NULL_VALUE_BEHAVIOR;
+import static org.influxdata.nifi.util.InfluxDBUtils.TAGS;
+import static org.influxdata.nifi.util.InfluxDBUtils.TIMESTAMP_FIELD;
+import static org.influxdata.nifi.util.InfluxDBUtils.TIMESTAMP_PRECISION;
 import static org.influxdata.nifi.util.PropertyValueUtils.getEnumValue;
 import static org.influxdb.BatchOptions.DEFAULT_BATCH_INTERVAL_DURATION;
 import static org.influxdb.BatchOptions.DEFAULT_JITTER_INTERVAL_DURATION;
@@ -79,21 +87,6 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
 
     protected static final String DATABASE_NAME_EMPTY_MESSAGE =
             "Cannot configure InfluxDB client because Database Name is null or empty.";
-
-    protected static final String MEASUREMENT_NAME_EMPTY_MESSAGE =
-            "Cannot write FlowFile to InfluxDB because Measurement Name is null or empty.";
-
-    protected static final String AT_LEAST_ONE_FIELD_DEFINED_MESSAGE =
-            "Cannot write FlowFile to InfluxDB because at least one field must be defined.";
-
-    protected static final String REQUIRED_FIELD_MISSING =
-            "Cannot write FlowFile to InfluxDB because the required field '%s' is not present in Record.";
-
-    protected static final String UNSUPPORTED_FIELD_TYPE =
-            "Cannot write FlowFile to InfluxDB because the field '%s' has a unsupported type '%s'.";
-
-    protected static final String FIELD_NULL_VALUE =
-            "Cannot write FlowFile to InfluxDB because the field '%s' has null value.";
 
     /**
      * Influx consistency levels.
@@ -136,57 +129,6 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
             new AllowableValue("FULL", "Full",
                     "Log the headers, body, and metadata for both requests and responses. "
                             + "Note: This requires that the entire request and response body be buffered in memory!");
-
-    /**
-     * Missing items behaviour.
-     */
-    private static final AllowableValue MISSING_ITEMS_BEHAVIOUR_IGNORE = new AllowableValue(
-            MissingItemsBehaviour.IGNORE.name(),
-            "Ignore",
-            "The item that is not present in the document is silently ignored.");
-
-    private static final AllowableValue MISSING_ITEMS_BEHAVIOUR_FAIL = new AllowableValue(
-            MissingItemsBehaviour.FAIL.name(),
-            "Fail",
-            "If the item is not present in the document, the FlowFile will be routed to the failure relationship.");
-
-
-    /**
-     * Null values behaviour.
-     */
-    private static final AllowableValue NULL_VALUE_BEHAVIOUR_IGNORE = new AllowableValue(
-            NullValueBehaviour.IGNORE.name(),
-            "Ignore",
-            "Silently skip fields with a null value.");
-
-    private static final AllowableValue NULL_VALUE_BEHAVIOUR_FAIL = new AllowableValue(
-            NullValueBehaviour.FAIL.name(),
-            "Fail",
-            "Fail when the field has a null value.");
-
-    /**
-     * Complex field behaviour
-     */
-    protected static final AllowableValue COMPLEX_FIELD_FAIL = new AllowableValue(
-            WriteOptions.ComplexFieldBehaviour.FAIL.name(),
-            "Fail",
-            "Route entire FlowFile to failure if any elements contain complex values.");
-
-    protected static final AllowableValue COMPLEX_FIELD_WARN = new AllowableValue(
-            WriteOptions.ComplexFieldBehaviour.WARN.name(),
-            "Warn",
-            "Provide a warning and do not include field InfluxDB data point.");
-
-    protected static final AllowableValue COMPLEX_FIELD_IGNORE = new AllowableValue(
-            WriteOptions.ComplexFieldBehaviour.IGNORE.name(),
-            "Ignore",
-            "Silently ignore and do not include field InfluxDB data point.");
-
-    protected static final AllowableValue COMPLEX_FIELD_VALUE = new AllowableValue(
-            WriteOptions.ComplexFieldBehaviour.TEXT.name(),
-            "Text",
-            "Use the string representation of the complex field as the value of the given field.");
-
 
     protected static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
             .description("All FlowFiles that are written into InfluxDB are routed to this relationship")
@@ -254,7 +196,7 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
             .name("influxdb-retention-policy")
             .displayName("Retention Policy")
             .description("Retention policy for the saving the records")
-            .defaultValue(WriteOptions.DEFAULT_RETENTION_POLICY)
+            .defaultValue(DEFAULT_RETENTION_POLICY)
             .required(true)
             .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
@@ -312,99 +254,6 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
             .required(false)
             .defaultValue(Integer.toString(BatchOptions.DEFAULT_BUFFER_LIMIT))
             .addValidator(StandardValidators.INTEGER_VALIDATOR)
-            .build();
-
-
-    protected static final PropertyDescriptor MEASUREMENT = new PropertyDescriptor.Builder()
-            .name("influxdb-measurement")
-            .displayName("Measurement")
-            .description("The name of the measurement."
-                    + " If the Record contains a field with measurement property value, "
-                    + "then value of the Record field is use as InfluxDB measurement.")
-            .required(true)
-            .addValidator(StandardValidators.NON_BLANK_VALIDATOR)
-            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
-            .defaultValue("measurement")
-            .build();
-
-    protected static final PropertyDescriptor FIELDS = new PropertyDescriptor.Builder()
-            .name("influxdb-fields")
-            .displayName("Fields")
-            .description("A comma-separated list of record fields stored in InfluxDB as 'field'. "
-                    + " At least one field must be defined")
-            .required(true)
-            .addValidator(StandardValidators.NON_BLANK_VALIDATOR)
-            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
-            .defaultValue("fields")
-            .build();
-
-    protected static final PropertyDescriptor TAGS = new PropertyDescriptor.Builder()
-            .name("influxdb-tags")
-            .displayName("Tags")
-            .description("A comma-separated list of record fields stored in InfluxDB as 'tag'.")
-            .required(false)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
-            .defaultValue("tags")
-            .build();
-
-    protected static final PropertyDescriptor TIMESTAMP_FIELD = new PropertyDescriptor.Builder()
-            .name("influxdb-timestamp-field")
-            .displayName("Timestamp field")
-            .description("A name of the record field that used as a 'timestamp'. "
-                    + "If it is not specified, current system time is used. "
-                    + "The support types of field value are: java.util.Date, java.lang.Number, "
-                    + "java.lang.String (parsable to Long).")
-            .required(false)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
-            .defaultValue("timestamp")
-            .build();
-
-    protected static final PropertyDescriptor TIMESTAMP_PRECISION = new PropertyDescriptor.Builder()
-            .name("influxdb-timestamp-precision")
-            .displayName("Timestamp precision")
-            .description("The timestamp precision is ignore when the 'Timestamp field' value is 'java.util.Date'.")
-            .defaultValue(WriteOptions.PRECISION_DEFAULT.name())
-            .required(true)
-            .allowableValues(Arrays.stream(TimeUnit.values()).map(Enum::name).toArray(String[]::new))
-            .sensitive(false)
-            .build();
-
-    protected static final PropertyDescriptor MISSING_FIELD_BEHAVIOR = new PropertyDescriptor.Builder()
-            .name("influxdb-fields-field-behavior")
-            .displayName("Missing Field Behavior")
-            .description("If the specified field is not present in the document, "
-                    + "this property specifies how to handle the situation.")
-            .allowableValues(MISSING_ITEMS_BEHAVIOUR_IGNORE, MISSING_ITEMS_BEHAVIOUR_FAIL)
-            .defaultValue(WriteOptions.MISSING_FIELDS_BEHAVIOUR_DEFAULT.name())
-            .build();
-
-    protected static final PropertyDescriptor MISSING_TAG_BEHAVIOR = new PropertyDescriptor.Builder()
-            .name("influxdb-tags-field-behavior")
-            .displayName("Missing Tag Behavior")
-            .description("If the specified tag is not present in the document, "
-                    + "this property specifies how to handle the situation.")
-            .allowableValues(MISSING_ITEMS_BEHAVIOUR_IGNORE, MISSING_ITEMS_BEHAVIOUR_FAIL)
-            .defaultValue(WriteOptions.MISSING_TAGS_BEHAVIOUR_DEFAULT.name())
-            .build();
-
-    protected static final PropertyDescriptor COMPLEX_FIELD_BEHAVIOR = new PropertyDescriptor.Builder()
-            .name("influxdb-complex-field-behavior")
-            .displayName("Complex Field Behavior")
-            .description("Indicates how to handle complex fields, i.e. fields that do not have a primitive value.")
-            .required(true)
-            .allowableValues(COMPLEX_FIELD_VALUE, COMPLEX_FIELD_IGNORE, COMPLEX_FIELD_WARN, COMPLEX_FIELD_FAIL)
-            .defaultValue(WriteOptions.COMPLEX_FIELD_BEHAVIOUR_DEFAULT.name())
-            .build();
-
-    protected static final PropertyDescriptor NULL_VALUE_BEHAVIOR = new PropertyDescriptor.Builder()
-            .name("influxdb-null-behavior")
-            .displayName("Null Values Behavior")
-            .description("Indicates how to handle null fields, i.e. fields that do not have a defined value.")
-            .required(true)
-            .allowableValues(NULL_VALUE_BEHAVIOUR_IGNORE, NULL_VALUE_BEHAVIOUR_FAIL)
-            .defaultValue(WriteOptions.NULL_FIELD_VALUE_BEHAVIOUR_DEFAULT.name())
             .build();
 
     private static final List<PropertyDescriptor> PROPERTY_DESCRIPTORS;
@@ -494,7 +343,7 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
             WriteOptions writeOptions = writeOptions(context, flowFile);
 
             // Init Mapper
-            RecordToPointMapper pointMapper = RecordToPointMapper
+            FlowFileToPointMapper pointMapper = FlowFileToPointMapper
                     .createMapper(session, context, getLogger(), writeOptions);
 
             // Write to InfluxDB
@@ -630,57 +479,15 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
         String retentionPolicy = context.getProperty(RETENTION_POLICY).evaluateAttributeExpressions(flowFile).getValue();
         if (StringUtils.isBlank(retentionPolicy)) {
 
-            retentionPolicy = WriteOptions.DEFAULT_RETENTION_POLICY;
+            retentionPolicy = DEFAULT_RETENTION_POLICY;
         }
 
-        // Timestamp
-        String timestamp = context.getProperty(TIMESTAMP_FIELD).evaluateAttributeExpressions(flowFile).getValue();
-
-        // Timestamp precision
-        TimeUnit precision = getEnumValue(TIMESTAMP_PRECISION, context, TimeUnit.class, WriteOptions.PRECISION_DEFAULT);
-
-        // Measurement
-        String measurement = context.getProperty(MEASUREMENT).evaluateAttributeExpressions(flowFile).getValue();
-        if (StringUtils.isEmpty(measurement)) {
-            throw new IllegalConfigurationException(MEASUREMENT_NAME_EMPTY_MESSAGE);
-        }
-
-        // Fields
-        List<String> fields = PropertyValueUtils.getList(FIELDS, context, flowFile);
-        if (fields.isEmpty()) {
-            throw new IllegalConfigurationException(AT_LEAST_ONE_FIELD_DEFINED_MESSAGE);
-        }
-
-        // Missing fields
-        MissingItemsBehaviour missingFields = getEnumValue(MISSING_FIELD_BEHAVIOR, context, MissingItemsBehaviour.class,
-                WriteOptions.MISSING_FIELDS_BEHAVIOUR_DEFAULT);
-
-        // Tags
-        List<String> tags = PropertyValueUtils.getList(TAGS, context, flowFile);
-
-        // Missing tags
-        MissingItemsBehaviour missingTags = getEnumValue(MISSING_TAG_BEHAVIOR, context, MissingItemsBehaviour.class,
-                WriteOptions.MISSING_TAGS_BEHAVIOUR_DEFAULT);
-
-        // Complex fields behaviour
-        WriteOptions.ComplexFieldBehaviour complexFieldBehaviour = getEnumValue(COMPLEX_FIELD_BEHAVIOR, context,
-                WriteOptions.ComplexFieldBehaviour.class, WriteOptions.COMPLEX_FIELD_BEHAVIOUR_DEFAULT);
-
-        // Null Field Value Behaviour
-        NullValueBehaviour nullValueBehaviour = getEnumValue(NULL_VALUE_BEHAVIOR, context, NullValueBehaviour.class, NullValueBehaviour.IGNORE);
+        MapperOptions mapperOptions = PropertyValueUtils.getMapperOptions(context, flowFile);
 
         return new WriteOptions()
                 .database(database)
                 .setRetentionPolicy(retentionPolicy)
-                .timestamp(timestamp)
-                .precision(precision)
-                .measurement(measurement)
-                .fields(fields)
-                .missingFields(missingFields)
-                .tags(tags)
-                .missingTags(missingTags)
-                .complexFieldBehaviour(complexFieldBehaviour)
-                .nullValueBehaviour(nullValueBehaviour);
+                .mapperOptions(mapperOptions);
     }
 
     @NonNull
@@ -697,13 +504,5 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
         getLogger().error(INFLUX_DB_ERROR_MESSAGE_LOG, new Object[]{flowFileName, e.getLocalizedMessage()}, e);
 
         return session.putAttribute(flowFile, AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE, String.valueOf(e.getMessage()));
-    }
-
-    protected class IllegalConfigurationException extends Exception {
-
-        protected IllegalConfigurationException(final String message) {
-
-            super(message);
-        }
     }
 }
