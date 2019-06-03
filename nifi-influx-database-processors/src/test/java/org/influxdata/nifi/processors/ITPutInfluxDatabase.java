@@ -16,12 +16,16 @@
  */
 package org.influxdata.nifi.processors;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunners;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +51,7 @@ public class ITPutInfluxDatabase extends AbstractITInfluxDB {
 
     @Test
     public void testValidSinglePoint() {
-        String message = "water,country=US,city=newark rain=1,humidity=0.6 ";
+        String message = "water,country=US,city=newark rain=1,humidity=0.6 1";
         byte [] bytes = message.getBytes();
         runner.enqueue(bytes);
         runner.run(1,true,true);
@@ -59,7 +63,32 @@ public class ITPutInfluxDatabase extends AbstractITInfluxDB {
         assertEquals("size should be same", 1, result.getResults().iterator().next().getSeries().size());
         List<List<Object>> values = result.getResults().iterator().next().getSeries().iterator().next().getValues();
         assertEquals("size should be same", 1, values.size());
-   }
+
+        Instant timestamp = Instant.parse(values.get(0).get(0).toString());
+
+        Assert.assertEquals(Instant.ofEpochSecond(0).plusNanos(1), timestamp);
+    }
+
+    @Test
+    public void testPrecision() {
+        runner.setProperty(PutInfluxDatabase.TIMESTAMP_PRECISION, TimeUnit.HOURS.name());
+        String message = "water,country=US,city=newark rain=1,humidity=0.6 1";
+        byte [] bytes = message.getBytes();
+        runner.enqueue(bytes);
+        runner.run(1,true,true);
+        runner.assertAllFlowFilesTransferred(PutInfluxDatabase.REL_SUCCESS, 1);
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(PutInfluxDatabase.REL_SUCCESS);
+        assertEquals("Value should be equal", 1, flowFiles.size());
+        assertEquals("Value should be equal",null, flowFiles.get(0).getAttribute(PutInfluxDatabase.INFLUX_DB_ERROR_MESSAGE));
+        QueryResult result = influxDB.query(new Query("select * from water", dbName));
+        assertEquals("size should be same", 1, result.getResults().iterator().next().getSeries().size());
+        List<List<Object>> values = result.getResults().iterator().next().getSeries().iterator().next().getValues();
+        assertEquals("size should be same", 1, values.size());
+
+        Instant timestamp = Instant.parse(values.get(0).get(0).toString());
+
+        Assert.assertEquals(Instant.ofEpochSecond(0).plus(1, ChronoUnit.HOURS), timestamp);
+    }
 
     @Test
     public void testValidSinglePointWithTime() {

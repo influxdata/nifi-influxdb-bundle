@@ -20,10 +20,14 @@ import java.io.ByteArrayOutputStream;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import org.influxdata.nifi.util.PropertyValueUtils;
 
 import org.apache.nifi.annotation.behavior.EventDriven;
 import org.apache.nifi.annotation.behavior.InputRequirement;
@@ -52,7 +56,8 @@ import org.influxdb.InfluxDBIOException;
 @SupportsBatching
 @Tags({"influxdb", "measurement","insert", "write", "put", "timeseries"})
 @CapabilityDescription("Processor to write the content of a FlowFile in 'line protocol'.  Please check details of the 'line protocol' in InfluxDB documentation (https://www.influxdb.com/). "
-        + "  The flow file can contain single measurement point or multiple measurement points separated by line seperator.  The timestamp (last field) should be in nano-seconds resolution.")
+        + "  The flow file can contain single measurement point or multiple measurement points separated by line separator."
+        + " The timestamp precision is defined by Timestamp property. If you do not specify precision then the InfluxDB assumes that timestamps are in nanoseconds.")
 @WritesAttributes({
     @WritesAttribute(attribute = AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE, description = "InfluxDB error message"),
     })
@@ -81,6 +86,16 @@ public class PutInfluxDatabase extends AbstractInfluxDatabaseProcessor {
             .required(true)
             .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor TIMESTAMP_PRECISION = new PropertyDescriptor.Builder()
+            .name("influxdb-timestamp-precision")
+            .displayName("Timestamp precision")
+            .description("The precision of the time stamps. InfluxDB assumes that timestamps are in nanoseconds if you do not specify precision.")
+            .required(false)
+            .allowableValues(Arrays.stream(TimeUnit.values()).filter(tu -> !TimeUnit.DAYS.equals(tu)).map(Enum::name).toArray(String[]::new))
+            .sensitive(false)
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .build();
 
     static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
@@ -115,6 +130,7 @@ public class PutInfluxDatabase extends AbstractInfluxDatabaseProcessor {
         tempDescriptors.add(CHARSET);
         tempDescriptors.add(CONSISTENCY_LEVEL);
         tempDescriptors.add(RETENTION_POLICY);
+        tempDescriptors.add(TIMESTAMP_PRECISION);
         tempDescriptors.add(MAX_RECORDS_SIZE);
         propertyDescriptors = Collections.unmodifiableList(tempDescriptors);
     }
@@ -160,6 +176,8 @@ public class PutInfluxDatabase extends AbstractInfluxDatabaseProcessor {
         String consistencyLevel = context.getProperty(CONSISTENCY_LEVEL).evaluateAttributeExpressions(flowFile).getValue();
         String database = context.getProperty(DB_NAME).evaluateAttributeExpressions(flowFile).getValue();
         String retentionPolicy = context.getProperty(RETENTION_POLICY).evaluateAttributeExpressions(flowFile).getValue();
+        TimeUnit precision = PropertyValueUtils.getEnumValue(TimeUnit.class, null,
+                context.getProperty(TIMESTAMP_PRECISION).evaluateAttributeExpressions(flowFile).getValue());
 
         try {
             long startTimeMillis = System.currentTimeMillis();
@@ -167,7 +185,7 @@ public class PutInfluxDatabase extends AbstractInfluxDatabaseProcessor {
             session.exportTo(flowFile, baos);
             String records = new String(baos.toByteArray(), charset);
 
-            writeToInfluxDB(context, consistencyLevel, database, retentionPolicy, records);
+            writeToInfluxDB(context, consistencyLevel, database, retentionPolicy, precision, records);
 
             final long endTimeMillis = System.currentTimeMillis();
             getLogger().debug("Records {} inserted", new Object[] {records});
@@ -197,8 +215,12 @@ public class PutInfluxDatabase extends AbstractInfluxDatabaseProcessor {
         }
     }
 
-    protected void writeToInfluxDB(ProcessContext context, String consistencyLevel, String database, String retentionPolicy, String records) {
-        getInfluxDB(context).write(database, retentionPolicy, InfluxDB.ConsistencyLevel.valueOf(consistencyLevel), records);
+    protected void writeToInfluxDB(ProcessContext context, String consistencyLevel, String database, String retentionPolicy, final TimeUnit precision, String records) {
+        if (precision != null) {
+            getInfluxDB(context).write(database, retentionPolicy, InfluxDB.ConsistencyLevel.valueOf(consistencyLevel), precision, records);
+        } else {
+            getInfluxDB(context).write(database, retentionPolicy, InfluxDB.ConsistencyLevel.valueOf(consistencyLevel), records);
+        }
     }
 
     @OnStopped

@@ -175,9 +175,10 @@ Processor to write the content of a FlowFile in 'line protocol'. Please check de
 | **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
 | Username | Username for accessing InfluxDB |
 | Password | Password for user |
-| **Character Set** | Specifies the character set of the document data. |
+| **Character Set** | Specifies the character set of the document data |
 | **Consistency Level** | InfluxDB consistency level |
 | **Retention Policy** | Retention policy for the saving the records |
+| Timestamp precisions | The precision of the time stamps. InfluxDB assumes that timestamps are in nanoseconds if you do not specify precision |
 | **Max size of records** | Maximum size of records allowed to be posted in one batch |
 
 ### InfluxLineProtocolRecordSetWriter

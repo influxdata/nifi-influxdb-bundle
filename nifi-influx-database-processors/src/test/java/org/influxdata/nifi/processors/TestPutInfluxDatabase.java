@@ -19,6 +19,7 @@ package org.influxdata.nifi.processors;
 import java.io.EOFException;
 import java.net.SocketTimeoutException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.util.MockFlowFile;
@@ -27,6 +28,7 @@ import org.apache.nifi.util.TestRunners;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBIOException;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,9 +37,11 @@ import static org.junit.Assert.assertEquals;
 public class TestPutInfluxDatabase {
     private TestRunner runner;
     private PutInfluxDatabase mockPutInfluxDatabase;
+    private TimeUnit precision;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
+        precision = null;
         mockPutInfluxDatabase = new PutInfluxDatabase() {
             @Override
             protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
@@ -46,7 +50,9 @@ public class TestPutInfluxDatabase {
 
             @Override
             protected void writeToInfluxDB(ProcessContext context, String consistencyLevel, String database, String retentionPolicy,
-                    String records) {
+                                           final TimeUnit precision, String records) {
+                TestPutInfluxDatabase.this.precision = precision;
+
             }
         };
         runner = TestRunners.newTestRunner(mockPutInfluxDatabase);
@@ -216,6 +222,30 @@ public class TestPutInfluxDatabase {
         List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(PutInfluxDatabase.REL_SUCCESS);
 
         assertEquals(flowFiles.get(0).getAttribute(PutInfluxDatabase.INFLUX_DB_ERROR_MESSAGE), null);
+        Assert.assertNull(precision);
+    }
+
+    @Test
+    public void testPrecision() {
+        runner.setProperty(PutInfluxDatabase.MAX_RECORDS_SIZE, "1 MB");
+        runner.setProperty(PutInfluxDatabase.TIMESTAMP_PRECISION, TimeUnit.SECONDS.name());
+        runner.assertValid();
+        byte [] bytes = "test".getBytes();
+
+        runner.enqueue(bytes);
+        runner.run(1,true,true);
+        runner.assertAllFlowFilesTransferred(PutInfluxDatabase.REL_SUCCESS, 1);
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(PutInfluxDatabase.REL_SUCCESS);
+
+        assertEquals(flowFiles.get(0).getAttribute(PutInfluxDatabase.INFLUX_DB_ERROR_MESSAGE), null);
+        Assert.assertEquals(TimeUnit.SECONDS, precision);
+    }
+
+    @Test
+    public void testPrecisionDays() {
+        runner.setProperty(PutInfluxDatabase.TIMESTAMP_PRECISION, TimeUnit.DAYS.name());
+        runner.assertNotValid();
     }
 
     @Test
@@ -223,7 +253,7 @@ public class TestPutInfluxDatabase {
         mockPutInfluxDatabase = new PutInfluxDatabase() {
             @Override
             protected void writeToInfluxDB(ProcessContext context, String consistencyLevel, String database, String retentionPolicy,
-                    String records) {
+                                           final TimeUnit precision, String records) {
                 throw new RuntimeException("WriteException");
             }
         };
@@ -253,7 +283,7 @@ public class TestPutInfluxDatabase {
         mockPutInfluxDatabase = new PutInfluxDatabase() {
             @Override
             protected void writeToInfluxDB(ProcessContext context, String consistencyLevel, String database, String retentionPolicy,
-                    String records) {
+                                           final TimeUnit precision, String records) {
                 throw new InfluxDBIOException(new EOFException("EOFException"));
             }
         };
@@ -283,7 +313,7 @@ public class TestPutInfluxDatabase {
         mockPutInfluxDatabase = new PutInfluxDatabase() {
             @Override
             protected void writeToInfluxDB(ProcessContext context, String consistencyLevel, String database, String retentionPolicy,
-                    String records) {
+                                           final TimeUnit precision, String records) {
                 throw new InfluxDBIOException(new SocketTimeoutException("SocketTimeoutException"));
             }
         };
