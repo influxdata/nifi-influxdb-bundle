@@ -6,7 +6,7 @@
 * [20](https://github.com/influxdata/nifi-influxdb-bundle#putinfluxdatabase): PutInfluxDatabase supports the custom timestamp precision
 
 ### Others
-* [11](https://github.com/influxdata/nifi-influxdb-bundle/issues/11): Updated to Apache NiFi 1.9.0
+* [11](https://github.com/influxdata/nifi-influxdb-bundle/issues/11): Updated to Apache NiFi 1.9.2
 * [12](https://github.com/influxdata/nifi-influxdb-bundle/issues/13): Updated to influxdb-java 2.15
 
 ## v1.0 [2019-02-21]
