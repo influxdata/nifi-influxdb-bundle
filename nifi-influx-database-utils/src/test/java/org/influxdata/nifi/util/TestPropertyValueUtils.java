@@ -109,6 +109,14 @@ public class TestPropertyValueUtils {
     }
 
     @Test
+    public void enumValueNull() {
+        
+        PropertyEnum enumValue = PropertyValueUtils.getEnumValue(PropertyEnum.class, null, null);
+
+        Assert.assertNull(enumValue);
+    }
+
+    @Test
     public void listValue() {
 
         testRunner.setProperty(TEST_LIST_PROPERTY, "one,two");

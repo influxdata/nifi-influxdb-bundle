@@ -29,7 +29,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.components.PropertyValue;
 import org.apache.nifi.context.PropertyContext;
-import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.flowfile.FlowFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +81,17 @@ public final class PropertyValueUtils {
 
         Objects.requireNonNull(enumType, "Type of Enum is required");
         Objects.requireNonNull(defaultValue, "Default value which will be used if propertyValue is not enum value");
+
+        //noinspection ConstantConditions
+        return getEnumValue(enumType, defaultValue, propertyValue);
+    }
+
+    @Nullable
+    public static <E extends Enum> E getEnumValue(@NonNull final Class<E> enumType,
+                                                   @Nullable final E defaultValue,
+                                                   @Nullable final String propertyValue) {
+
+        Objects.requireNonNull(enumType, "Type of Enum is required");
 
         E value = null;
         try {
