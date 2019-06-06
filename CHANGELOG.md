@@ -1,3 +1,5 @@
+## v1.2 [unreleased]
+
 ## v1.1 [2019-06-06]
 
 ### Features
