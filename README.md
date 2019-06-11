@@ -12,7 +12,8 @@
 - [How To Use](#how-to-use)
     - [PutInfluxDatabaseRecord](#putinfluxdatabaserecord)
     - [InfluxLineProtocolReader](#influxlineprotocolreader)
-    - [InfluxDatabaseService](#influxdatabaseservice)
+    - [InfluxDatabaseService for InfluxDB 1.x](#influxdatabaseservice)
+    - [InfluxDatabaseService for InfluxDB 2.0](#influxdatabaseservice_2)
     - [PutInfluxDatabase](#putinfluxdatabase)
     - [InfluxLineProtocolRecordSetWriter](#influxlineprotocolrecordsetwriter)
 - [Demo](#demo)
@@ -50,7 +51,7 @@ Nar Version                                                                     
 For example, to install the nar after download it to `~/Downloads`:
 
 ```bash
-$ cp ~/Downloads/nifi-influx-database-nar-1.0.nar.nar $NIFI_HOME/lib
+$ cp ~/Downloads/nifi-influx-database-nar-1.1.nar $NIFI_HOME/lib
 ```
 
 ## How To Use
@@ -150,7 +151,7 @@ partitioning data in NiFi obtained from Telegraf agents, IoT devices, InfluxDB s
 
 ### InfluxDatabaseService
 
-Allows sharing connection configuration among more NiFi processors. Also support a SSL connection.
+Allows sharing connection configuration to InfluxDB 1.x  among more NiFi processors. Also support a SSL connection.
 
 #### Properties
 
@@ -162,6 +163,20 @@ Allows sharing connection configuration among more NiFi processors. Also support
 | **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
 | Username | Username which is used to authorize against the InfluxDB |
 | Password | Password for the username which is used to authorize against the InfluxDB. If the authorization fail the FlowFile will be penalized and routed to 'retry' relationship. |
+
+### InfluxDatabaseService_2
+
+Allows sharing connection configuration to InfluxDB 2.0 among more NiFi processors. Also support a SSL connection.
+
+#### Properties
+
+| Property | Description |
+| --- | --- |
+| SSL Context Service | The SSL Context Service used to provide client certificate information for TLS/SSL connections |
+| Client Auth | The client authentication policy to use for the SSL Context. Only used if an SSL Context Service is provided. |
+| **InfluxDB connection URL** | InfluxDB URL to connect to. Eg: http://influxdb:8086 |
+| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
+| **InfluxDB Access Token** | Access Token used for authenticating/authorizing the InfluxDB request sent by NiFi. |
 
 ### PutInfluxDatabase
 

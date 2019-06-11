@@ -23,22 +23,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.influxdata.client.InfluxDBClient;
+import org.influxdata.client.InfluxDBClientFactory;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import okhttp3.OkHttpClient;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.ssl.SSLContextService;
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 
 import static org.influxdata.nifi.util.PropertyValueUtils.getEnumValue;
 
-@Tags({"influxdb", "client"})
-@CapabilityDescription("The controller service that provides connection to InfluxDB.")
-public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService implements InfluxDatabaseService {
+@Tags({"influxdb", "client", "2.0"})
+@CapabilityDescription("The controller service that provides connection to InfluxDB 2.0.")
+public class StandardInfluxDatabaseService_2 extends AbstractInfluxDatabaseService implements InfluxDatabaseService_2 {
 
     private static final List<PropertyDescriptor> PROPERTY_DESCRIPTORS;
 
@@ -50,8 +50,7 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
         propertyDescriptors.add(CLIENT_AUTH);
         propertyDescriptors.add(INFLUX_DB_URL);
         propertyDescriptors.add(INFLUX_DB_CONNECTION_TIMEOUT);
-        propertyDescriptors.add(USERNAME);
-        propertyDescriptors.add(PASSWORD);
+        propertyDescriptors.add(INFLUX_DB_ACCESS_TOKEN);
 
         PROPERTY_DESCRIPTORS = Collections.unmodifiableList(propertyDescriptors);
     }
@@ -64,7 +63,7 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
 
     @NonNull
     @Override
-    public InfluxDB connect() throws IOException, GeneralSecurityException {
+    public InfluxDBClient create() {
 
         ConfigurationContext context = getConfigurationContext();
 
@@ -77,15 +76,14 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
         long connectionTimeout = context.getProperty(INFLUX_DB_CONNECTION_TIMEOUT).asTimePeriod(TimeUnit.SECONDS);
 
         // Credentials
-        String username = context.getProperty(USERNAME).evaluateAttributeExpressions().getValue();
-        String password = context.getProperty(PASSWORD).evaluateAttributeExpressions().getValue();
+        String token = context.getProperty(INFLUX_DB_ACCESS_TOKEN).evaluateAttributeExpressions().getValue();
 
         try {
-            InfluxDB influxDB = connect(username, password, sslService, clientAuth, influxDbUrl, connectionTimeout);
+            InfluxDBClient client = connect(token, sslService, clientAuth, influxDbUrl, connectionTimeout);
 
-            getLogger().info("InfluxDB connection created for host {}", new Object[]{influxDbUrl});
+            getLogger().info("InfluxDB 2.0 connection created for host {}", new Object[]{influxDbUrl});
 
-            return influxDB;
+            return client;
 
         } catch (Exception e) {
 
@@ -105,12 +103,11 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
     }
 
     @NonNull
-    protected InfluxDB connect(final String username,
-                               final String password,
-                               final SSLContextService sslService,
-                               final SSLContextService.ClientAuth clientAuth,
-                               final String influxDbUrl,
-                               final long connectionTimeout) throws IOException, GeneralSecurityException {
+    protected InfluxDBClient connect(final String token,
+                                     final SSLContextService sslService,
+                                     final SSLContextService.ClientAuth clientAuth,
+                                     final String influxDbUrl,
+                                     final long connectionTimeout) throws IOException, GeneralSecurityException {
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
@@ -118,11 +115,8 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
             configureSSL(builder, clientAuth, sslService);
         }
 
-        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            return InfluxDBFactory.connect(influxDbUrl, builder);
-        } else {
-            return InfluxDBFactory.connect(influxDbUrl, username, password, builder);
-        }
+        return InfluxDBClientFactory.create(influxDbUrl, token.toCharArray());
     }
+
 }
 
