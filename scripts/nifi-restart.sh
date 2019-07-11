@@ -35,6 +35,10 @@ DEFAULT_CHRONOGRAF_VERSION="1.7"
 CHRONOGRAF_VERSION="${CHRONOGRAF_VERSION:-$DEFAULT_CHRONOGRAF_VERSION}"
 CHRONOGRAF_IMAGE=chronograf:${CHRONOGRAF_VERSION}
 
+DEFAULT_INFLUXDB_V2_VERSION="nightly"
+INFLUXDB_V2_VERSION="${INFLUXDB_V2_VERSION:-$DEFAULT_INFLUXDB_V2_VERSION}"
+INFLUXDB_V2_IMAGE=quay.io/influxdb/influx:${INFLUXDB_V2_VERSION}
+
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 echo "Building nifi-influxdata-nar..."
@@ -62,6 +66,9 @@ docker rm nifi || true
 docker kill influxdb || true
 docker rm influxdb || true
 
+docker kill influxdb_v2 || true
+docker rm influxdb_v2 || true
+
 echo
 echo "Starting InfluxDB..."
 echo
@@ -75,6 +82,34 @@ docker run \
       ${INFLUXDB_IMAGE}
 
 sleep 5
+
+#
+# InfluxDB 2.0
+#
+echo
+echo "Starting InfluxDB 2.0 [${INFLUXDB_V2_IMAGE}] ... "
+echo
+
+docker pull ${INFLUXDB_V2_IMAGE} || true
+docker run \
+       --detach \
+       --name influxdb_v2 \
+       --publish 9999:9999 \
+       ${INFLUXDB_V2_IMAGE}
+
+sleep 5
+
+echo
+echo "Post onBoarding request, to setup initial user (my-user@my-password), org (my-org) and bucket (my-bucket)"
+echo
+curl -i -X POST http://localhost:9999/api/v2/setup -H 'accept: application/json' \
+    -d '{
+            "username": "my-user",
+            "password": "my-password",
+            "org": "my-org",
+            "bucket": "my-bucket",
+            "token": "my-token"
+        }'
 
 #
 # Create database for Twitter demo
@@ -129,6 +164,7 @@ docker run \
 	--publish 8007:8000 \
 	--publish 6666:6666 \
 	--link=influxdb \
+	--link=influxdb_v2 \
 	--link=kafka \
 	nifi
 
