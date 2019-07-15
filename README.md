@@ -11,11 +11,11 @@
 - [Installation](#installation)
 - [How To Use](#how-to-use)
     - [PutInfluxDatabaseRecord](#putinfluxdatabaserecord)
-    - [InfluxLineProtocolReader](#influxlineprotocolreader)
-    - [InfluxDatabaseService for InfluxDB 1.x](#influxdatabaseservice)
-    - [InfluxDatabaseService for InfluxDB 2.0](#influxdatabaseservice_2)
     - [PutInfluxDatabase for InfluxDB 1.x](#putinfluxdatabase)
     - [PutInfluxDatabase for InfluxDB 2.0](#putinfluxdatabase_2)
+    - [InfluxDatabaseService for InfluxDB 1.x](#influxdatabaseservice)
+    - [InfluxDatabaseService for InfluxDB 2.0](#influxdatabaseservice_2)
+    - [InfluxLineProtocolReader](#influxlineprotocolreader)
     - [InfluxLineProtocolRecordSetWriter](#influxlineprotocolrecordsetwriter)
 - [Demo](#demo)
 - [Contributing](#contributing)
@@ -200,7 +200,7 @@ Processor to write the content of a FlowFile in 'line protocol'. Please check de
 
 ### PutInfluxDatabase_2
 
-Processor to write the content of a FlowFile in 'line protocol'. Please check details of the 'line protocol' in InfluxDB 2.0 documentation (https://www.influxdb.com/). The flow file can contain single measurement point or multiple measurement points separated by line separator. The timestamp precision is defined by Timestamp property. If you do not specify precision then the InfluxDB assumes that timestamps are in nanoseconds.
+Processor to write the content of a FlowFile in 'line protocol'. Please check details of the 'line protocol' in InfluxDB 2.0 documentation (https://www.influxdb.com/). The flow file can contain single measurement point or multiple measurement points separated by line separator. The timestamp precision is defined by Timestamp property.
 
 #### Properties
 
@@ -209,7 +209,7 @@ Processor to write the content of a FlowFile in 'line protocol'. Please check de
 | **InfluxDB Controller Service** | A controller service that provides connection to InfluxDB |
 | **Bucket** | Specifies the destination bucket for writes |
 | **Organization** | Specifies the destination organization for writes |
-| Timestamp precisions | The precision of the time stamps. InfluxDB assumes that timestamps are in nanoseconds if you do not specify precision |
+| Timestamp precisions | The precision of the time stamps |
 | **Enable gzip compression** | Enable gzip compression for InfluxDB http request body |
 | **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
 | **Character Set** | Specifies the character set of the document data |

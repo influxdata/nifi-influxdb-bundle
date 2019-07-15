@@ -17,19 +17,42 @@
 package org.influxdata.nifi.processors;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 import org.influxdata.client.InfluxDBClient;
+import org.influxdata.client.WriteApi;
+import org.influxdata.client.domain.WritePrecision;
+import org.influxdata.exceptions.InfluxException;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
 
+import okhttp3.MediaType;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
+import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.reporting.InitializationException;
+import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import retrofit2.Response;
+
+import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.CHARSET;
+import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
+import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
+import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.REL_FAILURE;
+import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.REL_MAX_SIZE_EXCEEDED;
+import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.REL_RETRY;
+import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.REL_SUCCESS;
+import static org.influxdata.nifi.services.InfluxDatabaseService_2.INFLUX_DB_ACCESS_TOKEN;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author Jakub Bednar (bednar@github) (11/07/2019 09:38)
@@ -37,13 +60,16 @@ import org.mockito.Mockito;
 public class TestPutInfluxDatabase_2 {
     private TestRunner runner;
     private InfluxDBClient mockInfluxDBClient;
-    private PutInfluxDatabase_2 mockPutInfluxDatabase;
+    private WriteApi mockWriteApi;
 
     @Before
     public void setUp() throws InitializationException, IOException, GeneralSecurityException {
+        mockWriteApi = Mockito.mock(WriteApi.class);
         mockInfluxDBClient = Mockito.mock(InfluxDBClient.class);
-        mockPutInfluxDatabase = new PutInfluxDatabase_2();
-        runner = TestRunners.newTestRunner(mockPutInfluxDatabase);
+        Mockito.doAnswer(invocation -> mockWriteApi).when(mockInfluxDBClient).getWriteApi();
+
+        PutInfluxDatabase_2 putInfluxDatabase_2 = new PutInfluxDatabase_2();
+        runner = TestRunners.newTestRunner(putInfluxDatabase_2);
         runner.setProperty(PutInfluxDatabase_2.INFLUX_DB_SERVICE, "influxdb-service");
         runner.setProperty(PutInfluxDatabase_2.BUCKET, "my-bucket");
         runner.setProperty(PutInfluxDatabase_2.ORG, "my-org");
@@ -52,8 +78,13 @@ public class TestPutInfluxDatabase_2 {
         Mockito.doAnswer(invocation -> mockInfluxDBClient).when(influxDatabaseService).create();
 
         runner.addControllerService("influxdb-service", influxDatabaseService);
-        runner.setProperty(influxDatabaseService, InfluxDatabaseService_2.INFLUX_DB_ACCESS_TOKEN, "my-token");
+        runner.setProperty(influxDatabaseService, INFLUX_DB_ACCESS_TOKEN, "my-token");
         runner.enableControllerService(influxDatabaseService);
+    }
+
+    @After
+    public void tearDown() {
+        runner = null;
     }
 
     @Test
@@ -93,12 +124,195 @@ public class TestPutInfluxDatabase_2 {
         runner.setProperty(PutInfluxDatabase_2.TIMESTAMP_PRECISION, "NS");
         runner.assertValid();
 
-        runner.setProperty(PutInfluxDatabase_2.TIMESTAMP_PRECISION, "D");
+        runner.setProperty(PutInfluxDatabase_2.TIMESTAMP_PRECISION, "DAYS");
         runner.assertNotValid();
     }
 
-    @After
-    public void tearDown() {
-        runner = null;
+    @Test
+    public void testCharsetUTF8() {
+        runner.setProperty(CHARSET, "UTF-8");
+        runner.assertValid();
+    }
+
+    @Test
+    public void testCharsetBlank() {
+        runner.setProperty(CHARSET, "");
+        runner.assertNotValid();
+    }
+
+    @Test
+    public void testMaxRecordSizeZero() {
+        runner.setProperty(MAX_RECORDS_SIZE, "0");
+        runner.assertNotValid();
+    }
+
+    @Test
+    public void testMaxRecordSizeOverThreshold() {
+        runner.setProperty(MAX_RECORDS_SIZE, "1 B");
+        runner.assertValid();
+
+        byte[] bytes = "aa".getBytes();
+        runner.enqueue(bytes);
+        runner.run(1);
+
+        runner.assertAllFlowFilesTransferred(REL_MAX_SIZE_EXCEEDED, 1);
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_MAX_SIZE_EXCEEDED);
+        assertEquals(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE), "Max records size exceeded " + bytes.length);
+    }
+
+    @Test
+    public void testMaxRecordSizeOverThresholdEL() {
+        runner.setVariable("max.record.size", "1 B");
+        runner.setProperty(MAX_RECORDS_SIZE, "${max.record.size}");
+        runner.assertValid();
+
+        byte[] bytes = "aa".getBytes();
+        runner.enqueue(bytes);
+        runner.run(1);
+
+        runner.assertAllFlowFilesTransferred(REL_MAX_SIZE_EXCEEDED, 1);
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_MAX_SIZE_EXCEEDED);
+        assertEquals(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE), "Max records size exceeded " + bytes.length);
+    }
+
+    @Test
+    public void testWriteEmpty() {
+
+        byte[] bytes = "".getBytes();
+
+        runner.enqueue(bytes);
+        runner.run(1,true,true);
+        runner.assertAllFlowFilesTransferred(REL_FAILURE, 1);
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_FAILURE);
+
+        assertEquals(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE),"Empty measurements");
+    }
+
+    @Test
+    public void testWriteThrowsException() {
+
+        byte[] bytes = "h2o_feet,location=coyote_creek level\\ water_level=1.0 1".getBytes();
+
+        Mockito.doThrow(new RuntimeException("WriteException")).when(mockWriteApi)
+                .writeRecord(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        runner.enqueue(bytes);
+        runner.run(1,true,true);
+        runner.assertAllFlowFilesTransferred(REL_FAILURE, 1);
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_FAILURE);
+
+        assertEquals(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE),"WriteException");
+    }
+
+    @Test
+    public void testWriteSocketTimeoutExceptionRetry() {
+
+        byte[] bytes = "h2o_feet,location=coyote_creek level\\ water_level=1.0 1".getBytes();
+
+        Mockito.doThrow(new InfluxException(new SocketTimeoutException("Simulate error: SocketTimeoutException"))).when(mockWriteApi)
+                .writeRecord(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        runner.enqueue(bytes);
+        runner.run(1,true,true);
+        runner.assertAllFlowFilesTransferred(REL_RETRY, 1);
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_RETRY);
+
+        assertEquals("Simulate error: SocketTimeoutException", flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
+    }
+    
+    @Test
+    public void testWriteServiceUnavailableExceptionRetry() {
+
+        byte[] bytes = "h2o_feet,location=coyote_creek level\\ water_level=1.0 1".getBytes();
+
+        Mockito.doThrow(new InfluxException(createErrorResponse(503))).when(mockWriteApi)
+                .writeRecord(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        runner.enqueue(bytes);
+        runner.run(1,true,true);
+        runner.assertAllFlowFilesTransferred(REL_RETRY, 1);
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_RETRY);
+
+        assertEquals("Simulate error: 503", flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
+    }
+
+    @Test
+    public void testWriteTooManyRequestsExceptionRetry() {
+
+        byte[] bytes = "h2o_feet,location=coyote_creek level\\ water_level=1.0 1".getBytes();
+
+        Mockito.doThrow(new InfluxException(createErrorResponse(429))).when(mockWriteApi)
+                .writeRecord(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        runner.enqueue(bytes);
+        runner.run(1,true,true);
+        runner.assertAllFlowFilesTransferred(REL_RETRY, 1);
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_RETRY);
+
+        assertEquals("Simulate error: 429", flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
+    }
+
+    @Test
+    public void testCannotInstantiateInfluxDBClient() throws InitializationException, IOException, GeneralSecurityException {
+
+        byte[] bytes = "h2o_feet,location=coyote_creek level\\ water_level=1.0 1".getBytes();
+        
+        PutInfluxDatabase_2 putInfluxDatabase_2 = new PutInfluxDatabase_2() {
+            @Override
+            protected synchronized InfluxDBClient getInfluxDBClient(final ProcessContext context) {
+                throw new RuntimeException("testException");
+            }
+        };
+        runner = TestRunners.newTestRunner(putInfluxDatabase_2);
+        runner.setProperty(PutInfluxDatabase_2.INFLUX_DB_SERVICE, "influxdb-service");
+        runner.setProperty(PutInfluxDatabase_2.BUCKET, "my-bucket");
+        runner.setProperty(PutInfluxDatabase_2.ORG, "my-org");
+
+        InfluxDatabaseService_2 influxDatabaseService = Mockito.spy(new StandardInfluxDatabaseService_2());
+        Mockito.doAnswer(invocation -> mockInfluxDBClient).when(influxDatabaseService).create();
+
+        runner.addControllerService("influxdb-service", influxDatabaseService);
+        runner.setProperty(influxDatabaseService, INFLUX_DB_ACCESS_TOKEN, "my-token");
+        runner.enableControllerService(influxDatabaseService);
+
+        runner.enqueue(bytes);
+        runner.run(1,true,true);
+        runner.assertAllFlowFilesTransferred(REL_FAILURE, 1);
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_FAILURE);
+
+        assertEquals(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE),"testException");
+    }
+
+    @Test
+    public void testWrittenRecord() {
+        byte[] bytes = "h2o_feet,location=coyote_creek level\\ water_level=1.0 1".getBytes();
+
+        runner.enqueue(bytes);
+        runner.run(1, true, true);
+        runner.assertAllFlowFilesTransferred(REL_SUCCESS, 1);
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_SUCCESS);
+
+        assertNull(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
+        Mockito.verify(mockWriteApi, Mockito.times(1))
+                .writeRecord("my-bucket", "my-org", WritePrecision.NS, "h2o_feet,location=coyote_creek level\\ water_level=1.0 1");
+    }
+
+    private Response createErrorResponse(final int code) {
+        okhttp3.Response build = new okhttp3.Response.Builder() //
+                .code(code).addHeader("X-Influx-Error", "Simulate error: " + code)
+                .message("Response.error()")
+                .protocol(Protocol.HTTP_1_1)
+                .request(new Request.Builder().url("http://localhost/").build())
+                .build();
+
+        return Response
+                .error(ResponseBody.create(MediaType.parse("application/json"), ""), build);
     }
 }

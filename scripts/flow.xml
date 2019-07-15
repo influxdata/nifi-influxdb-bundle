@@ -831,6 +831,7 @@ InfluxDB in order to work with time series.
         <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>failure</relationship>
+        <relationship>failure-max-size</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
