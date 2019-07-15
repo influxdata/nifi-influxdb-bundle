@@ -64,3 +64,34 @@ else
     echo "> check: fail..."  `(echo ${nifi_logs} | jq '.results[0].series[0].values[0][1]')`
     exit 1
 fi
+
+echo
+echo "Querying from InfluxDB 2.0 data by:"
+echo "  from(bucket: "my-bucket")"
+echo "      |> range(start: 0)"
+echo "      |> filter(fn: (r) => r._measurement == "nifi_logs")"
+echo "      |> filter(fn: (r) => r._field == "message")"
+echo "      |> drop(columns: ["thread", "level"])"
+echo "      |> count()"
+echo
+
+nifi_logs_v2=`(curl -s POST \
+  http://localhost:9999/api/v2/query?org=my-org \
+  -H 'Authorization: Token my-token' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "query": "from(bucket:\"my-bucket\") |> range(start: 0) |> filter(fn: (r) => r._measurement == \"nifi_logs\") |> filter(fn: (r) => r._field == \"message\") |> drop(columns: [\"thread\", \"level\"]) |> count()",
+    "dialect" : {
+        "header": false,
+        "annotations": []
+    }
+}')`
+
+nifi_logs_v2_count=`(echo ${nifi_logs_v2} | head | cut -d ',' -f 8 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')`
+echo ${nifi_logs_v2_count}
+if [[ ${nifi_logs_v2_count} -gt 0 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  ${nifi_logs_v2}
+    exit 1
+fi
