@@ -22,7 +22,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 import org.influxdata.client.InfluxDBClient;
-import org.influxdata.client.WriteApi;
+import org.influxdata.client.WriteApiBlocking;
 import org.influxdata.client.domain.WritePrecision;
 import org.influxdata.exceptions.InfluxException;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
@@ -60,13 +60,13 @@ import static org.junit.Assert.assertNull;
 public class TestPutInfluxDatabase_2 {
     private TestRunner runner;
     private InfluxDBClient mockInfluxDBClient;
-    private WriteApi mockWriteApi;
+    private WriteApiBlocking mockWriteApi;
 
     @Before
     public void setUp() throws InitializationException, IOException, GeneralSecurityException {
-        mockWriteApi = Mockito.mock(WriteApi.class);
+        mockWriteApi = Mockito.mock(WriteApiBlocking.class);
         mockInfluxDBClient = Mockito.mock(InfluxDBClient.class);
-        Mockito.doAnswer(invocation -> mockWriteApi).when(mockInfluxDBClient).getWriteApi();
+        Mockito.doAnswer(invocation -> mockWriteApi).when(mockInfluxDBClient).getWriteApiBlocking();
 
         PutInfluxDatabase_2 putInfluxDatabase_2 = new PutInfluxDatabase_2();
         runner = TestRunners.newTestRunner(putInfluxDatabase_2);

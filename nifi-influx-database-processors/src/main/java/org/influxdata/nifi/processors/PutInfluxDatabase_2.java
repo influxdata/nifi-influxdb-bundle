@@ -26,11 +26,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.influxdata.client.WriteApi;
 import org.influxdata.client.domain.WritePrecision;
-import org.influxdata.client.write.events.AbstractWriteEvent;
-import org.influxdata.client.write.events.WriteErrorEvent;
-import org.influxdata.client.write.events.WriteRetriableErrorEvent;
 import org.influxdata.exceptions.InfluxException;
 import org.influxdata.nifi.util.PropertyValueUtils;
 
@@ -139,7 +135,7 @@ public class PutInfluxDatabase_2 extends AbstractInfluxDatabaseProcessor_2 {
         Charset charset = Charset.forName(context.getProperty(CHARSET).evaluateAttributeExpressions(flowFile).getValue());
         String bucket = context.getProperty(BUCKET).evaluateAttributeExpressions(flowFile).getValue();
         String org = context.getProperty(ORG).evaluateAttributeExpressions(flowFile).getValue();
-        WritePrecision precision = PropertyValueUtils.getEnumValue(WritePrecision.class, null,
+        WritePrecision precision = PropertyValueUtils.getEnumValue(WritePrecision.class, WritePrecision.NS,
                 context.getProperty(TIMESTAMP_PRECISION).evaluateAttributeExpressions(flowFile).getValue());
 
         try {
@@ -151,7 +147,9 @@ public class PutInfluxDatabase_2 extends AbstractInfluxDatabaseProcessor_2 {
                 session.exportTo(flowFile, baos);
 
                 String records = new String(baos.toByteArray(), charset);
-                write(context, bucket, org, precision, records);
+
+                getInfluxDBClient(context).getWriteApiBlocking().writeRecord(bucket, org, precision, records);
+
                 stopWatch.stop();
 
                 getLogger().debug("Records {} inserted", new Object[]{records});
@@ -181,25 +179,5 @@ public class PutInfluxDatabase_2 extends AbstractInfluxDatabaseProcessor_2 {
             session.transfer(flowFile, REL_FAILURE);
             context.yield();
         }
-    }
-
-    private void write(ProcessContext context, final String bucket, final String org, final WritePrecision precision, final String record) {
-
-        List<AbstractWriteEvent> events = new ArrayList<>();
-        try (WriteApi writeApi = getInfluxDBClient(context).getWriteApi()) {
-
-            writeApi.listenEvents(WriteErrorEvent.class, events::add);
-            writeApi.listenEvents(WriteRetriableErrorEvent.class, events::add);
-
-            writeApi.writeRecord(bucket, org, precision, record);
-        }
-
-        events.forEach(event -> {
-            if (event instanceof WriteRetriableErrorEvent) {
-                throw new InfluxException(((WriteRetriableErrorEvent) event).getThrowable());
-            } else if (event instanceof WriteErrorEvent) {
-                throw new InfluxException(((WriteErrorEvent) event).getThrowable());
-            }
-        });
     }
 }
