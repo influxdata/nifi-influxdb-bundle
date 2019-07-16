@@ -30,6 +30,7 @@ import org.apache.nifi.processor.AbstractProcessor;
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
+import org.apache.nifi.serialization.RecordReaderFactory;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
@@ -38,7 +39,16 @@ import org.influxdb.InfluxDBFactory;
  */
 public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor {
 
-    public static final PropertyDescriptor CHARSET = new PropertyDescriptor.Builder()
+    static final PropertyDescriptor RECORD_READER_FACTORY = new PropertyDescriptor.Builder()
+            .name("record-reader")
+            .displayName("Record Reader")
+            .description("Specifies the Controller Service to use for parsing incoming data "
+                    + "and determining the data's schema.")
+            .identifiesControllerService(RecordReaderFactory.class)
+            .required(true)
+            .build();
+
+    static final PropertyDescriptor CHARSET = new PropertyDescriptor.Builder()
             .name("influxdb-charset")
             .displayName("Character Set")
             .description("Specifies the character set of the document data.")
@@ -48,7 +58,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.CHARACTER_SET_VALIDATOR)
             .build();
 
-    public static final PropertyDescriptor INFLUX_DB_URL = new PropertyDescriptor.Builder()
+    static final PropertyDescriptor INFLUX_DB_URL = new PropertyDescriptor.Builder()
             .name("influxdb-url")
             .displayName("InfluxDB connection URL")
             .description("InfluxDB URL to connect to. Eg: http://influxdb:8086")
@@ -58,7 +68,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.URL_VALIDATOR)
             .build();
 
-    public static final PropertyDescriptor INFLUX_DB_CONNECTION_TIMEOUT = new PropertyDescriptor.Builder()
+    static final PropertyDescriptor INFLUX_DB_CONNECTION_TIMEOUT = new PropertyDescriptor.Builder()
             .name("InfluxDB Max Connection Time Out (seconds)")
             .description("The maximum time for establishing connection to the InfluxDB")
             .defaultValue("0 seconds")
@@ -67,7 +77,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .sensitive(false)
             .build();
 
-    public static final PropertyDescriptor DB_NAME = new PropertyDescriptor.Builder()
+    static final PropertyDescriptor DB_NAME = new PropertyDescriptor.Builder()
             .name("influxdb-dbname")
             .displayName("Database Name")
             .description("InfluxDB database to connect to")
@@ -76,7 +86,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    public static final PropertyDescriptor USERNAME = new PropertyDescriptor.Builder()
+    static final PropertyDescriptor USERNAME = new PropertyDescriptor.Builder()
             .name("influxdb-username")
             .displayName("Username")
             .required(false)
@@ -85,7 +95,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    public static final PropertyDescriptor PASSWORD = new PropertyDescriptor.Builder()
+    static final PropertyDescriptor PASSWORD = new PropertyDescriptor.Builder()
             .name("influxdb-password")
             .displayName("Password")
             .required(false)
@@ -95,7 +105,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .sensitive(true)
             .build();
 
-    public static final PropertyDescriptor MAX_RECORDS_SIZE = new PropertyDescriptor.Builder()
+    static final PropertyDescriptor MAX_RECORDS_SIZE = new PropertyDescriptor.Builder()
             .name("influxdb-max-records-size")
             .displayName("Max size of records")
             .description("Maximum size of records allowed to be posted in one batch")

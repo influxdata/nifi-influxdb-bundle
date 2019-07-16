@@ -20,7 +20,7 @@ import java.util.Objects;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-public final class WriteOptions implements Cloneable {
+final class WriteOptions implements Cloneable {
 
     private String database;
     private String retentionPolicy;

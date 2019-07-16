@@ -52,7 +52,6 @@ import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.exception.ProcessException;
 import org.apache.nifi.processor.util.StandardValidators;
-import org.apache.nifi.serialization.RecordReaderFactory;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDB.ConsistencyLevel;
@@ -77,7 +76,7 @@ import static org.influxdb.BatchOptions.DEFAULT_JITTER_INTERVAL_DURATION;
 @InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
 @SupportsBatching
 @Tags({"influxdb", "measurement", "insert", "write", "put", "record", "timeseries"})
-@CapabilityDescription("org.influxdata.nifi.processors.PutInfluxDatabaseRecord processor uses a specified RecordReader to write the content of a FlowFile " +
+@CapabilityDescription("PutInfluxDatabaseRecord processor uses a specified RecordReader to write the content of a FlowFile " +
         "into InfluxDB database.")
 @WritesAttributes({@WritesAttribute(
         attribute = AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE,
@@ -141,15 +140,6 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
     protected static final Relationship REL_RETRY = new Relationship.Builder().name("retry")
             .description("A FlowFile is routed to this relationship if the database cannot be updated but attempting "
                     + "the operation again may succeed. ")
-            .build();
-
-    protected static final PropertyDescriptor RECORD_READER_FACTORY = new PropertyDescriptor.Builder()
-            .name("record-reader")
-            .displayName("Record Reader")
-            .description("Specifies the Controller Service to use for parsing incoming data "
-                    + "and determining the data's schema.")
-            .identifiesControllerService(RecordReaderFactory.class)
-            .required(true)
             .build();
 
     public static final PropertyDescriptor INFLUX_DB_SERVICE = new PropertyDescriptor.Builder()
