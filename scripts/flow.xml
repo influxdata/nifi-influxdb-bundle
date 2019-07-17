@@ -27,37 +27,6 @@
     <position x="0.0" y="0.0"/>
     <comment/>
     <label>
-      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
-      <position x="1151.566401798875" y="-208.0879260307986"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 3 User Story:
-   
-
-As NiFi user I want to store LineProtocol date into multiple environments
- - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
-    </label>
-    <label>
-      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
-      <position x="1145.4612992598124" y="-407.1201983696658"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 2 User Story:
-  
-
-As NiFi user I want to reliably monitor multiple environments
-and be able to write data selectively.
-
-
-* AC1: Partition and route metrics data using NiFi "Record Path language"
-   by type of measurement (name of container)
-</value>
-    </label>
-    <label>
       <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
       <position x="268.0609696699687" y="-600.9202250695664"/>
       <size height="561.7161407470703" width="471.0166015625"/>
@@ -85,6 +54,37 @@ NiFi flow produced by Telegraf.
 Set as Line Protocol.</value>
     </label>
     <label>
+      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
+      <position x="1145.4612992598124" y="-407.1201983696658"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 2 User Story:
+  
+
+As NiFi user I want to reliably monitor multiple environments
+and be able to write data selectively.
+
+
+* AC1: Partition and route metrics data using NiFi "Record Path language"
+   by type of measurement (name of container)
+</value>
+    </label>
+    <label>
+      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
+      <position x="1151.566401798875" y="-208.0879260307986"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 3 User Story:
+   
+
+As NiFi user I want to store LineProtocol date into multiple environments
+ - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
+    </label>
+    <label>
       <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
       <position x="1145.261012394578" y="-596.720167086168"/>
       <size height="163.47393798828125" width="414.004150390625"/>
@@ -106,9 +106,97 @@ InfluxDB in order to work with time series.
       <position x="750.2611569191332" y="-602.1202333945846"/>
       <comment/>
       <processor>
+        <id>fe6407fc-016b-1000-9d2e-d21b9a02785a</id>
+        <name>PutInfluxDatabaseRecord_2</name>
+        <position x="485.59002685546875" y="-428.4388122558594"/>
+        <styles/>
+        <comment/>
+        <class>org.influxdata.nifi.processors.PutInfluxDatabaseRecord_2</class>
+        <bundle>
+          <group>org.influxdata.nifi</group>
+          <artifact>nifi-influx-database-nar</artifact>
+          <version>1.2-SNAPSHOT</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>record-reader</name>
+          <value>d764d87d-0162-1000-f939-e92ae75435c5</value>
+        </property>
+        <property>
+          <name>influxdb-service</name>
+          <value>fe4e410d-016b-1000-f0e5-c2e5647eb06b</value>
+        </property>
+        <property>
+          <name>influxdb-bucket</name>
+          <value>my-bucket</value>
+        </property>
+        <property>
+          <name>influxdb-org</name>
+          <value>my-org</value>
+        </property>
+        <property>
+          <name>influxdb-enable-gzip</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>influxdb-log-level</name>
+          <value>NONE</value>
+        </property>
+        <property>
+          <name>influxdb-measurement</name>
+          <value>tweets</value>
+        </property>
+        <property>
+          <name>influxdb-tags</name>
+          <value>lang,keyword,user_verified</value>
+        </property>
+        <property>
+          <name>influxdb-tags-field-behavior</name>
+          <value>IGNORE</value>
+        </property>
+        <property>
+          <name>influxdb-fields</name>
+          <value>tweet_id,retweet_count,followers_count,friends_count,favourites_count,screen_name,text</value>
+        </property>
+        <property>
+          <name>influxdb-fields-field-behavior</name>
+          <value>IGNORE</value>
+        </property>
+        <property>
+          <name>influxdb-timestamp-field</name>
+          <value>timestamp</value>
+        </property>
+        <property>
+          <name>influxdb-timestamp-precision</name>
+          <value>MS</value>
+        </property>
+        <property>
+          <name>influxdb-complex-field-behavior</name>
+          <value>TEXT</value>
+        </property>
+        <property>
+          <name>influxdb-null-behavior</name>
+          <value>IGNORE</value>
+        </property>
+        <property>
+          <name>influxdb-max-records-size</name>
+          <value>1 MB</value>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      </processor>
+      <processor>
         <id>e1be6989-0162-1000-597d-9480ca71dedb</id>
         <name>ErrorLog</name>
-        <position x="52.29529011987802" y="-145.25662929638406"/>
+        <position x="241.98269856714364" y="-120.27340633495828"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.PutFile</class>
@@ -160,7 +248,7 @@ InfluxDB in order to work with time series.
       <processor>
         <id>d36329b4-0162-1000-eaf4-d9600c44b359</id>
         <name>GetTwitter</name>
-        <position x="50.54593169940665" y="-727.0363180206975"/>
+        <position x="238.38272369159415" y="-729.8122579621038"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.twitter.GetTwitter</class>
@@ -185,19 +273,19 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>enc{cf9eabbd7487e222a956f69a1eb81bdd734303b69507201deb896ffe577bf2f821a8a63de54b073ba6a428f1ca1b7ad3}</value>
+          <value>enc{39def4fcf80b3e02c85e094c3f0b6a68c66155f4e5eeab1818ef56a227523debfb76b44798d541584e6e6794495c9c67}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{8409bf0a3c1186860d036b86482f111f4736d7ec7c1837bab8c411fe01deecc775f3843461169a83f74f53f626282379edb0dad0327fa721e88613000300d9add754ea90648877e62ede6f87c9c7336b}</value>
+          <value>enc{e3e5530798f6ef64e53184c4d398276c70896c615a5451eb7bdafe64c79006394d1266faa7f342f8519b56d707eb88a7b6e99092dd508c2460d2d9573fadcb5e450935db44e5614592341b0dacbc5710}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{85a3794348d2bcd8b6db888d955c54a9960232d568b6b7a0668c3307315265113ddcbd37f7467d9dced52499ce0853b8fdf2a155394e1ed71c62f129600f8898c8eddf125c5c290545f3d56975f34aff}</value>
+          <value>enc{5f31a3e7120d5ae989db9f03e22392d2cc1eaaf7f60033cd2f65d0f998c627e7ccd7e9e64b528e5b19d6788c2097ebf88a631a87b41faec577624007d335671abf04ce6b29cc068db27b0d6b15c38b60}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{0e789197ff549b4933285b323f656114d48c46fc1d5c28cb84456ff48bff22137de3c74ec136ef33f032a5bd800d557d3237013e7d78dfe2a2525d7566135bb4}</value>
+          <value>enc{ab99e052b4cede6c6e12f368d1c4714da14d823ec86da82fb7f638062a8ccd8e73c04f59b04d8ba48a546aa41362fe624a19054622dfb21a475be938a9a5dd26}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -216,7 +304,7 @@ InfluxDB in order to work with time series.
       <processor>
         <id>e1bafe5a-0162-1000-c7cb-1ddcffb38604</id>
         <name>PutInfluxDatabaseRecord</name>
-        <position x="51.67434132837411" y="-426.4706543169834"/>
+        <position x="-3.843908183344638" y="-427.39597780331155"/>
         <styles/>
         <comment/>
         <class>org.influxdata.nifi.processors.PutInfluxDatabaseRecord</class>
@@ -329,7 +417,7 @@ InfluxDB in order to work with time series.
         <id>e1c02369-0162-1000-32d4-3703bdbf1397</id>
         <name/>
         <bendPoints>
-          <bendPoint x="227.4869842529297" y="-515.0573425292969"/>
+          <bendPoint x="272.826904296875" y="-497.4765625"/>
         </bendPoints>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
@@ -348,19 +436,21 @@ InfluxDB in order to work with time series.
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>e1bff2f9-0162-1000-0379-8f80b039da58</id>
+        <id>fe679375-016b-1000-28bd-f31894f138db</id>
         <name/>
-        <bendPoints/>
+        <bendPoints>
+          <bendPoint x="911.577880859375" y="-331.0699157714844"/>
+          <bendPoint x="843.1053466796875" y="-213.52272033691406"/>
+        </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
-        <sourceId>e1bafe5a-0162-1000-c7cb-1ddcffb38604</sourceId>
+        <sourceId>fe6407fc-016b-1000-9d2e-d21b9a02785a</sourceId>
         <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
         <sourceType>PROCESSOR</sourceType>
-        <destinationId>e1be6989-0162-1000-597d-9480ca71dedb</destinationId>
+        <destinationId>fe6407fc-016b-1000-9d2e-d21b9a02785a</destinationId>
         <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <relationship>failure-max-size</relationship>
+        <relationship>retry</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -372,10 +462,10 @@ InfluxDB in order to work with time series.
         <id>0694d941-0163-1000-c99f-90d011ee5171</id>
         <name/>
         <bendPoints>
-          <bendPoint x="553.4887029006397" y="-385.16953737362405"/>
-          <bendPoint x="547.3883305861866" y="-328.0653503619053"/>
+          <bendPoint x="-45.18326365209464" y="-295.41502077206155"/>
+          <bendPoint x="-3.167753569849765" y="-210.5517242632725"/>
         </bendPoints>
-        <labelIndex>0</labelIndex>
+        <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>e1bafe5a-0162-1000-c7cb-1ddcffb38604</sourceId>
         <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
@@ -384,6 +474,66 @@ InfluxDB in order to work with time series.
         <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>retry</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>fe671c1f-016b-1000-7cb5-655988797497</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>d36329b4-0162-1000-eaf4-d9600c44b359</sourceId>
+        <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>fe6407fc-016b-1000-9d2e-d21b9a02785a</destinationId>
+        <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>fe66e125-016b-1000-293c-656cb891e02c</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>e1bafe5a-0162-1000-c7cb-1ddcffb38604</sourceId>
+        <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>e1be6989-0162-1000-597d-9480ca71dedb</destinationId>
+        <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>fe670720-016b-1000-34e0-5248caa06ff5</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>fe6407fc-016b-1000-9d2e-d21b9a02785a</sourceId>
+        <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>e1be6989-0162-1000-597d-9480ca71dedb</destinationId>
+        <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -750,7 +900,7 @@ InfluxDB in order to work with time series.
         <runDurationNanos>0</runDurationNanos>
         <property>
           <name>influxdb-service</name>
-          <value>dfd11fe1-016b-1000-a737-a6012f1304f1</value>
+          <value>fe4e410d-016b-1000-f0e5-c2e5647eb06b</value>
         </property>
         <property>
           <name>influxdb-bucket</name>
@@ -762,6 +912,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>influxdb-timestamp-precision</name>
+          <value>NS</value>
         </property>
         <property>
           <name>influxdb-enable-gzip</name>
@@ -1216,37 +1367,6 @@ InfluxDB in order to work with time series.
         </property>
       </controllerService>
       <controllerService>
-        <id>dfd11fe1-016b-1000-a737-a6012f1304f1</id>
-        <name>StandardInfluxDatabaseService_2</name>
-        <comment/>
-        <class>org.influxdata.nifi.services.StandardInfluxDatabaseService_2</class>
-        <bundle>
-          <group>org.influxdata.nifi</group>
-          <artifact>nifi-influx-database-nar</artifact>
-          <version>1.2-SNAPSHOT</version>
-        </bundle>
-        <enabled>true</enabled>
-        <property>
-          <name>inluxdb-ssl</name>
-        </property>
-        <property>
-          <name>inluxdb-ssl-auth</name>
-          <value>REQUIRED</value>
-        </property>
-        <property>
-          <name>influxdb-url</name>
-          <value>http://influxdb_v2:9999</value>
-        </property>
-        <property>
-          <name>influxdb-connection-timeout</name>
-          <value>0 seconds</value>
-        </property>
-        <property>
-          <name>influxdb-token</name>
-          <value>enc{38ece8557ea6acea222d6c7e9999d001d1a48528bb7b96fd356b492e6eae41c2}</value>
-        </property>
-      </controllerService>
-      <controllerService>
         <id>01fe7c27-dec5-320d-fcb4-f913797de2f8</id>
         <name>AvroSchemaRegistry</name>
         <comment/>
@@ -1289,7 +1409,7 @@ InfluxDB in order to work with time series.
       <processor>
         <id>5ea1e9b1-0163-1000-d88e-eecbd44bb920</id>
         <name>LogAttribute</name>
-        <position x="1484.7763744367746" y="394.6037145043457"/>
+        <position x="1727.7763744367746" y="140.6037145043457"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.LogAttribute</class>
@@ -1378,7 +1498,7 @@ InfluxDB in order to work with time series.
       <processor>
         <id>4e5db836-0163-1000-1118-1b4cbc65e367</id>
         <name>PutInfluxDatabaseRecord</name>
-        <position x="476.58453369140625" y="394.30047607421875"/>
+        <position x="736.5845336914062" y="396.30047607421875"/>
         <styles/>
         <comment/>
         <class>org.influxdata.nifi.processors.PutInfluxDatabaseRecord</class>
@@ -1490,7 +1610,7 @@ InfluxDB in order to work with time series.
       <processor>
         <id>5e7b1a3d-0163-1000-92bd-215d0d973049</id>
         <name>RouteOnAttribute</name>
-        <position x="1030.0520768019476" y="113.37669783795178"/>
+        <position x="1030.0520768019476" y="143.37669783795178"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.RouteOnAttribute</class>
@@ -1523,9 +1643,97 @@ InfluxDB in order to work with time series.
         </property>
       </processor>
       <processor>
+        <id>fe47dd7d-016b-1000-54bc-60debdada912</id>
+        <name>PutInfluxDatabaseRecord_2</name>
+        <position x="1365.1265878046115" y="390.9705499927852"/>
+        <styles/>
+        <comment/>
+        <class>org.influxdata.nifi.processors.PutInfluxDatabaseRecord_2</class>
+        <bundle>
+          <group>org.influxdata.nifi</group>
+          <artifact>nifi-influx-database-nar</artifact>
+          <version>1.2-SNAPSHOT</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>record-reader</name>
+          <value>4e5e71b8-0163-1000-1b27-632f18180d23</value>
+        </property>
+        <property>
+          <name>influxdb-service</name>
+          <value>fe4e410d-016b-1000-f0e5-c2e5647eb06b</value>
+        </property>
+        <property>
+          <name>influxdb-bucket</name>
+          <value>my-bucket</value>
+        </property>
+        <property>
+          <name>influxdb-org</name>
+          <value>my-org</value>
+        </property>
+        <property>
+          <name>influxdb-enable-gzip</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>influxdb-log-level</name>
+          <value>NONE</value>
+        </property>
+        <property>
+          <name>influxdb-measurement</name>
+          <value>measurement</value>
+        </property>
+        <property>
+          <name>influxdb-tags</name>
+          <value>tags</value>
+        </property>
+        <property>
+          <name>influxdb-tags-field-behavior</name>
+          <value>IGNORE</value>
+        </property>
+        <property>
+          <name>influxdb-fields</name>
+          <value>fields</value>
+        </property>
+        <property>
+          <name>influxdb-fields-field-behavior</name>
+          <value>IGNORE</value>
+        </property>
+        <property>
+          <name>influxdb-timestamp-field</name>
+          <value>timestamp</value>
+        </property>
+        <property>
+          <name>influxdb-timestamp-precision</name>
+          <value>NS</value>
+        </property>
+        <property>
+          <name>influxdb-complex-field-behavior</name>
+          <value>TEXT</value>
+        </property>
+        <property>
+          <name>influxdb-null-behavior</name>
+          <value>IGNORE</value>
+        </property>
+        <property>
+          <name>influxdb-max-records-size</name>
+          <value>1 MB</value>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      </processor>
+      <processor>
         <id>4e6785e3-0163-1000-d555-63c86866c915</id>
         <name>ErrorLog</name>
-        <position x="476.677001953125" y="610.3519897460938"/>
+        <position x="1050.677001953125" y="634.3519897460938"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.PutFile</class>
@@ -1644,7 +1852,7 @@ InfluxDB in order to work with time series.
         <name/>
         <bendPoints>
           <bendPoint x="1484.6731741842975" y="-76.33684730234859"/>
-          <bendPoint x="1484.6731741842975" y="-26.336847302348588"/>
+          <bendPoint x="1540.6731741842975" y="-26.336847302348588"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -1652,6 +1860,26 @@ InfluxDB in order to work with time series.
         <sourceGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</sourceGroupId>
         <sourceType>PROCESSOR</sourceType>
         <destinationId>5e62f804-0163-1000-18ea-70da8664cfd0</destinationId>
+        <destinationGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>fe5526c6-016b-1000-e035-262394f09ebb</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>fe47dd7d-016b-1000-54bc-60debdada912</sourceId>
+        <sourceGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>4e6785e3-0163-1000-d555-63c86866c915</destinationId>
         <destinationGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>failure</relationship>
@@ -1686,10 +1914,10 @@ InfluxDB in order to work with time series.
         <id>4e685590-0163-1000-c399-4e6f531adf22</id>
         <name/>
         <bendPoints>
-          <bendPoint x="931.5845336914062" y="434.30047607421875"/>
-          <bendPoint x="931.5845336914062" y="484.30047607421875"/>
+          <bendPoint x="817.8736572265625" y="656.9297790527344"/>
+          <bendPoint x="769.3555297851562" y="549.23828125"/>
         </bendPoints>
-        <labelIndex>1</labelIndex>
+        <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>4e5db836-0163-1000-1118-1b4cbc65e367</sourceId>
         <sourceGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</sourceGroupId>
@@ -1727,6 +1955,29 @@ InfluxDB in order to work with time series.
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
+        <id>fe554e7e-016b-1000-bbaa-362f4fcc5857</id>
+        <name/>
+        <bendPoints>
+          <bendPoint x="1687.1265878046115" y="550.9705805103633"/>
+          <bendPoint x="1705.1265878046115" y="654.9705805103633"/>
+        </bendPoints>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>fe47dd7d-016b-1000-54bc-60debdada912</sourceId>
+        <sourceGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>fe47dd7d-016b-1000-54bc-60debdada912</destinationId>
+        <destinationGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>retry</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
         <id>ebece362-0168-1000-8c10-86a9855a0684</id>
         <name/>
         <bendPoints/>
@@ -1747,19 +1998,18 @@ InfluxDB in order to work with time series.
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>4e67a216-0163-1000-2d31-ad4a2a120558</id>
+        <id>fe55add5-016b-1000-cad2-7891c68c1f9c</id>
         <name/>
         <bendPoints/>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
-        <sourceId>4e5db836-0163-1000-1118-1b4cbc65e367</sourceId>
+        <sourceId>5e7b1a3d-0163-1000-92bd-215d0d973049</sourceId>
         <sourceGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</sourceGroupId>
         <sourceType>PROCESSOR</sourceType>
-        <destinationId>4e6785e3-0163-1000-d555-63c86866c915</destinationId>
+        <destinationId>fe47dd7d-016b-1000-54bc-60debdada912</destinationId>
         <destinationGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <relationship>failure-max-size</relationship>
+        <relationship>nifi_container</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -1780,6 +2030,26 @@ InfluxDB in order to work with time series.
         <destinationGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>fe53e3f7-016b-1000-87a7-cd58c3380cc9</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>4e5db836-0163-1000-1118-1b4cbc65e367</sourceId>
+        <sourceGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>4e6785e3-0163-1000-d555-63c86866c915</destinationId>
+        <destinationGroupId>4e5add98-0163-1000-37c6-a81f1b8d947e</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -1995,6 +2265,37 @@ InfluxDB in order to work with time series.
         </property>
       </controllerService>
     </processGroup>
+    <controllerService>
+      <id>fe4e410d-016b-1000-f0e5-c2e5647eb06b</id>
+      <name>StandardInfluxDatabaseService_2</name>
+      <comment/>
+      <class>org.influxdata.nifi.services.StandardInfluxDatabaseService_2</class>
+      <bundle>
+        <group>org.influxdata.nifi</group>
+        <artifact>nifi-influx-database-nar</artifact>
+        <version>1.2-SNAPSHOT</version>
+      </bundle>
+      <enabled>true</enabled>
+      <property>
+        <name>inluxdb-ssl</name>
+      </property>
+      <property>
+        <name>inluxdb-ssl-auth</name>
+        <value>REQUIRED</value>
+      </property>
+      <property>
+        <name>influxdb-url</name>
+        <value>http://influxdb_v2:9999</value>
+      </property>
+      <property>
+        <name>influxdb-connection-timeout</name>
+        <value>0 seconds</value>
+      </property>
+      <property>
+        <name>influxdb-token</name>
+        <value>enc{52d7c91cbb028cfdd615058d0b882aa6d4d7343cf69d8a604c1eb0b2f53052da}</value>
+      </property>
+    </controllerService>
     <controllerService>
       <id>d764d87d-0162-1000-f939-e92ae75435c5</id>
       <name>TwitterJSONReader</name>
