@@ -82,6 +82,9 @@ public class PutInfluxDatabaseRecord_2 extends AbstractInfluxDatabaseProcessor_2
         propertyDescriptors.add(BUCKET);
         propertyDescriptors.add(ORG);
 
+        propertyDescriptors.add(ENABLE_GZIP);
+        propertyDescriptors.add(LOG_LEVEL);
+
         propertyDescriptors.add(MEASUREMENT);
 
         propertyDescriptors.add(TAGS);
@@ -95,9 +98,6 @@ public class PutInfluxDatabaseRecord_2 extends AbstractInfluxDatabaseProcessor_2
 
         propertyDescriptors.add(COMPLEX_FIELD_BEHAVIOR);
         propertyDescriptors.add(NULL_VALUE_BEHAVIOR);
-
-        propertyDescriptors.add(ENABLE_GZIP);
-        propertyDescriptors.add(LOG_LEVEL);
 
         propertyDescriptors.add(MAX_RECORDS_SIZE);
 

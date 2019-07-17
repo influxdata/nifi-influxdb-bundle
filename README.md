@@ -140,6 +140,71 @@ Batching is useful when the flow file contains large number of records. Records 
 | failure | All FlowFiles that cannot be written to InfluxDB are routed to this relationship |
 
 
+### PutInfluxDatabaseRecord_2
+
+Uses a specified RecordReader to write the content of a FlowFile into InfluxDB 2.0 database.
+
+#### Features
+
+* Input can be any built-in or custom implemented NiFi RecordReader (json, avro, csv, `InfluxLineProtocolReader`...)
+* Configurable mapping between NiFi Records and InfluxDB measurement, field and tags
+* Configurable timestamp precision 
+* Reusable connection settings (InfluxDB url, password) for more processors via `InfluxDatabaseService_2` controller
+* Advanced InfluxDB client settings
+  * Gzip compression
+  
+#### Mapping Records to InfluxDB Data Point
+
+##### Measurement
+The value is determined from the field in the Record Schema. If the field is not found in the schema then is used the value of `Measurement property`. 
+Any data type is converted into a String type and used as the value.
+
+##### Tags
+The name of the field in the Record Schema is used as the key of the Tag. The value of the field is used as the value of the Tag.
+Any data type is converted into a String type and used as the Tag value [see also handling complex types](#behavior-of-handling-complex-types-for-tags-and-fields).
+
+##### Timestamp
+The value is determined from the field in the Record Schema. If the field is not found in the schema 
+or field has not defined value the timestamp is not specified for the Data Point. 
+The precision for the supplied time value is determined from the property `Timestamp precision`.
+
+#### Behavior of handling complex types for Tags and Fields
+
+The Apache NiFi complex Record fields are handled by different strategy:
+- `Map` - keys are mapped as keys of Tags or Fields, values are mapped as values of Tags or Fields
+- `Choice` - for the value is used the compatible type from Choice definition
+- `Array`  - based on property the `Complex Field Behavior`
+- `Record` - based on property the `Complex Field Behavior`
+
+#### Properties
+
+| Property | Description |
+| --- | --- |
+| **Record Reader** | Specifies the Controller Service to use for parsing incoming data and determining the data's schema |
+| **InfluxDB Controller Service** | A controller service that provides connection to InfluxDB |
+| **Bucket** | Specifies the destination bucket for writes |
+| **Organization** | Specifies the destination organization for writes |
+| **Enable gzip compression** | Enable gzip compression for InfluxDB http request body |
+| **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
+| **Measurement** | The name of the measurement. If the Record contains a field with measurement property value, then value of the Record field is use as InfluxDB measurement |
+| Tags | A comma-separated list of record fields stored in InfluxDB as 'tag' |
+| Missing Tag Behavior | If the specified tag is not present in the document, this property specifies how to handle the situation. |
+| **Fields** | A comma-separated list of record fields stored in InfluxDB as 'field'. At least one field must be defined |
+| Missing Field Behavior | If the specified field is not present in the document, this property specifies how to handle the situation |
+| Timestamp field | A name of the record field that used as a 'timestamp' |
+| **Timestamp precision** | The timestamp precision is ignore when the 'Timestamp field' value is 'java.util.Date' |
+| **Complex Field Behavior** | Indicates how to handle complex fields, i.e. fields that do not have a primitive value |
+| **Null Values Behavior** | Indicates how to handle null fields, i.e. fields that do not have a defined value |
+| **Max size of records** | Maximum size of records allowed to be posted in one batch |
+
+#### Relationships
+
+| Property | Description |
+| --- | --- |
+| success | All FlowFiles that are written into InfluxDB are routed to this relationship |
+| retry | A FlowFile is routed to this relationship if the database cannot be updated but attempting the operation again may succeed. |
+| failure | All FlowFiles that cannot be written to InfluxDB are routed to this relationship |
+
 ### InfluxLineProtocolReader
 
 Parses the InfluxDB Line Protocol into NiFi Record. This allows processing, filtering and
@@ -385,6 +450,7 @@ The metrics from monitoring Docker containers are filtered in the NiFi. NiFi con
 1. **PartitionRecord** - Group incoming records by container name  
 1. **RouteOnAttribute** - Routes incoming container metrics: NiFi container metrics are routed to `PutInfluxDatabaseRecord` other metrics to `LogAttribute`
 1. **PutInfluxDatabaseRecord** - Writes NiFi container metrics to the InfluxDB
+1. **PutInfluxDatabaseRecord_2** - Writes NiFi container metrics to the InfluxDB 2.0
 1. **LogAttribute** - Log metrics that aren't written to the InfluxDB
 
 #### Result
