@@ -18,19 +18,8 @@ package org.influxdata.nifi.processors;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.List;
 
-import org.influxdata.client.InfluxDBClient;
-import org.influxdata.client.InfluxDBClientFactory;
-import org.influxdata.client.InfluxDBClientOptions;
-import org.influxdata.client.QueryApi;
-import org.influxdata.client.domain.Authorization;
-import org.influxdata.client.domain.Bucket;
-import org.influxdata.client.domain.BucketRetentionRules;
-import org.influxdata.client.domain.Organization;
-import org.influxdata.client.domain.Permission;
-import org.influxdata.client.domain.PermissionResource;
 import org.influxdata.client.domain.WritePrecision;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
@@ -38,9 +27,7 @@ import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
 import org.influxdata.query.FluxTable;
 
 import org.apache.nifi.util.MockFlowFile;
-import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,61 +40,12 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Jakub Bednar (bednar@github) (15/07/2019 09:05)
  */
-public class ITPutInfluxDatabase_2 {
-
-    private TestRunner runner;
-
-    private String bucketName;
-
-    private QueryApi queryApi;
-    private InfluxDBClient influxDBClient;
+public class ITPutInfluxDatabase_2 extends AbstractITInfluxDB_2 {
 
     @Before
     public void setUp() throws Exception {
 
-        String url = "http://localhost:9999";
-
-        influxDBClient = InfluxDBClientFactory.create(url, "my-token".toCharArray());
-
-        Organization organization = influxDBClient.getOrganizationsApi().findOrganizations().stream()
-                .filter(it -> it.getName().equals("my-org"))
-                .findFirst()
-                .orElseThrow(IllegalStateException::new);
-
-        bucketName = "nifi-bucket-" + System.currentTimeMillis();
-
-        Bucket bucket = influxDBClient.getBucketsApi()
-                .createBucket(bucketName, new BucketRetentionRules().everySeconds(3600), organization);
-
-        PermissionResource resource = new PermissionResource();
-        resource.setId(bucket.getId());
-        resource.setOrgID(organization.getId());
-        resource.setType(PermissionResource.TypeEnum.BUCKETS);
-
-        //
-        // Add Permissions to read and write to the Bucket
-        //
-        Permission readBucket = new Permission();
-        readBucket.setResource(resource);
-        readBucket.setAction(Permission.ActionEnum.READ);
-
-        Permission writeBucket = new Permission();
-        writeBucket.setResource(resource);
-        writeBucket.setAction(Permission.ActionEnum.WRITE);
-
-        Authorization authorization = influxDBClient.getAuthorizationsApi()
-                .createAuthorization(organization, Arrays.asList(readBucket, writeBucket));
-
-        String token = authorization.getToken();
-
-        influxDBClient.close();
-        InfluxDBClientOptions options = InfluxDBClientOptions.builder()
-                .url(url)
-                .authenticateToken(token.toCharArray())
-                .org(organization.getId())
-                .build();
-        influxDBClient = InfluxDBClientFactory.create(options);
-        queryApi = influxDBClient.getQueryApi();
+        init();
 
         PutInfluxDatabase_2 putInfluxDatabase_2 = new PutInfluxDatabase_2();
         runner = TestRunners.newTestRunner(putInfluxDatabase_2);
@@ -118,15 +56,9 @@ public class ITPutInfluxDatabase_2 {
         InfluxDatabaseService_2 influxDatabaseService = Mockito.spy(new StandardInfluxDatabaseService_2());
 
         runner.addControllerService("influxdb-service", influxDatabaseService);
-        runner.setProperty(influxDatabaseService, INFLUX_DB_URL, url);
+        runner.setProperty(influxDatabaseService, INFLUX_DB_URL, INFLUX_DB_2);
         runner.setProperty(influxDatabaseService, INFLUX_DB_ACCESS_TOKEN, "my-token");
         runner.enableControllerService(influxDatabaseService);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        runner = null;
-        influxDBClient.close();
     }
 
     @Test
