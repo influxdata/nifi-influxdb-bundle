@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.influxdata.client.domain.WritePrecision;
 import org.influxdata.exceptions.InfluxException;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2;
 import org.influxdata.nifi.util.PropertyValueUtils;
 
 import org.apache.nifi.annotation.behavior.EventDriven;
@@ -46,14 +47,14 @@ import org.apache.nifi.processor.exception.ProcessException;
 import org.apache.nifi.util.StopWatch;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.CHARSET;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.INFLUX_DB_FAIL_TO_INSERT;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
 import static org.influxdata.nifi.processors.PutInfluxDatabase.REL_FAILURE;
 import static org.influxdata.nifi.processors.PutInfluxDatabase.REL_MAX_SIZE_EXCEEDED;
 import static org.influxdata.nifi.processors.PutInfluxDatabase.REL_RETRY;
 import static org.influxdata.nifi.processors.PutInfluxDatabase.REL_SUCCESS;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.CHARSET;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_FAIL_TO_INSERT;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
 
 /**
  * @author Jakub Bednar (bednar@github) (11/07/2019 07:44)

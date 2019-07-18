@@ -176,7 +176,7 @@ InfluxDB in order to work with time series.
           <value>timestamp</value>
         </property>
         <property>
-          <name>influxdb-timestamp-precision</name>
+          <name>influxdb-write-precision</name>
           <value>MS</value>
         </property>
         <property>
@@ -911,7 +911,7 @@ InfluxDB in order to work with time series.
           <value>my-org</value>
         </property>
         <property>
-          <name>influxdb-timestamp-precision</name>
+          <name>influxdb-write-precision</name>
           <value>NS</value>
         </property>
         <property>
@@ -1713,7 +1713,7 @@ InfluxDB in order to work with time series.
           <value>timestamp</value>
         </property>
         <property>
-          <name>influxdb-timestamp-precision</name>
+          <name>influxdb-write-precision</name>
           <value>NS</value>
         </property>
         <property>

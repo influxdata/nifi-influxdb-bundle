@@ -43,13 +43,13 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import retrofit2.Response;
 
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.CHARSET;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.REL_FAILURE;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.REL_MAX_SIZE_EXCEEDED;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.REL_RETRY;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.REL_SUCCESS;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.CHARSET;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.REL_FAILURE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.REL_MAX_SIZE_EXCEEDED;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.REL_RETRY;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.REL_SUCCESS;
 import static org.influxdata.nifi.services.InfluxDatabaseService_2.INFLUX_DB_ACCESS_TOKEN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -264,7 +264,7 @@ public class TestPutInfluxDatabase_2 {
         
         PutInfluxDatabase_2 putInfluxDatabase_2 = new PutInfluxDatabase_2() {
             @Override
-            protected synchronized InfluxDBClient getInfluxDBClient(final ProcessContext context) {
+            public synchronized InfluxDBClient getInfluxDBClient(final ProcessContext context) {
                 throw new RuntimeException("testException");
             }
         };

@@ -14,13 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.influxdata.nifi.processors;
+package org.influxdata.nifi.processors.internal;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import org.influxdata.nifi.processors.PutInfluxDatabaseRecord;
+import org.influxdata.nifi.processors.RecordToPointMapper;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -36,26 +39,23 @@ import org.apache.nifi.serialization.RecordReaderFactory;
 import org.apache.nifi.serialization.record.Record;
 import org.apache.nifi.serialization.record.RecordSchema;
 import org.apache.nifi.util.StopWatch;
-import org.influxdb.InfluxDB;
-import org.influxdb.dto.BatchPoints;
-import org.influxdb.dto.Point;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-public final class FlowFileToPointMapper {
+public abstract class AbstractFlowFileToPointMapper<P> {
 
     private final ComponentLog log;
     private final ProcessSession session;
     private final ProcessContext context;
 
-    private final WriteOptions options;
+    final WriteOptions options;
 
-    private FlowFile flowFile;
+    FlowFile flowFile;
 
-    private StopWatch stopWatch = new StopWatch();
-    private List<Point> points = new ArrayList<>();
+    StopWatch stopWatch = new StopWatch();
+    List<P> points = new ArrayList<>();
 
-    private FlowFileToPointMapper(@NonNull final ProcessSession session,
+    AbstractFlowFileToPointMapper(@NonNull final ProcessSession session,
                                   @NonNull final ProcessContext context,
                                   @NonNull final ComponentLog log,
                                   @NonNull final WriteOptions options) {
@@ -71,22 +71,13 @@ public final class FlowFileToPointMapper {
         this.options = options;
     }
 
-    @NonNull
-    public static FlowFileToPointMapper createMapper(@NonNull final ProcessSession session,
-                                                     @NonNull final ProcessContext context,
-                                                     @NonNull final ComponentLog log,
-                                                     @NonNull final WriteOptions options) {
-        return new FlowFileToPointMapper(session, context, log, options);
-    }
-
-    @NonNull
-    protected FlowFileToPointMapper mapFlowFile(@Nullable final FlowFile flowFile) throws Exception {
+    void mapFlowFile(@Nullable final FlowFile flowFile) throws Exception {
 
 
         this.flowFile = flowFile;
 
         if (flowFile == null) {
-            return this;
+            return;
         }
 
         try (final InputStream stream = session.read(flowFile)) {
@@ -94,47 +85,15 @@ public final class FlowFileToPointMapper {
             mapInputStream(stream);
         }
 
-        return this;
     }
 
-    @NonNull
-    protected FlowFileToPointMapper writeToInflux(@NonNull final InfluxDB influxDB) {
-
-        Objects.requireNonNull(flowFile, "FlowFile is required");
-        Objects.requireNonNull(points, "Points are required");
-
-        stopWatch.start();
-
-        if (influxDB.isBatchEnabled()) {
-
-            // Write by batching
-            points.forEach(point -> influxDB.write(options.getDatabase(), options.getRetentionPolicy(), point));
-
-        } else {
-
-            BatchPoints batch = BatchPoints
-                    .database(options.getDatabase())
-                    .retentionPolicy(options.getRetentionPolicy())
-                    .build();
-
-            points.forEach(batch::point);
-
-            // Write all Points together
-            influxDB.write(batch);
-        }
-
-        stopWatch.stop();
-
-        return this;
-    }
-
-    protected void reportResults(@Nullable final String url) {
+    public void reportResults(@Nullable final String url) {
 
         Objects.requireNonNull(flowFile, "FlowFile is required");
 
         if (!points.isEmpty()) {
 
-            String transitUri = url + "/" + options.getDatabase();
+            String transitUri = url + "/" + (options.getDatabase() != null ? options.getDatabase() : "");
             String message = String.format("Added %d points to InfluxDB.", points.size());
 
             session.getProvenanceReporter().send(flowFile, transitUri, message, stopWatch.getElapsed(MILLISECONDS));
@@ -166,8 +125,11 @@ public final class FlowFileToPointMapper {
         Record record;
         while ((record = parser.nextRecord()) != null) {
 
-            points.addAll(toPointMapper.mapRecord(record));
+            points.addAll(mapRecord(toPointMapper, record));
         }
     }
+
+    @NonNull
+    abstract List<P> mapRecord(final RecordToPointMapper toPointMapper, final Record record);
 
 }

@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import org.influxdata.client.domain.WritePrecision;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -63,10 +65,8 @@ public final class RecordToPointMapper {
     @NonNull
     public List<Point> mapRecord(@Nullable final Record record) {
 
-        List<Point> points = new ArrayList<>();
-
         if (record == null) {
-            return points;
+            return new ArrayList<>();
         }
 
         // If the Record contains a field with measurement property value,
@@ -77,8 +77,34 @@ public final class RecordToPointMapper {
             measurement = options.getMeasurement();
         }
 
-        Point.Builder point = Point.measurement(measurement);
+        PointBuilder<Point> point = PointBuilderV1.measurement(measurement);
 
+        return mapRecord(record, point);
+    }
+
+    @NonNull
+    public List<org.influxdata.client.write.Point > mapRecordV2(@Nullable final Record record) {
+
+        if (record == null) {
+            return new ArrayList<>();
+        }
+
+        // If the Record contains a field with measurement property value,
+        // then value of the Record field is use as InfluxDB measurement.
+        String measurement = record.getAsString(options.getMeasurement());
+        if (StringUtils.isBlank(measurement)) {
+
+            measurement = options.getMeasurement();
+        }
+
+        PointBuilder<org.influxdata.client.write.Point> point = PointBuilderV2.measurement(measurement);
+
+        return mapRecord(record, point);
+    }
+
+    private <P> List<P> mapRecord(@NonNull final Record record, final @NonNull PointBuilder<P> point) {
+
+        List<P> points = new ArrayList<>();
         mapFields(record, point);
 
         if (point.hasFields()) {
@@ -92,7 +118,7 @@ public final class RecordToPointMapper {
         return points;
     }
 
-    private void mapFields(@Nullable final Record record, @NonNull final Point.Builder point) {
+    private void mapFields(@Nullable final Record record, @NonNull final PointBuilder point) {
 
         Objects.requireNonNull(point, "Point is required");
 
@@ -112,7 +138,7 @@ public final class RecordToPointMapper {
         });
     }
 
-    private void mapTags(@Nullable final Record record, @NonNull final Point.Builder point) {
+    private void mapTags(@Nullable final Record record, @NonNull final PointBuilder point) {
 
         Objects.requireNonNull(point, "Point is required");
 
@@ -153,7 +179,7 @@ public final class RecordToPointMapper {
         }
     }
 
-    private void mapTimestamp(@Nullable final Record record, @NonNull final Point.Builder point) {
+    private void mapTimestamp(@Nullable final Record record, @NonNull final PointBuilder point) {
 
         Objects.requireNonNull(point, "Point is required");
 
@@ -173,15 +199,18 @@ public final class RecordToPointMapper {
 
         Long time;
         TimeUnit precision;
+        WritePrecision writePrecision;
 
         time = DataTypeUtils.toLong(value, recordField.getFieldName());
         if (value instanceof Date) {
             precision = MILLISECONDS;
+            writePrecision = WritePrecision.MS;
         } else {
             precision = options.getPrecision();
+            writePrecision = options.getWritePrecision();
         }
 
-        point.time(time, precision);
+        point.time(time, precision, writePrecision);
     }
 
     @Nullable
@@ -252,10 +281,10 @@ public final class RecordToPointMapper {
     private final class RecordFieldMapper {
 
         private final Record record;
-        private final Point.Builder point;
+        private final PointBuilder point;
 
         private RecordFieldMapper(@NonNull final Record record,
-                                  @NonNull final Point.Builder point) {
+                                  @NonNull final PointBuilder point) {
             this.record = record;
             this.point = point;
         }
@@ -463,6 +492,157 @@ public final class RecordToPointMapper {
             String message = String.format(FIELD_NULL_VALUE, fieldName);
 
             throw new IllegalStateException(message);
+        }
+    }
+
+    private static abstract class PointBuilder<P> {
+
+        public abstract void addField(final String field, final Long value);
+        public abstract void addField(final String field, final Double value);
+        public abstract void addField(final String field, final Float value);
+        public abstract void addField(final String field, final Integer value);
+        public abstract void addField(final String field, final BigInteger value);
+        public abstract void addField(final String field, final Boolean value);
+        public abstract void addField(final String field, final String value);
+
+        public abstract void tag(final String key, final String value);
+
+        public abstract void time(final Long time, final TimeUnit precision, final WritePrecision writePrecision);
+
+        public abstract boolean hasFields();
+
+        public abstract P build();
+    }
+
+    private static class PointBuilderV1 extends PointBuilder<Point> {
+
+        private Point.Builder builder;
+
+        private PointBuilderV1(final String measurement) {
+            this.builder = Point.measurement(measurement);
+        }
+
+        public static PointBuilderV1 measurement(final String measurement) {
+
+            return new PointBuilderV1(measurement);
+        }
+
+        @Override
+        public void addField(final String field, final Long value) {
+            builder.addField(field, value);
+        }
+        @Override
+        public void addField(final String field, final Double value) {
+            builder.addField(field, value);
+        }
+        @Override
+        public void addField(final String field, final Float value) {
+            builder.addField(field, value);
+        }
+        @Override
+        public void addField(final String field, final Integer value) {
+            builder.addField(field, value);
+        }
+        @Override
+        public void addField(final String field, final BigInteger value) {
+            builder.addField(field, value);
+        }
+        @Override
+        public void addField(final String field, final Boolean value) {
+            builder.addField(field, value);
+        }
+        @Override
+        public void addField(final String field, final String value) {
+            builder.addField(field, value);
+        }
+
+        @Override
+        public void tag(final String key, final String value) {
+            builder.tag(key, value);
+        }
+
+        @Override
+        public void time(final Long time, final TimeUnit precision, final WritePrecision writePrecision) {
+            builder.time(time, precision);
+        }
+
+        @Override
+        public boolean hasFields() {
+            return builder.hasFields();
+        }
+
+        @Override
+        public Point build() {
+            return builder.build();
+        }
+    }
+
+    private static class PointBuilderV2 extends PointBuilder<org.influxdata.client.write.Point> {
+
+        private org.influxdata.client.write.Point point;
+
+        public static PointBuilderV2 measurement(final String measurement) {
+
+            return new PointBuilderV2(measurement);
+        }
+
+        private PointBuilderV2(final String measurement) {
+            this.point = org.influxdata.client.write.Point.measurement(measurement);
+        }
+
+        @Override
+        public void addField(final String field, final Long value) {
+            point.addField(field, value);
+        }
+
+        @Override
+        public void addField(final String field, final Double value) {
+            point.addField(field, value);
+        }
+
+        @Override
+        public void addField(final String field, final Float value) {
+            point.addField(field, value);
+        }
+
+        @Override
+        public void addField(final String field, final Integer value) {
+            point.addField(field, value);
+        }
+
+        @Override
+        public void addField(final String field, final BigInteger value) {
+            point.addField(field, value);
+        }
+
+        @Override
+        public void addField(final String field, final Boolean value) {
+            point.addField(field, value);
+        }
+
+        @Override
+        public void addField(final String field, final String value) {
+            point.addField(field, value);
+        }
+
+        @Override
+        public void tag(final String key, final String value) {
+            point.addTag(key, value);
+        }
+
+        @Override
+        public void time(final Long time, final TimeUnit precision, final WritePrecision writePrecision) {
+            point.time(time, writePrecision);
+        }
+
+        @Override
+        public boolean hasFields() {
+            return point.hasFields();
+        }
+
+        @Override
+        public org.influxdata.client.write.Point build() {
+            return point;
         }
     }
 }

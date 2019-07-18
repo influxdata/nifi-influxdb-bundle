@@ -14,13 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.influxdata.nifi.processors;
+package org.influxdata.nifi.processors.internal;
 
 import java.util.Objects;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import org.influxdata.nifi.processors.MapperOptions;
+import org.influxdata.nifi.processors.PutInfluxDatabaseRecord;
+import org.influxdata.nifi.processors.RecordToPointMapper;
 
-final class WriteOptions implements Cloneable {
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+
+public final class WriteOptions implements Cloneable {
 
     private String database;
     private String retentionPolicy;
@@ -77,7 +82,7 @@ final class WriteOptions implements Cloneable {
     /**
      * @see PutInfluxDatabaseRecord#DB_NAME
      */
-    @NonNull
+    @Nullable
     public String getDatabase() {
         return database;
     }

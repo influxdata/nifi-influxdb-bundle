@@ -37,9 +37,9 @@ import org.influxdb.dto.Point;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE_LOG;
 import static org.influxdata.nifi.processors.PutInfluxDatabaseRecord.DATABASE_NAME_EMPTY_MESSAGE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE_LOG;
 import static org.influxdata.nifi.util.InfluxDBUtils.AT_LEAST_ONE_FIELD_DEFINED_MESSAGE;
 import static org.influxdata.nifi.util.InfluxDBUtils.MEASUREMENT_NAME_EMPTY_MESSAGE;
 import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour.FAIL;

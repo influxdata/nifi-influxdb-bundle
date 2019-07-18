@@ -105,11 +105,11 @@ public abstract class AbstractTestPutInfluxDatabaseRecord {
         processor.close();
     }
 
-    protected class TypeOfExceptionMatcher<T extends Throwable> extends IsInstanceOf {
+    protected static class TypeOfExceptionMatcher<T extends Throwable> extends IsInstanceOf {
 
         private final Class<T> expectedErrorType;
 
-        public TypeOfExceptionMatcher(final Class<T> expectedClass) {
+        TypeOfExceptionMatcher(final Class<T> expectedClass) {
 
             super(expectedClass);
 

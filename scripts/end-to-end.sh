@@ -67,6 +67,68 @@ fi
 
 echo
 echo "Querying from InfluxDB 2.0 data by:"
+echo "  from(bucket: \"my-bucket\")"
+echo "      |> range(start: 0)"
+echo "      |> filter(fn: (r) => r._measurement == \"tweets\")"
+echo "      |> filter(fn: (r) => r._field == \"text\")"
+echo "      |> keep(columns: [\"_field\", \"_value\"])"
+echo "      |> count()"
+echo
+
+twitter_v2=`(curl -s POST \
+  http://localhost:9999/api/v2/query?org=my-org \
+  -H 'Authorization: Token my-token' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "query": "from(bucket:\"my-bucket\") |> range(start: 0) |> filter(fn: (r) => r._measurement == \"tweets\") |> filter(fn: (r) => r._field == \"text\") |> keep(columns: [\"_field\", \"_value\"]) |> count()",
+    "dialect" : {
+        "header": false,
+        "annotations": []
+    }
+}')`
+
+twitter_v2_count=`(echo ${twitter_v2} | head | cut -d ',' -f 5 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')`
+echo ${twitter_v2_count}
+if [[ ${twitter_v2_count} -gt 0 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  ${twitter_v2_count}
+    exit 1
+fi
+
+echo
+echo "Querying from InfluxDB 2.0 data by:"
+echo "  from(bucket: \"my-bucket\")"
+echo "      |> range(start: 0)"
+echo "      |> filter(fn: (r) => r._measurement == \"docker_container_status\")"
+echo "      |> filter(fn: (r) => r._field == \"started_at\")"
+echo "      |> keep(columns: [\"_field\", \"_value\"])"
+echo "      |> count()"
+echo
+
+docker_container_status_v2=`(curl -s POST \
+  http://localhost:9999/api/v2/query?org=my-org \
+  -H 'Authorization: Token my-token' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "query": "from(bucket:\"my-bucket\") |> range(start: 0) |> filter(fn: (r) => r._measurement == \"docker_container_status\") |> filter(fn: (r) => r._field == \"started_at\") |> keep(columns: [\"_field\", \"_value\"]) |> count()",
+    "dialect" : {
+        "header": false,
+        "annotations": []
+    }
+}')`
+
+docker_container_status_v2_count=`(echo ${docker_container_status_v2} | head | cut -d ',' -f 5 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')`
+echo ${docker_container_status_v2_count}
+if [[ ${docker_container_status_v2_count} -gt 0 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  ${docker_container_status_v2_count}
+    exit 1
+fi
+
+echo
+echo "Querying from InfluxDB 2.0 data by:"
 echo "  from(bucket: "my-bucket")"
 echo "      |> range(start: 0)"
 echo "      |> filter(fn: (r) => r._measurement == "nifi_logs")"

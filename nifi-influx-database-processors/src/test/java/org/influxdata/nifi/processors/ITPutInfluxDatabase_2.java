@@ -32,6 +32,7 @@ import org.influxdata.client.domain.Organization;
 import org.influxdata.client.domain.Permission;
 import org.influxdata.client.domain.PermissionResource;
 import org.influxdata.client.domain.WritePrecision;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
 import org.influxdata.query.FluxTable;

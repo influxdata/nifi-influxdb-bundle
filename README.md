@@ -329,7 +329,7 @@ Select Twitter Filter Endpoint API, Auth keys and tokens, and fill keywords to b
 field. To access the Twitter API you need authorization keys that can be obtained from
 [Twitter Apps](https://developer.twitter.com/en/apps).
 
->  Note, that the credentials embeded in demo may not work in shared enviroment, it is better to
+>  Note, that the credentials embedded in demo may not work in shared environment, it is better to
    generate new for testing.
    
 <img src="assets/doc/demo1-gettwitter.png" height="250px"> 

@@ -25,6 +25,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
+import org.influxdata.nifi.processors.internal.FlowFileToPointMapperV1;
+import org.influxdata.nifi.processors.internal.WriteOptions;
 import org.influxdata.nifi.services.InfluxDatabaseService;
 import org.influxdata.nifi.util.PropertyValueUtils;
 import org.influxdata.nifi.util.PropertyValueUtils.IllegalConfigurationException;
@@ -333,12 +336,12 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
             WriteOptions writeOptions = writeOptions(context, flowFile);
 
             // Init Mapper
-            FlowFileToPointMapper pointMapper = FlowFileToPointMapper
+            FlowFileToPointMapperV1 pointMapper = FlowFileToPointMapperV1
                     .createMapper(session, context, getLogger(), writeOptions);
 
             // Write to InfluxDB
             pointMapper
-                    .mapFlowFile(flowFile)
+                    .addFlowFile(flowFile)
                     .writeToInflux(getInfluxDB(context))
                     .reportResults(influxDatabaseService.getDatabaseURL());
 
@@ -454,7 +457,7 @@ public class PutInfluxDatabaseRecord extends AbstractInfluxDatabaseProcessor {
     }
 
     @NonNull
-    protected WriteOptions writeOptions(@NonNull final ProcessContext context, @Nullable final FlowFile flowFile)
+    WriteOptions writeOptions(@NonNull final ProcessContext context, @Nullable final FlowFile flowFile)
             throws IllegalConfigurationException {
 
         Objects.requireNonNull(context, "Context of Processor is required");

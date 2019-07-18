@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.influxdata.nifi.processors;
+package org.influxdata.nifi.processors.internal;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,7 +39,7 @@ import org.influxdb.InfluxDBFactory;
  */
 public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor {
 
-    static final PropertyDescriptor RECORD_READER_FACTORY = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor RECORD_READER_FACTORY = new PropertyDescriptor.Builder()
             .name("record-reader")
             .displayName("Record Reader")
             .description("Specifies the Controller Service to use for parsing incoming data "
@@ -48,7 +48,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .required(true)
             .build();
 
-    static final PropertyDescriptor CHARSET = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor CHARSET = new PropertyDescriptor.Builder()
             .name("influxdb-charset")
             .displayName("Character Set")
             .description("Specifies the character set of the document data.")
@@ -58,7 +58,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.CHARACTER_SET_VALIDATOR)
             .build();
 
-    static final PropertyDescriptor INFLUX_DB_URL = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor INFLUX_DB_URL = new PropertyDescriptor.Builder()
             .name("influxdb-url")
             .displayName("InfluxDB connection URL")
             .description("InfluxDB URL to connect to. Eg: http://influxdb:8086")
@@ -68,7 +68,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.URL_VALIDATOR)
             .build();
 
-    static final PropertyDescriptor INFLUX_DB_CONNECTION_TIMEOUT = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor INFLUX_DB_CONNECTION_TIMEOUT = new PropertyDescriptor.Builder()
             .name("InfluxDB Max Connection Time Out (seconds)")
             .description("The maximum time for establishing connection to the InfluxDB")
             .defaultValue("0 seconds")
@@ -77,7 +77,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .sensitive(false)
             .build();
 
-    static final PropertyDescriptor DB_NAME = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor DB_NAME = new PropertyDescriptor.Builder()
             .name("influxdb-dbname")
             .displayName("Database Name")
             .description("InfluxDB database to connect to")
@@ -86,7 +86,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    static final PropertyDescriptor USERNAME = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor USERNAME = new PropertyDescriptor.Builder()
             .name("influxdb-username")
             .displayName("Username")
             .required(false)
@@ -95,7 +95,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    static final PropertyDescriptor PASSWORD = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor PASSWORD = new PropertyDescriptor.Builder()
             .name("influxdb-password")
             .displayName("Password")
             .required(false)
@@ -105,7 +105,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .sensitive(true)
             .build();
 
-    static final PropertyDescriptor MAX_RECORDS_SIZE = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor MAX_RECORDS_SIZE = new PropertyDescriptor.Builder()
             .name("influxdb-max-records-size")
             .displayName("Max size of records")
             .description("Maximum size of records allowed to be posted in one batch")
@@ -115,16 +115,16 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.DATA_SIZE_VALIDATOR)
             .build();
 
-    static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
+    public static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
             .description("Successful FlowFiles that are saved to InfluxDB are routed to this relationship").build();
 
-    static final Relationship REL_FAILURE = new Relationship.Builder().name("failure")
+    public static final Relationship REL_FAILURE = new Relationship.Builder().name("failure")
             .description("FlowFiles were not saved to InfluxDB are routed to this relationship").build();
 
-    static final Relationship REL_RETRY = new Relationship.Builder().name("retry")
+    public static final Relationship REL_RETRY = new Relationship.Builder().name("retry")
             .description("FlowFiles were not saved to InfluxDB due to retryable exception are routed to this relationship").build();
 
-    static final Relationship REL_MAX_SIZE_EXCEEDED = new Relationship.Builder().name("failure-max-size")
+    public static final Relationship REL_MAX_SIZE_EXCEEDED = new Relationship.Builder().name("failure-max-size")
             .description("FlowFiles exceeding max records size are routed to this relationship").build();
 
 
@@ -177,7 +177,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
         }
         if ( influxDB.get() != null ) {
             influxDB.get().close();
-            influxDB.set(null);;
+            influxDB.set(null);
         }
     }
 }

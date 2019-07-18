@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.influxdata.nifi.processors;
+package org.influxdata.nifi.processors.internal;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -37,7 +37,7 @@ import org.apache.nifi.processor.DataUnit;
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.util.StandardValidators;
 
-import static org.influxdata.nifi.processors.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
 import static org.influxdata.nifi.util.PropertyValueUtils.getEnumValue;
 
 /**
@@ -46,6 +46,12 @@ import static org.influxdata.nifi.util.PropertyValueUtils.getEnumValue;
  * @author Jakub Bednar (bednar@github) (11/07/2019 07:47)
  */
 public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcessor {
+
+    public static final String ORG_NAME_EMPTY_MESSAGE =
+            "Cannot write FlowFile to InfluxDB because destination organization is null or empty.";
+
+    public static final String BUCKET_NAME_EMPTY_MESSAGE =
+            "Cannot write FlowFile to InfluxDB because destination bucket is null or empty.";
 
     /**
      * Influx Log levels.
@@ -66,7 +72,7 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
                     "Log the headers, body, and metadata for both requests and responses. "
                             + "Note: This requires that the entire request and response body be buffered in memory!");
 
-    static final PropertyDescriptor INFLUX_DB_SERVICE = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor INFLUX_DB_SERVICE = new PropertyDescriptor.Builder()
             .name("influxdb-service")
             .displayName("InfluxDB Controller Service")
             .description("A controller service that provides connection to InfluxDB")
@@ -74,7 +80,7 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
             .identifiesControllerService(InfluxDatabaseService_2.class)
             .build();
 
-    static final PropertyDescriptor BUCKET = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor BUCKET = new PropertyDescriptor.Builder()
             .name("influxdb-bucket")
             .displayName("Bucket")
             .description("Specifies the destination bucket for writes")
@@ -83,7 +89,7 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    static final PropertyDescriptor ORG = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor ORG = new PropertyDescriptor.Builder()
             .name("influxdb-org")
             .displayName("Organization")
             .description("Specifies the destination organization for writes")
@@ -92,8 +98,8 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    static final PropertyDescriptor TIMESTAMP_PRECISION = new PropertyDescriptor.Builder()
-            .name("influxdb-timestamp-precision")
+    public static final PropertyDescriptor TIMESTAMP_PRECISION = new PropertyDescriptor.Builder()
+            .name("influxdb-write-precision")
             .displayName("Timestamp precision")
             .description("The precision of the time stamps.")
             .required(true)
@@ -103,7 +109,7 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
             .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .build();
 
-    static final PropertyDescriptor ENABLE_GZIP = new PropertyDescriptor.Builder()
+    protected static final PropertyDescriptor ENABLE_GZIP = new PropertyDescriptor.Builder()
             .name("influxdb-enable-gzip")
             .displayName("Enable gzip compression")
             .description("Enable gzip compression for InfluxDB http request body.")
@@ -113,7 +119,7 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
             .required(true)
             .build();
 
-    static final PropertyDescriptor LOG_LEVEL = new PropertyDescriptor.Builder()
+    protected static final PropertyDescriptor LOG_LEVEL = new PropertyDescriptor.Builder()
             .name("influxdb-log-level")
             .displayName("Log Level")
             .description("Controls the level of logging for the REST layer of InfluxDB client.")
@@ -124,8 +130,8 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
 
     private AtomicReference<InfluxDBClient> influxDBClient = new AtomicReference<>();
 
-    InfluxDatabaseService_2 influxDatabaseService;
-    long maxRecordsSize;
+    protected InfluxDatabaseService_2 influxDatabaseService;
+    protected long maxRecordsSize;
 
     /**
      * Assigns the InfluxDB 2.0 Service on scheduling.
@@ -162,7 +168,7 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
      *
      * @return InfluxDBClient instance
      */
-    protected synchronized InfluxDBClient getInfluxDBClient(final ProcessContext context) {
+    public synchronized InfluxDBClient getInfluxDBClient(final ProcessContext context) {
 
         if (influxDBClient.get() == null) {
 
