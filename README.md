@@ -14,6 +14,7 @@
     - [PutInfluxDatabaseRecord for InfluxDB 2.0](#putinfluxdatabaserecord_2)
     - [PutInfluxDatabase for InfluxDB 1.x](#putinfluxdatabase)
     - [PutInfluxDatabase for InfluxDB 2.0](#putinfluxdatabase_2)
+    - [GetInfluxDatabase for InfluxDB 2.0](#getinfluxdatabase_2)
     - [InfluxDatabaseService for InfluxDB 1.x](#influxdatabaseservice)
     - [InfluxDatabaseService for InfluxDB 2.0](#influxdatabaseservice_2)
     - [InfluxLineProtocolReader](#influxlineprotocolreader)
@@ -280,6 +281,23 @@ Processor to write the content of a FlowFile in 'line protocol'. Please check de
 | **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
 | **Character Set** | Specifies the character set of the document data |
 | **Max size of records** | Maximum size of records allowed to be posted in one batch |
+
+### GetInfluxDatabase_2
+
+Creates FlowFiles from records in InfluxDB 2.0 loaded by a user-specified Flux query.
+
+| Property | Description |
+| --- | --- |
+| **InfluxDB Controller Service** | A controller service that provides connection to InfluxDB |
+| **Organization** | Specifies the source organization |
+| **Query** | A valid Flux query to use to execute against InfluxDB |
+| **Dialect Header** | If true, the results will contain a header row |
+| **Dialect Delimiter** | Separator between cells; the default is "," |
+| Dialect Annotations | Describing properties about the columns of the table. More than one can be supplied if comma separated. Allowable values: "group", "datatype", "default". |
+| **Dialect Comment Prefix** | Character prefixed to comment strings. |
+| **Dialect Date Time Format** | Format of timestamps. |
+| **Enable gzip compression** | Enable gzip compression for InfluxDB http request body |
+| **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
 
 ### InfluxLineProtocolRecordSetWriter
 

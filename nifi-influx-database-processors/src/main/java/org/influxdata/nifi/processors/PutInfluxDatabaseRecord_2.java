@@ -121,7 +121,6 @@ public class PutInfluxDatabaseRecord_2 extends AbstractInfluxDatabaseProcessor_2
         PROPERTY_DESCRIPTORS = Collections.unmodifiableList(propertyDescriptors);
     }
 
-
     @Override
     public Set<Relationship> getRelationships() {
         return RELATIONSHIPS;
