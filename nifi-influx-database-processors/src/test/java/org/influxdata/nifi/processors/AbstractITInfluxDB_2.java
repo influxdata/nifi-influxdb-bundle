@@ -43,12 +43,13 @@ abstract class AbstractITInfluxDB_2 {
     protected String bucketName;
     protected QueryApi queryApi;
     protected InfluxDBClient influxDBClient;
+    protected Organization organization;
 
     protected void init() throws Exception {
 
         influxDBClient = InfluxDBClientFactory.create(INFLUX_DB_2, "my-token".toCharArray());
 
-        Organization organization = influxDBClient.getOrganizationsApi().findOrganizations().stream()
+        organization = influxDBClient.getOrganizationsApi().findOrganizations().stream()
                 .filter(it -> it.getName().equals("my-org"))
                 .findFirst()
                 .orElseThrow(IllegalStateException::new);
@@ -84,6 +85,7 @@ abstract class AbstractITInfluxDB_2 {
                 .url(INFLUX_DB_2)
                 .authenticateToken(token.toCharArray())
                 .org(organization.getId())
+                .bucket(bucket.getId())
                 .build();
         influxDBClient = InfluxDBClientFactory.create(options);
         queryApi = influxDBClient.getQueryApi();

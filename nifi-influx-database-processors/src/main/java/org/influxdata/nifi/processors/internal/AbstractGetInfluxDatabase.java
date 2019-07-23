@@ -153,22 +153,14 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) throws ProcessException {
 
+        boolean createdFlowFile = false;
+        FlowFile flowFile = session.get();
 
-        FlowFile flowFile;
-        // If there are incoming connections, prepare query params from flow file
-        if (context.hasIncomingConnection()) {
-            FlowFile incomingFlowFile = session.get();
-
-            if (incomingFlowFile == null && context.hasNonLoopConnection()) {
-                return;
-            }
-
-            flowFile = incomingFlowFile;
-
-        } else {
+        // If there aren't incoming connections.
+        if (flowFile == null) {
             flowFile = session.create();
+            createdFlowFile = true;
         }
-
 
         String org = context.getProperty(ORG).evaluateAttributeExpressions(flowFile).getValue();
         String flux = context.getProperty(QUERY).evaluateAttributeExpressions(flowFile).getValue();
@@ -208,7 +200,7 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
                     .query(flux)
                     .dialect(dialect);
 
-            new QueryProcessor(org, query, sizePerBatch, flowFile, context, session).doQueryRaw();
+            new QueryProcessor(org, query, sizePerBatch, flowFile, createdFlowFile, context, session).doQueryRaw();
 
         } catch (Exception e) {
             catchException(e, Collections.singletonList(flowFile), context, session);
@@ -267,10 +259,10 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
                                final Query query,
                                final long sizePerBatch,
                                final FlowFile flowFile,
-                               final ProcessContext context,
+                               final boolean createdFlowFile, final ProcessContext context,
                                final ProcessSession session) {
             this.flowFiles.add(flowFile);
-            if (sizePerBatch == -1) {
+            if (sizePerBatch == -1 || createdFlowFile) {
                 this.flowFile = flowFile;
             } else {
                 this.flowFile = session.create();
@@ -292,12 +284,17 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
                         .getQueryApi()
                         .queryRaw(query, org, this::onResponse, this::onError, this::onComplete);
 
+                countDownLatch.await();
             } catch (Exception e) {
                 catchException(e, flowFiles, context, session);
             }
         }
 
         private void onResponse(Cancellable cancellable, String record) {
+
+            if (record == null || record.isEmpty()) {
+                return;
+            }
 
             recordIndex++;
             if (sizePerBatch != -1 && recordIndex > sizePerBatch) {
@@ -315,23 +312,26 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
         }
 
         private void onError(Throwable throwable) {
-            countDownLatch.countDown();
             stopWatch.stop();
 
             catchException(throwable, flowFiles, context, session);
+
+            countDownLatch.countDown();
         }
 
         private void onComplete() {
-            countDownLatch.countDown();
             stopWatch.stop();
 
             session.transfer(flowFiles, REL_SUCCESS);
+            
             for (FlowFile flowFile : flowFiles) {
                 session.getProvenanceReporter()
                         .send(flowFile, influxDatabaseService.getDatabaseURL(), stopWatch.getElapsed(MILLISECONDS));
             }
 
             getLogger().debug("Query {} fetched in {}", new Object[]{query, stopWatch.getDuration()});
+
+            countDownLatch.countDown();
         }
     }
 }

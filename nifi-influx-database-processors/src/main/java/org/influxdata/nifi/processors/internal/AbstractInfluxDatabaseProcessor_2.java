@@ -119,7 +119,7 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
             .required(true)
             .build();
 
-    protected static final PropertyDescriptor LOG_LEVEL = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor LOG_LEVEL = new PropertyDescriptor.Builder()
             .name("influxdb-log-level")
             .displayName("Log Level")
             .description("Controls the level of logging for the REST layer of InfluxDB client.")

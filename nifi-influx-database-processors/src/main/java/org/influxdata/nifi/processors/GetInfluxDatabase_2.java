@@ -25,7 +25,6 @@ import java.util.Set;
 import org.influxdata.nifi.processors.internal.AbstractGetInfluxDatabase;
 
 import org.apache.nifi.annotation.behavior.EventDriven;
-import org.apache.nifi.annotation.behavior.InputRequirement;
 import org.apache.nifi.annotation.behavior.WritesAttribute;
 import org.apache.nifi.annotation.behavior.WritesAttributes;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
@@ -38,7 +37,6 @@ import org.apache.nifi.processor.Relationship;
  */
 @CapabilityDescription("Creates FlowFiles from records in InfluxDB 2.0 loaded by a user-specified Flux query.")
 @Tags({"influxdb", "measurement", "get", "fetch", "record", "timeseries", "2.0", "flux"})
-@InputRequirement(InputRequirement.Requirement.INPUT_FORBIDDEN)
 @WritesAttributes({
         @WritesAttribute(attribute = GetInfluxDatabase_2.INFLUXDB_ORG_NAME, description = "The organization where the results came from."),
 })
