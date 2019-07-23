@@ -16,19 +16,33 @@
  */
 package org.influxdata.nifi.processors.internal;
 
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
+import org.influxdata.Cancellable;
 import org.influxdata.client.domain.Dialect;
+import org.influxdata.client.domain.Query;
+import org.influxdata.exceptions.InfluxException;
 
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.components.ValidationResult;
 import org.apache.nifi.expression.ExpressionLanguageScope;
+import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.exception.ProcessException;
 import org.apache.nifi.processor.util.StandardValidators;
+import org.apache.nifi.util.StopWatch;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_FAIL_TO_QUERY;
 
 /**
  * @author Jakub Bednar (bednar@github) (19/07/2019 10:23)
@@ -118,17 +132,206 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
             .allowableValues("RFC3339", "RFC3339Nano")
             .build();
 
-    protected static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
+    public static final PropertyDescriptor RECORDS_PER_FLOWFILE = new PropertyDescriptor.Builder()
+            .name("influxdb-records-per-flowfile")
+            .displayName("Results Per FlowFile")
+            .description("How many records to put into a FlowFile at once. The whole body will be treated as a CSV file.")
+            .required(false)
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
+            .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
+            .build();
+
+    public static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
             .description("Successful Flux queries are routed to this relationship").build();
 
-    protected static final Relationship REL_FAILURE = new Relationship.Builder().name("failure")
+    public static final Relationship REL_FAILURE = new Relationship.Builder().name("failure")
             .description("Failed Flux queries are routed to this relationship").build();
 
-    protected static final Relationship REL_RETRY = new Relationship.Builder().name("retry")
+    public static final Relationship REL_RETRY = new Relationship.Builder().name("retry")
             .description("Failed queries that are retryable exception are routed to this relationship").build();
 
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) throws ProcessException {
 
+
+        FlowFile flowFile;
+        // If there are incoming connections, prepare query params from flow file
+        if (context.hasIncomingConnection()) {
+            FlowFile incomingFlowFile = session.get();
+
+            if (incomingFlowFile == null && context.hasNonLoopConnection()) {
+                return;
+            }
+
+            flowFile = incomingFlowFile;
+
+        } else {
+            flowFile = session.create();
+        }
+
+
+        String org = context.getProperty(ORG).evaluateAttributeExpressions(flowFile).getValue();
+        String flux = context.getProperty(QUERY).evaluateAttributeExpressions(flowFile).getValue();
+
+        boolean dialectHeader = context.getProperty(DIALECT_HEADER).asBoolean();
+        String dialectDelimiter = context.getProperty(DIALECT_DELIMITER).getValue();
+        String dialectCommentPrefix = context.getProperty(DIALECT_COMMENT_PREFIX).getValue();
+        Dialect.DateTimeFormatEnum dialectTimeFormat = Dialect.DateTimeFormatEnum
+                .fromValue(context.getProperty(DIALECT_DATE_TIME_FORMAT).getValue());
+
+        List<Dialect.AnnotationsEnum> dialectAnnotations = new ArrayList<>();
+        String dialectAnnotationsValue = context.getProperty(DIALECT_ANNOTATIONS).getValue();
+        if (dialectAnnotationsValue != null && !dialectAnnotationsValue.isEmpty()) {
+            Arrays.stream(dialectAnnotationsValue.split(","))
+                    .filter(annotation -> annotation != null && !annotation.trim().isEmpty())
+                    .map(String::trim)
+                    .forEach(annotation -> dialectAnnotations.add(Dialect.AnnotationsEnum.fromValue(annotation.trim())));
+        }
+
+
+        long sizePerBatch = -1;
+        if (context.getProperty(RECORDS_PER_FLOWFILE).isSet()) {
+            sizePerBatch = context.getProperty(RECORDS_PER_FLOWFILE).evaluateAttributeExpressions().asLong();
+        }
+
+
+        try {
+
+            Dialect dialect = new Dialect()
+                    .header(dialectHeader)
+                    .delimiter(dialectDelimiter)
+                    .commentPrefix(dialectCommentPrefix)
+                    .dateTimeFormat(dialectTimeFormat)
+                    .annotations(dialectAnnotations);
+
+            Query query = new Query()
+                    .query(flux)
+                    .dialect(dialect);
+
+            new QueryProcessor(org, query, sizePerBatch, flowFile, context, session).doQueryRaw();
+
+        } catch (Exception e) {
+            catchException(e, Collections.singletonList(flowFile), context, session);
+        }
+    }
+
+    private void catchException(final Throwable e,
+                                final List<FlowFile> flowFiles,
+                                final ProcessContext context,
+                                final ProcessSession session) {
+
+        String message = INFLUX_DB_FAIL_TO_QUERY;
+        Object status = e.getClass().getSimpleName();
+        Relationship relationship = REL_FAILURE;
+
+        if (e instanceof InfluxException) {
+
+            InfluxException ie = (InfluxException) e;
+            status = ie.status();
+
+            // Retryable
+            if (Arrays.asList(429, 503).contains(ie.status()) || ie.getCause() instanceof SocketTimeoutException) {
+                message += " ... retry";
+                relationship = REL_RETRY;
+            }
+        }
+
+        for (FlowFile flowFile : flowFiles) {
+
+            if (REL_RETRY.equals(relationship)) {
+                session.penalize(flowFile);
+            }
+
+            session.putAttribute(flowFile, INFLUX_DB_ERROR_MESSAGE, e.getMessage());
+            session.transfer(flowFile, relationship);
+        }
+
+        getLogger().error(message, new Object[]{status, e.getLocalizedMessage()}, e);
+        context.yield();
+    }
+
+    private class QueryProcessor {
+        private FlowFile flowFile;
+        private final List<FlowFile> flowFiles = new ArrayList<>();
+        private final String org;
+        private final long sizePerBatch;
+        private final Query query;
+        private final ProcessContext context;
+        private final ProcessSession session;
+        private final CountDownLatch countDownLatch = new CountDownLatch(1);
+        private final StopWatch stopWatch = new StopWatch();
+
+        private long recordIndex = 0;
+
+        private QueryProcessor(final String org,
+                               final Query query,
+                               final long sizePerBatch,
+                               final FlowFile flowFile,
+                               final ProcessContext context,
+                               final ProcessSession session) {
+            this.flowFiles.add(flowFile);
+            if (sizePerBatch == -1) {
+                this.flowFile = flowFile;
+            } else {
+                this.flowFile = session.create();
+                this.flowFiles.add(this.flowFile);
+            }
+            this.org = org;
+            this.sizePerBatch = sizePerBatch;
+            this.query = query;
+            this.context = context;
+            this.session = session;
+
+            this.stopWatch.start();
+        }
+
+        void doQueryRaw() {
+            try {
+
+                getInfluxDBClient(context)
+                        .getQueryApi()
+                        .queryRaw(query, org, this::onResponse, this::onError, this::onComplete);
+
+            } catch (Exception e) {
+                catchException(e, flowFiles, context, session);
+            }
+        }
+
+        private void onResponse(Cancellable cancellable, String record) {
+
+            recordIndex++;
+            if (sizePerBatch != -1 && recordIndex > sizePerBatch) {
+                flowFile = session.create();
+                flowFiles.add(flowFile);
+                recordIndex = 1;
+            }
+
+            session.append(flowFile, out -> {
+                if (recordIndex > 1) {
+                    out.write('\n');
+                }
+                out.write(record.getBytes());
+            });
+        }
+
+        private void onError(Throwable throwable) {
+            countDownLatch.countDown();
+            stopWatch.stop();
+
+            catchException(throwable, flowFiles, context, session);
+        }
+
+        private void onComplete() {
+            countDownLatch.countDown();
+            stopWatch.stop();
+
+            session.transfer(flowFiles, REL_SUCCESS);
+            for (FlowFile flowFile : flowFiles) {
+                session.getProvenanceReporter()
+                        .send(flowFile, influxDatabaseService.getDatabaseURL(), stopWatch.getElapsed(MILLISECONDS));
+            }
+
+            getLogger().debug("Query {} fetched in {}", new Object[]{query, stopWatch.getDuration()});
+        }
     }
 }

@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.influxdata.nifi.processors.internal.AbstractGetInfluxDatabase;
 
+import org.apache.nifi.annotation.behavior.EventDriven;
 import org.apache.nifi.annotation.behavior.InputRequirement;
 import org.apache.nifi.annotation.behavior.WritesAttribute;
 import org.apache.nifi.annotation.behavior.WritesAttributes;
@@ -41,7 +42,7 @@ import org.apache.nifi.processor.Relationship;
 @WritesAttributes({
         @WritesAttribute(attribute = GetInfluxDatabase_2.INFLUXDB_ORG_NAME, description = "The organization where the results came from."),
 })
-
+@EventDriven
 public class GetInfluxDatabase_2 extends AbstractGetInfluxDatabase {
 
     private static final List<PropertyDescriptor> PROPERTY_DESCRIPTORS;
@@ -69,6 +70,7 @@ public class GetInfluxDatabase_2 extends AbstractGetInfluxDatabase {
         propertyDescriptors.add(DIALECT_COMMENT_PREFIX);
         propertyDescriptors.add(DIALECT_DATE_TIME_FORMAT);
 
+        propertyDescriptors.add(RECORDS_PER_FLOWFILE);
         propertyDescriptors.add(ENABLE_GZIP);
         propertyDescriptors.add(LOG_LEVEL);
 

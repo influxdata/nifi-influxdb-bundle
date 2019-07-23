@@ -29,18 +29,14 @@ import org.influxdata.nifi.util.InfluxDBUtils;
 
 import avro.shaded.com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import okhttp3.MediaType;
-import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.serialization.record.RecordFieldType;
 import org.apache.nifi.util.LogMessage;
 import org.apache.nifi.util.MockFlowFile;
 import org.junit.Assert;
 import org.junit.Test;
-import retrofit2.Response;
 
+import static org.influxdata.nifi.processors.Utils.createErrorResponse;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
 import static org.influxdata.nifi.util.InfluxDBUtils.AT_LEAST_ONE_FIELD_DEFINED_MESSAGE;
 import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour.FAIL;
@@ -285,17 +281,5 @@ public class TestPutInfluxDatabaseRecordErrorHandling_2 extends AbstractTestPutI
 
         recordReader.addSchemaField("nifi-field", RecordFieldType.STRING);
         recordReader.addRecord("nifi-field-value");
-    }
-
-    private Response createErrorResponse(final int code) {
-        okhttp3.Response build = new okhttp3.Response.Builder() //
-                .code(code).addHeader("X-Influx-Error", "Simulate error: " + code)
-                .message("Response.error()")
-                .protocol(Protocol.HTTP_1_1)
-                .request(new Request.Builder().url("http://localhost/").build())
-                .build();
-
-        return Response
-                .error(ResponseBody.create(MediaType.parse("application/json"), ""), build);
     }
 }

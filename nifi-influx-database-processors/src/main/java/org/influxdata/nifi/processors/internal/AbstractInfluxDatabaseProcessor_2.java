@@ -144,7 +144,10 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
         Objects.requireNonNull(context, "ProcessContext is required");
 
         influxDatabaseService = context.getProperty(INFLUX_DB_SERVICE).asControllerService(InfluxDatabaseService_2.class);
-        maxRecordsSize = context.getProperty(MAX_RECORDS_SIZE).evaluateAttributeExpressions().asDataSize(DataUnit.B).longValue();
+
+        if (getSupportedPropertyDescriptors().contains(MAX_RECORDS_SIZE)) {
+            maxRecordsSize = context.getProperty(MAX_RECORDS_SIZE).evaluateAttributeExpressions().asDataSize(DataUnit.B).longValue();
+        }
     }
 
     @OnStopped

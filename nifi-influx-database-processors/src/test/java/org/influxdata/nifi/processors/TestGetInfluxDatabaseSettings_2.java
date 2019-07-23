@@ -105,4 +105,16 @@ public class TestGetInfluxDatabaseSettings_2 extends AbstractTestGetInfluxDataba
         runner.setProperty(GetInfluxDatabase_2.DIALECT_DATE_TIME_FORMAT, "not-supported");
         runner.assertNotValid();
     }
+
+    @Test
+    public void testRecordsPerFlowfile() {
+        runner.setProperty(GetInfluxDatabase_2.RECORDS_PER_FLOWFILE, "5");
+        runner.assertValid();
+    }
+
+    @Test
+    public void testNegativeRecordsPerFlowfile() {
+        runner.setProperty(GetInfluxDatabase_2.RECORDS_PER_FLOWFILE, "-1");
+        runner.assertNotValid();
+    }
 }

@@ -28,10 +28,6 @@ import org.influxdata.exceptions.InfluxException;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
 
-import okhttp3.MediaType;
-import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.util.MockFlowFile;
@@ -41,8 +37,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import retrofit2.Response;
 
+import static org.influxdata.nifi.processors.Utils.createErrorResponse;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.CHARSET;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
@@ -302,17 +298,5 @@ public class TestPutInfluxDatabase_2 {
         assertNull(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
         Mockito.verify(mockWriteApi, Mockito.times(1))
                 .writeRecord("my-bucket", "my-org", WritePrecision.NS, "h2o_feet,location=coyote_creek level\\ water_level=1.0 1");
-    }
-
-    private Response createErrorResponse(final int code) {
-        okhttp3.Response build = new okhttp3.Response.Builder() //
-                .code(code).addHeader("X-Influx-Error", "Simulate error: " + code)
-                .message("Response.error()")
-                .protocol(Protocol.HTTP_1_1)
-                .request(new Request.Builder().url("http://localhost/").build())
-                .build();
-
-        return Response
-                .error(ResponseBody.create(MediaType.parse("application/json"), ""), build);
     }
 }
