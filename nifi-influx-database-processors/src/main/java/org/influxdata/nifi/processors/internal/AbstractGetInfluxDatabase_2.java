@@ -16,19 +16,31 @@
  */
 package org.influxdata.nifi.processors.internal;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.SocketTimeoutException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.BiConsumer;
 
 import org.influxdata.Cancellable;
 import org.influxdata.client.domain.Dialect;
 import org.influxdata.client.domain.Query;
 import org.influxdata.exceptions.InfluxException;
+import org.influxdata.query.FluxRecord;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.components.ValidationResult;
 import org.apache.nifi.expression.ExpressionLanguageScope;
@@ -38,6 +50,16 @@ import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.exception.ProcessException;
 import org.apache.nifi.processor.util.StandardValidators;
+import org.apache.nifi.serialization.RecordSetWriter;
+import org.apache.nifi.serialization.RecordSetWriterFactory;
+import org.apache.nifi.serialization.SimpleRecordSchema;
+import org.apache.nifi.serialization.record.DataType;
+import org.apache.nifi.serialization.record.MapRecord;
+import org.apache.nifi.serialization.record.Record;
+import org.apache.nifi.serialization.record.RecordField;
+import org.apache.nifi.serialization.record.RecordFieldType;
+import org.apache.nifi.serialization.record.RecordSchema;
+import org.apache.nifi.serialization.record.util.DataTypeUtils;
 import org.apache.nifi.util.StopWatch;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -47,14 +69,20 @@ import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProc
 /**
  * @author Jakub Bednar (bednar@github) (19/07/2019 10:23)
  */
-public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabaseProcessor_2 {
+public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabaseProcessor_2 {
 
-    public static final String INFLUXDB_ORG_NAME = "influxdb.org.name";
+    public static final PropertyDescriptor WRITER_FACTORY = new PropertyDescriptor.Builder()
+            .name("influxdb-record-writer-factory")
+            .displayName("Record Writer")
+            .description("The record writer to use to write the result sets.")
+            .identifiesControllerService(RecordSetWriterFactory.class)
+            .required(true)
+            .build();
 
     public static final PropertyDescriptor ORG = new PropertyDescriptor.Builder()
             .name("influxdb-org")
             .displayName("Organization")
-            .description("Specifies the source organization")
+            .description("Specifies the source organization.")
             .required(true)
             .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
@@ -63,7 +91,7 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
     public static final PropertyDescriptor QUERY = new PropertyDescriptor.Builder()
             .name("influxdb-flux")
             .displayName("Query")
-            .description("A valid Flux query to use to execute against InfluxDB")
+            .description("A valid Flux query to use to execute against InfluxDB.")
             .required(true)
             .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
@@ -132,14 +160,7 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
             .allowableValues("RFC3339", "RFC3339Nano")
             .build();
 
-    public static final PropertyDescriptor RECORDS_PER_FLOWFILE = new PropertyDescriptor.Builder()
-            .name("influxdb-records-per-flowfile")
-            .displayName("Results Per FlowFile")
-            .description("How many records to put into a FlowFile at once. The whole body will be treated as a CSV file.")
-            .required(false)
-            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
-            .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
-            .build();
+    public static PropertyDescriptor RECORDS_PER_FLOWFILE;
 
     public static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
             .description("Successful Flux queries are routed to this relationship").build();
@@ -149,6 +170,18 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
 
     public static final Relationship REL_RETRY = new Relationship.Builder().name("retry")
             .description("Failed queries that are retryable exception are routed to this relationship").build();
+
+    private volatile RecordSetWriterFactory writerFactory;
+
+    @OnScheduled
+    public void initWriterFactory(@NonNull final ProcessContext context) {
+
+        Objects.requireNonNull(context, "ProcessContext is required");
+
+        if (getSupportedPropertyDescriptors().contains(WRITER_FACTORY)) {
+            writerFactory = context.getProperty(WRITER_FACTORY).asControllerService(RecordSetWriterFactory.class);
+        }
+    }
 
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) throws ProcessException {
@@ -164,48 +197,37 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
 
         String org = context.getProperty(ORG).evaluateAttributeExpressions(flowFile).getValue();
         String flux = context.getProperty(QUERY).evaluateAttributeExpressions(flowFile).getValue();
+        Dialect dialect = prepareDialect(context);
 
-        boolean dialectHeader = context.getProperty(DIALECT_HEADER).asBoolean();
-        String dialectDelimiter = context.getProperty(DIALECT_DELIMITER).getValue();
-        String dialectCommentPrefix = context.getProperty(DIALECT_COMMENT_PREFIX).getValue();
-        Dialect.DateTimeFormatEnum dialectTimeFormat = Dialect.DateTimeFormatEnum
-                .fromValue(context.getProperty(DIALECT_DATE_TIME_FORMAT).getValue());
-
-        List<Dialect.AnnotationsEnum> dialectAnnotations = new ArrayList<>();
-        String dialectAnnotationsValue = context.getProperty(DIALECT_ANNOTATIONS).getValue();
-        if (dialectAnnotationsValue != null && !dialectAnnotationsValue.isEmpty()) {
-            Arrays.stream(dialectAnnotationsValue.split(","))
-                    .filter(annotation -> annotation != null && !annotation.trim().isEmpty())
-                    .map(String::trim)
-                    .forEach(annotation -> dialectAnnotations.add(Dialect.AnnotationsEnum.fromValue(annotation.trim())));
-        }
-
-
-        long sizePerBatch = -1;
+        //
+        // Records per Flowfile
+        //
+        long recordsPerFlowFile = -1;
         if (context.getProperty(RECORDS_PER_FLOWFILE).isSet()) {
-            sizePerBatch = context.getProperty(RECORDS_PER_FLOWFILE).evaluateAttributeExpressions().asLong();
+            recordsPerFlowFile = context.getProperty(RECORDS_PER_FLOWFILE).evaluateAttributeExpressions().asLong();
         }
-
 
         try {
-
-            Dialect dialect = new Dialect()
-                    .header(dialectHeader)
-                    .delimiter(dialectDelimiter)
-                    .commentPrefix(dialectCommentPrefix)
-                    .dateTimeFormat(dialectTimeFormat)
-                    .annotations(dialectAnnotations);
 
             Query query = new Query()
                     .query(flux)
                     .dialect(dialect);
 
-            new QueryProcessor(org, query, sizePerBatch, flowFile, createdFlowFile, context, session).doQueryRaw();
+            QueryProcessor processor = new QueryProcessor(org, query, recordsPerFlowFile, flowFile, createdFlowFile, context, session);
+
+            // CVS or Record based response?
+            if (getSupportedPropertyDescriptors().contains(WRITER_FACTORY)) {
+                processor.doQuery();
+            } else {
+                processor.doQueryRaw();
+            }
 
         } catch (Exception e) {
             catchException(e, Collections.singletonList(flowFile), context, session);
         }
     }
+
+    protected abstract Dialect prepareDialect(final ProcessContext context);
 
     private void catchException(final Throwable e,
                                 final List<FlowFile> flowFiles,
@@ -243,10 +265,9 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
     }
 
     private class QueryProcessor {
-        private FlowFile flowFile;
         private final List<FlowFile> flowFiles = new ArrayList<>();
         private final String org;
-        private final long sizePerBatch;
+        private final long recordsPerFlowFile;
         private final Query query;
         private final ProcessContext context;
         private final ProcessSession session;
@@ -255,21 +276,25 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
 
         private long recordIndex = 0;
 
+        private FlowFile flowFile;
+        private RecordSetWriter writer;
+        private OutputStream out;
+
         private QueryProcessor(final String org,
                                final Query query,
-                               final long sizePerBatch,
+                               final long recordsPerFlowFile,
                                final FlowFile flowFile,
                                final boolean createdFlowFile, final ProcessContext context,
                                final ProcessSession session) {
             this.flowFiles.add(flowFile);
-            if (sizePerBatch == -1 || createdFlowFile) {
+            if (recordsPerFlowFile == -1 || createdFlowFile) {
                 this.flowFile = flowFile;
             } else {
                 this.flowFile = session.create();
                 this.flowFiles.add(this.flowFile);
             }
             this.org = org;
-            this.sizePerBatch = sizePerBatch;
+            this.recordsPerFlowFile = recordsPerFlowFile;
             this.query = query;
             this.context = context;
             this.session = session;
@@ -277,12 +302,12 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
             this.stopWatch.start();
         }
 
-        void doQueryRaw() {
+        void doQuery() {
             try {
 
                 getInfluxDBClient(context)
                         .getQueryApi()
-                        .queryRaw(query, org, this::onResponse, this::onError, this::onComplete);
+                        .query(query, org, this::onResponseRecord, this::onError, this::onComplete);
 
                 countDownLatch.await();
             } catch (Exception e) {
@@ -290,18 +315,56 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
             }
         }
 
-        private void onResponse(Cancellable cancellable, String record) {
+        void doQueryRaw() {
+            try {
+
+                getInfluxDBClient(context)
+                        .getQueryApi()
+                        .queryRaw(query, org, this::onResponseRaw, this::onError, this::onComplete);
+
+                countDownLatch.await();
+            } catch (Exception e) {
+                catchException(e, flowFiles, context, session);
+            }
+        }
+
+        private void onResponseRecord(final Cancellable cancellable, final FluxRecord fluxRecord) {
+
+            if (fluxRecord == null) {
+                return;
+            }
+
+            beforeOnResponse();
+
+            Record record = toNifiRecord(fluxRecord);
+            if (writer == null) {
+                final RecordSchema recordSchema = record.getSchema();
+                try {
+//                    final RecordSchema writeSchema = writerFactory.getSchema(new HashMap<>(), recordSchema);
+                    out = session.write(flowFile);
+                    writer = writerFactory.createWriter(getLogger(), recordSchema, out);
+                    writer.beginRecordSet();
+                } catch (Exception e) {
+                    cancellable.cancel();
+                    onError(e);
+                }
+            }
+
+            try {
+                writer.write(record);
+            } catch (IOException e) {
+                cancellable.cancel();
+                onError(e);
+            }
+        }
+
+        private void onResponseRaw(Cancellable cancellable, String record) {
 
             if (record == null || record.isEmpty()) {
                 return;
             }
 
-            recordIndex++;
-            if (sizePerBatch != -1 && recordIndex > sizePerBatch) {
-                flowFile = session.create();
-                flowFiles.add(flowFile);
-                recordIndex = 1;
-            }
+            beforeOnResponse();
 
             session.append(flowFile, out -> {
                 if (recordIndex > 1) {
@@ -311,8 +374,19 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
             });
         }
 
+        private void beforeOnResponse() {
+            recordIndex++;
+            if (recordsPerFlowFile != -1 && recordIndex > recordsPerFlowFile) {
+                closeRecordWriter();
+                flowFile = session.create();
+                flowFiles.add(flowFile);
+                recordIndex = 1;
+            }
+        }
+
         private void onError(Throwable throwable) {
             stopWatch.stop();
+            closeRecordWriter();
 
             catchException(throwable, flowFiles, context, session);
 
@@ -321,9 +395,10 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
 
         private void onComplete() {
             stopWatch.stop();
+            closeRecordWriter();
 
             session.transfer(flowFiles, REL_SUCCESS);
-            
+
             for (FlowFile flowFile : flowFiles) {
                 session.getProvenanceReporter()
                         .send(flowFile, influxDatabaseService.getDatabaseURL(), stopWatch.getElapsed(MILLISECONDS));
@@ -332,6 +407,54 @@ public abstract class AbstractGetInfluxDatabase extends AbstractInfluxDatabasePr
             getLogger().debug("Query {} fetched in {}", new Object[]{query, stopWatch.getDuration()});
 
             countDownLatch.countDown();
+        }
+
+        private void closeRecordWriter() {
+            if (writer != null) {
+                try {
+                    writer.finishRecordSet();
+                    writer.close();
+                    out.close();
+                } catch (IOException e) {
+                   throw new RuntimeException(e);
+                }
+            }
+
+            out = null;
+            writer = null;
+        }
+
+        private Record toNifiRecord(final FluxRecord fluxRecord) {
+
+            Map<String, Object> values = new LinkedHashMap<>();
+            List<RecordField> fields = new ArrayList<>();
+
+            fluxRecord.getValues().forEach(new BiConsumer<String, Object>() {
+                @Override
+                public void accept(final String fieldName, final Object fluxValue) {
+
+                    if (fluxValue == null) {
+                        return;
+                    }
+
+                    Object nifiValue = fluxValue;
+                    if (fluxValue instanceof Instant) {
+                        nifiValue = java.util.Date.from((Instant) fluxValue);
+                    } else if (fluxValue instanceof Duration) {
+                        nifiValue = ((Duration) fluxValue).get(ChronoUnit.NANOS);
+                    }
+
+                    DataType dataType = DataTypeUtils.inferDataType(nifiValue, RecordFieldType.STRING.getDataType());
+                    if (fluxValue.getClass().isArray()) {
+                        dataType =  RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.BYTE.getDataType());
+                    }
+
+                    fields.add(new RecordField(fieldName, dataType));
+                    values.put(fieldName, nifiValue);
+                }
+            });
+
+            return new MapRecord(new SimpleRecordSchema(fields), values);
         }
     }
 }

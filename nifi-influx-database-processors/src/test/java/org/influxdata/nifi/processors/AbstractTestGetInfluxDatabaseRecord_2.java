@@ -19,6 +19,7 @@ package org.influxdata.nifi.processors;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -28,9 +29,12 @@ import org.influxdata.client.QueryApi;
 import org.influxdata.client.domain.Query;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
+import org.influxdata.query.FluxRecord;
 
 import com.google.common.collect.Lists;
 import org.apache.nifi.reporting.InitializationException;
+import org.apache.nifi.serialization.record.ArrayListRecordWriter;
+import org.apache.nifi.serialization.record.RecordSchema;
 import org.apache.nifi.util.MockComponentLog;
 import org.apache.nifi.util.MockProcessContext;
 import org.apache.nifi.util.MockProcessorInitializationContext;
@@ -43,23 +47,25 @@ import org.mockito.stubbing.Answer;
 import static org.influxdata.nifi.services.InfluxDatabaseService_2.INFLUX_DB_ACCESS_TOKEN;
 
 /**
- * @author Jakub Bednar (bednar@github) (22/07/2019 08:11)
+ * @author Jakub Bednar (24/07/2019 08:18)
  */
-abstract class AbstractTestGetInfluxDatabaseSettings_2 {
+abstract class AbstractTestGetInfluxDatabaseRecord_2 {
 
     TestRunner runner;
+    MockComponentLog logger;
+
     Answer queryAnswer = invocation -> Void.class;
     Exception queryOnErrorValue = null;
-    List<String> queryOnResponseRecords = Lists.newArrayList();
-    MockComponentLog logger;
-    QueryApi mockQueryApi;
-    GetInfluxDatabase_2 processor;
+    List<FluxRecord> queryOnResponseRecords = Lists.newArrayList();
+
+    GetInfluxDatabaseRecord_2 processor;
+    ArrayListRecordWriter writer;
 
     @Before
     public void before() throws IOException, GeneralSecurityException, InitializationException {
 
         InfluxDBClient mockInfluxDBClient = Mockito.mock(InfluxDBClient.class);
-        mockQueryApi = Mockito.mock(QueryApi.class);
+        QueryApi mockQueryApi = Mockito.mock(QueryApi.class);
         Mockito.doAnswer(invocation -> mockQueryApi).when(mockInfluxDBClient).getQueryApi();
         Mockito.doAnswer(invocation -> {
             if (queryOnErrorValue != null) {
@@ -70,7 +76,7 @@ abstract class AbstractTestGetInfluxDatabaseSettings_2 {
 
             queryOnResponseRecords.forEach(record -> {
                 //noinspection unchecked
-                BiConsumer<Cancellable, String> onRecord = invocation.getArgumentAt(2, BiConsumer.class);
+                BiConsumer<Cancellable, FluxRecord> onRecord = invocation.getArgumentAt(2, BiConsumer.class);
                 onRecord.accept(Mockito.mock(Cancellable.class), record);
             });
 
@@ -86,14 +92,15 @@ abstract class AbstractTestGetInfluxDatabaseSettings_2 {
                     onComplete.run();
                 }
             }
-        }).when(mockQueryApi).queryRaw(Mockito.any(Query.class), Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any());
+        }).when(mockQueryApi).query(Mockito.any(Query.class), Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any(Runnable.class));
 
-        processor = Mockito.spy(new GetInfluxDatabase_2());
+        processor = Mockito.spy(new GetInfluxDatabaseRecord_2());
 
         runner = TestRunners.newTestRunner(processor);
-        runner.setProperty(GetInfluxDatabase_2.ORG, "my-org");
-        runner.setProperty(GetInfluxDatabase_2.QUERY, "from(bucket:\"my-bucket\") |> range(start: 0) |> last()");
-        runner.setProperty(GetInfluxDatabase_2.INFLUX_DB_SERVICE, "influxdb-service");
+        runner.setProperty(GetInfluxDatabaseRecord_2.ORG, "my-org");
+        runner.setProperty(GetInfluxDatabaseRecord_2.QUERY, "from(bucket:\"my-bucket\") |> range(start: 0) |> last()");
+        runner.setProperty(GetInfluxDatabaseRecord_2.INFLUX_DB_SERVICE, "influxdb-service");
+        runner.setProperty(GetInfluxDatabaseRecord_2.WRITER_FACTORY, "writer");
 
         InfluxDatabaseService_2 influxDatabaseService = Mockito.spy(new StandardInfluxDatabaseService_2());
         Mockito.doAnswer(invocation -> mockInfluxDBClient).when(influxDatabaseService).create();
@@ -102,10 +109,20 @@ abstract class AbstractTestGetInfluxDatabaseSettings_2 {
         runner.setProperty(influxDatabaseService, INFLUX_DB_ACCESS_TOKEN, "my-token");
         runner.enableControllerService(influxDatabaseService);
 
+        writer = new ArrayListRecordWriter(null){
+            @Override
+            public RecordSchema getSchema(final Map<String, String> variables, final RecordSchema readSchema) {
+                return readSchema;
+            }
+        };
+        runner.addControllerService("writer", writer);
+        runner.enableControllerService(writer);
+
         MockProcessContext context = new MockProcessContext(processor);
         MockProcessorInitializationContext initContext = new MockProcessorInitializationContext(processor, context);
         logger = initContext.getLogger();
         processor.initialize(initContext);
         processor.onScheduled(runner.getProcessContext());
+        processor.initWriterFactory(runner.getProcessContext());
     }
 }

@@ -21,7 +21,7 @@ import org.junit.Test;
 /**
  * @author Jakub Bednar (bednar@github) (22/07/2019 08:06)
  */
-public class TestGetInfluxDatabaseSettings_2 extends AbstractTestGetInfluxDatabaseSettings_2 {
+public class TestGetInfluxDatabaseSettings_2 extends AbstractTestGetInfluxDatabase_2 {
 
     @Test
     public void defaultSettingsValid() {

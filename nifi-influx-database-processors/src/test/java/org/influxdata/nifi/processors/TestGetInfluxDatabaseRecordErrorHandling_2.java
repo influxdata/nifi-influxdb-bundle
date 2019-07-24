@@ -34,9 +34,9 @@ import static org.influxdata.nifi.processors.Utils.createErrorResponse;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
 
 /**
- * @author Jakub Bednar (bednar@github) (23/07/2019 08:06)
+ * @author Jakub Bednar (24/07/2019 08:49)
  */
-public class TestGetInfluxDatabaseErrorHandling_2 extends AbstractTestGetInfluxDatabase_2 {
+public class TestGetInfluxDatabaseRecordErrorHandling_2  extends AbstractTestGetInfluxDatabaseRecord_2 {
 
     @Test
     public void socketTimeoutException() {

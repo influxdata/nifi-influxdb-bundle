@@ -10,15 +10,19 @@
 - [About this Project](#about-this-project)
 - [Installation](#installation)
 - [How To Use](#how-to-use)
-    - [PutInfluxDatabaseRecord for InfluxDB 1.x](#putinfluxdatabaserecord)
-    - [PutInfluxDatabaseRecord for InfluxDB 2.0](#putinfluxdatabaserecord_2)
-    - [PutInfluxDatabase for InfluxDB 1.x](#putinfluxdatabase)
-    - [PutInfluxDatabase for InfluxDB 2.0](#putinfluxdatabase_2)
-    - [GetInfluxDatabase for InfluxDB 2.0](#getinfluxdatabase_2)
+    - Writes
+        - [PutInfluxDatabaseRecord for InfluxDB 1.x](#putinfluxdatabaserecord)
+        - [PutInfluxDatabaseRecord for InfluxDB 2.0](#putinfluxdatabaserecord_2)
+        - [PutInfluxDatabase for InfluxDB 1.x](#putinfluxdatabase)
+        - [PutInfluxDatabase for InfluxDB 2.0](#putinfluxdatabase_2)
+    - Queries
+        - [GetInfluxDatabase for InfluxDB 2.0](#getinfluxdatabase_2)
+        - [GetInfluxDatabaseRecord for InfluxDB 2.0](#getinfluxdatabaserecord_2)
+    - Serializations
+        - [InfluxLineProtocolReader](#influxlineprotocolreader)
+        - [InfluxLineProtocolRecordSetWriter](#influxlineprotocolrecordsetwriter)
     - [InfluxDatabaseService for InfluxDB 1.x](#influxdatabaseservice)
     - [InfluxDatabaseService for InfluxDB 2.0](#influxdatabaseservice_2)
-    - [InfluxLineProtocolReader](#influxlineprotocolreader)
-    - [InfluxLineProtocolRecordSetWriter](#influxlineprotocolrecordsetwriter)
 - [Demo](#demo)
 - [Contributing](#contributing)
 - [License](#license)
@@ -296,6 +300,22 @@ Creates FlowFiles from records in InfluxDB 2.0 loaded by a user-specified Flux q
 | Dialect Annotations | Describing properties about the columns of the table. More than one can be supplied if comma separated. Allowable values: "group", "datatype", "default". |
 | **Dialect Comment Prefix** | Character prefixed to comment strings. |
 | **Dialect Date Time Format** | Format of timestamps. |
+| Results Per FlowFile | How many records to put into a FlowFile at once. The whole body will be treated as a CSV file. |
+| **Enable gzip compression** | Enable gzip compression for InfluxDB http request body |
+| **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
+
+### GetInfluxDatabaseRecord_2
+
+A record-based version of GetInfluxDatabase_2 that uses the Record writers to write the Flux result set.
+
+| Property | Description |
+| --- | --- |
+| **InfluxDB Controller Service** | A controller service that provides connection to InfluxDB |
+| **Record Writer** | The record writer to use to write the result sets |
+| **Organization** | Specifies the source organization |
+| **Query** | A valid Flux query to use to execute against InfluxDB |
+| **Dialect Date Time Format** | Format of timestamps. |
+| Results Per FlowFile | How many records to put into a FlowFile at once. The whole body will be treated as a set of Records. |
 | **Enable gzip compression** | Enable gzip compression for InfluxDB http request body |
 | **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
 

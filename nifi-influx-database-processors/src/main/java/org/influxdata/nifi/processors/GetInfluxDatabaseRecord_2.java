@@ -17,7 +17,6 @@
 package org.influxdata.nifi.processors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,17 +38,17 @@ import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 
 /**
- * @author Jakub Bednar (bednar@github) (19/07/2019 10:01)
+ * @author Jakub Bednar (23/07/2019 15:10)
  */
-@CapabilityDescription("Creates FlowFiles from records in InfluxDB 2.0 loaded by a user-specified Flux query.")
-@Tags({"influxdb", "measurement", "get", "fetch", "timeseries", "2.0", "flux"})
+@CapabilityDescription("A record-based version of GetInfluxDatabase_2 that uses the Record writers to write the Flux result set.")
+@Tags({"influxdb", "measurement", "get", "fetch", "record", "timeseries", "2.0", "flux"})
 @WritesAttributes({
         @WritesAttribute(
                 attribute = AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE,
                 description = "InfluxDB error message"),
 })
 @EventDriven
-public class GetInfluxDatabase_2 extends AbstractGetInfluxDatabase_2 {
+public class GetInfluxDatabaseRecord_2 extends AbstractGetInfluxDatabase_2 {
 
     private static final List<PropertyDescriptor> PROPERTY_DESCRIPTORS;
     private static final Set<Relationship> RELATIONSHIPS;
@@ -59,7 +58,7 @@ public class GetInfluxDatabase_2 extends AbstractGetInfluxDatabase_2 {
         RECORDS_PER_FLOWFILE = new PropertyDescriptor.Builder()
                 .name("influxdb-records-per-flowfile")
                 .displayName("Results Per FlowFile")
-                .description("How many records to put into a FlowFile at once. The whole body will be treated as a CSV file.")
+                .description("How many records to put into a FlowFile at once. The whole body will be treated as a set of Records.")
                 .required(false)
                 .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
                 .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
@@ -74,15 +73,12 @@ public class GetInfluxDatabase_2 extends AbstractGetInfluxDatabase_2 {
         final List<PropertyDescriptor> propertyDescriptors = new ArrayList<>();
 
         propertyDescriptors.add(INFLUX_DB_SERVICE);
+        propertyDescriptors.add(WRITER_FACTORY);
         propertyDescriptors.add(ORG);
 
         propertyDescriptors.add(QUERY);
 
         //Dialect
-        propertyDescriptors.add(DIALECT_HEADER);
-        propertyDescriptors.add(DIALECT_DELIMITER);
-        propertyDescriptors.add(DIALECT_ANNOTATIONS);
-        propertyDescriptors.add(DIALECT_COMMENT_PREFIX);
         propertyDescriptors.add(DIALECT_DATE_TIME_FORMAT);
 
         propertyDescriptors.add(RECORDS_PER_FLOWFILE);
@@ -105,26 +101,15 @@ public class GetInfluxDatabase_2 extends AbstractGetInfluxDatabase_2 {
     @Override
     protected Dialect prepareDialect(final ProcessContext context) {
 
-        boolean dialectHeader = context.getProperty(DIALECT_HEADER).asBoolean();
-        String dialectDelimiter = context.getProperty(DIALECT_DELIMITER).getValue();
-        String dialectCommentPrefix = context.getProperty(DIALECT_COMMENT_PREFIX).getValue();
         Dialect.DateTimeFormatEnum dialectTimeFormat = Dialect.DateTimeFormatEnum
                 .fromValue(context.getProperty(DIALECT_DATE_TIME_FORMAT).getValue());
 
-        List<Dialect.AnnotationsEnum> dialectAnnotations = new ArrayList<>();
-        String dialectAnnotationsValue = context.getProperty(DIALECT_ANNOTATIONS).getValue();
-        if (dialectAnnotationsValue != null && !dialectAnnotationsValue.isEmpty()) {
-            Arrays.stream(dialectAnnotationsValue.split(","))
-                    .filter(annotation -> annotation != null && !annotation.trim().isEmpty())
-                    .map(String::trim)
-                    .forEach(annotation -> dialectAnnotations.add(Dialect.AnnotationsEnum.fromValue(annotation.trim())));
-        }
-
-        return new Dialect()
-                .header(dialectHeader)
-                .delimiter(dialectDelimiter)
-                .commentPrefix(dialectCommentPrefix)
+        return new Dialect().header(true)
+                .delimiter(",")
+                .commentPrefix("#")
                 .dateTimeFormat(dialectTimeFormat)
-                .annotations(dialectAnnotations);
+                .addAnnotationsItem(Dialect.AnnotationsEnum.DATATYPE)
+                .addAnnotationsItem(Dialect.AnnotationsEnum.GROUP)
+                .addAnnotationsItem(Dialect.AnnotationsEnum.DEFAULT);
     }
 }

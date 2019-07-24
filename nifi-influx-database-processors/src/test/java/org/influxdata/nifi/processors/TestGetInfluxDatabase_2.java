@@ -32,7 +32,7 @@ import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProc
 /**
  * @author Jakub Bednar (23/07/2019 09:22)
  */
-public class TestGetInfluxDatabase_2 extends AbstractTestGetInfluxDatabaseSettings_2 {
+public class TestGetInfluxDatabase_2 extends AbstractTestGetInfluxDatabase_2 {
 
     @Test
     public void queryValue() {
