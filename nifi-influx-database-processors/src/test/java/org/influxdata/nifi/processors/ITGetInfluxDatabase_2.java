@@ -70,7 +70,7 @@ public class ITGetInfluxDatabase_2 extends AbstractITInfluxDB_2 {
     }
 
     @Test
-    public void moreRow() {
+    public void moreRows() {
 
         influxDBClient.getWriteApiBlocking().writeRecords(WritePrecision.NS, Arrays.asList(
                 "water,country=US,city=newark humidity=0.1 1",

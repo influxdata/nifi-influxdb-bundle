@@ -69,7 +69,7 @@ public class TestGetInfluxDatabaseRecord_2 extends AbstractTestGetInfluxDatabase
         Assert.assertEquals(RecordFieldType.DOUBLE, schema.getField("double_value").get().getDataType().getFieldType());
         Assert.assertEquals(RecordFieldType.ARRAY, schema.getField("base64Binary_value").get().getDataType().getFieldType());
         Assert.assertEquals(RecordFieldType.BYTE, ((ArrayDataType) schema.getField("base64Binary_value").get().getDataType()).getElementType().getFieldType());
-        Assert.assertEquals(RecordFieldType.DATE, schema.getField("instant_value").get().getDataType().getFieldType());
+        Assert.assertEquals(RecordFieldType.TIMESTAMP, schema.getField("instant_value").get().getDataType().getFieldType());
         Assert.assertEquals(RecordFieldType.LONG, schema.getField("duration_value").get().getDataType().getFieldType());
         Assert.assertEquals(RecordFieldType.STRING, schema.getField("string_value").get().getDataType().getFieldType());
 

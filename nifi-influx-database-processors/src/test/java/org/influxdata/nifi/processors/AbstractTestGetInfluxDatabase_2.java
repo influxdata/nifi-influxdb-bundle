@@ -109,5 +109,6 @@ abstract class AbstractTestGetInfluxDatabase_2 {
         logger = initContext.getLogger();
         processor.initialize(initContext);
         processor.onScheduled(runner.getProcessContext());
+        processor.initWriterFactory(runner.getProcessContext());
     }
 }

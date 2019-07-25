@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
-import java.util.function.BiConsumer;
 
 import org.influxdata.Cancellable;
 import org.influxdata.client.domain.Dialect;
@@ -340,7 +339,6 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
             if (writer == null) {
                 final RecordSchema recordSchema = record.getSchema();
                 try {
-//                    final RecordSchema writeSchema = writerFactory.getSchema(new HashMap<>(), recordSchema);
                     out = session.write(flowFile);
                     writer = writerFactory.createWriter(getLogger(), recordSchema, out);
                     writer.beginRecordSet();
@@ -429,29 +427,26 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
             Map<String, Object> values = new LinkedHashMap<>();
             List<RecordField> fields = new ArrayList<>();
 
-            fluxRecord.getValues().forEach(new BiConsumer<String, Object>() {
-                @Override
-                public void accept(final String fieldName, final Object fluxValue) {
+            fluxRecord.getValues().forEach((fieldName, fluxValue) -> {
 
-                    if (fluxValue == null) {
-                        return;
-                    }
-
-                    Object nifiValue = fluxValue;
-                    if (fluxValue instanceof Instant) {
-                        nifiValue = java.util.Date.from((Instant) fluxValue);
-                    } else if (fluxValue instanceof Duration) {
-                        nifiValue = ((Duration) fluxValue).get(ChronoUnit.NANOS);
-                    }
-
-                    DataType dataType = DataTypeUtils.inferDataType(nifiValue, RecordFieldType.STRING.getDataType());
-                    if (fluxValue.getClass().isArray()) {
-                        dataType =  RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.BYTE.getDataType());
-                    }
-
-                    fields.add(new RecordField(fieldName, dataType));
-                    values.put(fieldName, nifiValue);
+                if (fluxValue == null) {
+                    return;
                 }
+
+                Object nifiValue = fluxValue;
+                if (fluxValue instanceof Instant) {
+                    nifiValue = java.sql.Timestamp.from((Instant) fluxValue);
+                } else if (fluxValue instanceof Duration) {
+                    nifiValue = ((Duration) fluxValue).get(ChronoUnit.NANOS);
+                }
+
+                DataType dataType = DataTypeUtils.inferDataType(nifiValue, RecordFieldType.STRING.getDataType());
+                if (fluxValue.getClass().isArray()) {
+                    dataType =  RecordFieldType.ARRAY.getArrayDataType(RecordFieldType.BYTE.getDataType());
+                }
+
+                fields.add(new RecordField(fieldName, dataType));
+                values.put(fieldName, nifiValue);
             });
 
             return new MapRecord(new SimpleRecordSchema(fields), values);
