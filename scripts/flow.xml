@@ -38,14 +38,31 @@
 
 As NiFi user I want to put my data (complex json structure) to
 InfluxDB in order to work with time series.
-   * AC1: Count twitter messages, grouping by keywords and languages
+  
+* AC1: Count twitter messages, grouping by keywords and languages
 
 </value>
     </label>
     <label>
+      <id>280850da-016c-1000-bb1f-063422ae1933</id>
+      <position x="1149.274867625133" y="-17.059789260861407"/>
+      <size height="172.25083923339844" width="415.77381896972656"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 4 User Story:
+   
+
+As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
+HTTP endpoint.
+  
+* AC1: Transforming Flux Result to JSON - data for HTML widget
+* AC2: Transforming Flux Result to XML - remote API for server application</value>
+    </label>
+    <label>
       <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
       <position x="268.0609696699687" y="-600.9202250695664"/>
-      <size height="561.7161407470703" width="471.0166015625"/>
+      <size height="761.6532745361328" width="473.57989501953125"/>
       <styles>
         <style name="font-size">14px</style>
       </styles>
@@ -60,14 +77,17 @@ integration we implemented following NiFi extensions:
 processors in flow can reuse one InfluxDB connection configuration 
 (url, credentials)
   
-* PutInfluxDatabase, PutInfluxDatabase_2 – processor
+* PutInfluxDatabase, PutInfluxDatabase_2 – processors
 that puts InfluxDB Line Protocol data into InfluxDB
   
-* PutInfluxDatabaseRecord, PutInfluxDatabaseRecord_2 – processor
+* PutInfluxDatabaseRecord, PutInfluxDatabaseRecord_2 – processors
 that puts structured data (json, csv, text, avro) into InfluxDB 
 using NiFi Record readers/writers.
  
-  
+* GetInfluxDatabase_2, GetInfluxDatabaseRecord_2  – processors that
+are able use Flux query to get records from InfluxDB 2.0
+ 
+
 * InfluxLineProtocolReader – reader parses the InfluxDB Line Protocol 
 into NiFi Record. This allows filtering, partitioning line protocol data in 
 NiFi flow produced by Telegraf.
@@ -77,7 +97,7 @@ Set as Line Protocol.</value>
     </label>
     <label>
       <id>01631000-efa4-184f-e581-a743d2fe812a</id>
-      <position x="1151.566401798875" y="-208.0879260307986"/>
+      <position x="1149.66674359575" y="-208.8424884087283"/>
       <size height="170.00000762939453" width="416.8000030517578"/>
       <styles>
         <style name="font-size">12px</style>
@@ -100,12 +120,17 @@ As NiFi user I want to store LineProtocol date into multiple environments
 
 As NiFi user I want to reliably monitor multiple environments
 and be able to write data selectively.
-
-
+  
 * AC1: Partition and route metrics data using NiFi "Record Path language"
    by type of measurement (name of container)
 </value>
     </label>
+    <processGroup>
+      <id>2807fffd-016c-1000-ff4c-eb46f296840c</id>
+      <name>Exposing InfluxDB 2.0</name>
+      <position x="751.3459817261955" y="-15.869125218553108"/>
+      <comment/>
+    </processGroup>
     <processGroup>
       <id>f84fd79f-0162-1000-c9dc-9ef8abe709be</id>
       <name>TwitterInfluxDBDemo</name>
@@ -279,19 +304,19 @@ and be able to write data selectively.
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>enc{cf0d3b02ff51a01b55928b6fca0ef36caf8c43add1d1a4c614b5541664187b4860369d06c517bd30a77558f6dd9524d7}</value>
+          <value>enc{54d6ca3219232be083c8468b70e924c02fc5b1a8a5d8cf07a5199d32e54a87a3ba47b7a1d2e5b4680df3374f5b86c041}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{58366f058cc4fef53e259eaf78ddfcd42a142426a20116daefe0c1e883b090c2052acfed0d7114df05e9ab88b47b910c2c1482d00e3c3ebd8c2a3fe8ac2aae6b1aecdc8b31c9258bba003f111e604cc9}</value>
+          <value>enc{87fbfbbbaee0221154689829d87d4e4d836530bba8512b09e0f99d9bc732b92de7b73d1b42741dabb95ffb49326009523536e1a25d8e281eeb469249445eae0913753b50ea721e446ddbfcd3feec579c}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{df088950a5e907d2d7fd4ca3f020c9f3d49db6f92404653adbb9aae1f15863a6a76655013279154af96898031deb4b83c982a9fef758201088c287c433f83c009bcfa55f03b411567b8e675804bb498a}</value>
+          <value>enc{3c2af736c0ae5b3ebc0225a64474ff0f558301970cee9445829811c0ceb02052f5349b230cfaea14b7f7f56d0ab7cfc47910b8e902e950de26be2702e873d4141f89446d9862c62e13c7922d07f6de91}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{2a865263ed02a4d379ec03eaa6143627b64ba2293e8dc47a81acf08b54240e5d62ba4c8820b2e0e8d1b7bf0910eab92d51df973f198c21b3556eb5a02500ded5}</value>
+          <value>enc{5eb30d0d784628c2800f50bb84c965452c3dd618cd58f87646f2e8ead207725de236d5500db979e6024de7e43bbbb469f78efae609b59fa5a5e41a950453fb57}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -584,7 +609,7 @@ and be able to write data selectively.
     <processGroup>
       <id>0d3a59b3-016b-1000-3219-73ec601dca9c</id>
       <name>KafkaDemo</name>
-      <position x="754.0775756835938" y="-211.1091766357422"/>
+      <position x="751.6052856445312" y="-211.1091766357422"/>
       <comment/>
       <processor>
         <id>bd0efd4c-3086-3c99-dc9e-5811b2c3ca87</id>
@@ -646,7 +671,7 @@ and be able to write data selectively.
       <processor>
         <id>0d7ad789-016b-1000-952f-d20e18a0390b</id>
         <name>ErrorLog</name>
-        <position x="1051.1138914982193" y="963.886468413549"/>
+        <position x="1047.7962645450943" y="963.886468413549"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.PutFile</class>
@@ -698,7 +723,7 @@ and be able to write data selectively.
       <processor>
         <id>0da4cb96-016b-1000-471a-93377cc20d0d</id>
         <name>PublishKafka_0_10</name>
-        <position x="1403.560119525563" y="662.185296538549"/>
+        <position x="1047.893615619313" y="682.185540679174"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.kafka.pubsub.PublishKafka_0_10</class>
@@ -824,7 +849,7 @@ and be able to write data selectively.
       <processor>
         <id>9993347a-5fbd-1c2b-a6cf-829e9b16c88d</id>
         <name>PutInfluxDatabase</name>
-        <position x="709.0254515568131" y="662.4194884330802"/>
+        <position x="1573.154113666188" y="683.2148985893302"/>
         <styles/>
         <comment/>
         <class>org.influxdata.nifi.processors.PutInfluxDatabase</class>
@@ -885,7 +910,7 @@ and be able to write data selectively.
       <processor>
         <id>dfceea1c-016b-1000-b2ce-2d172775840b</id>
         <name>PutInfluxDatabase_2</name>
-        <position x="232.64064489119914" y="661.9613344036944"/>
+        <position x="544.1536453794804" y="681.0541688763507"/>
         <styles/>
         <comment/>
         <class>org.influxdata.nifi.processors.PutInfluxDatabase_2</class>
@@ -976,9 +1001,7 @@ and be able to write data selectively.
       <connection>
         <id>dfcf19c8-016b-1000-e323-ae40deca4ffd</id>
         <name/>
-        <bendPoints>
-          <bendPoint x="733.6111450195312" y="875.0322875976562"/>
-        </bendPoints>
+        <bendPoints/>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>dfceea1c-016b-1000-b2ce-2d172775840b</sourceId>
@@ -1020,8 +1043,8 @@ and be able to write data selectively.
         <id>dfcf3302-016b-1000-50de-901254d75111</id>
         <name/>
         <bendPoints>
-          <bendPoint x="332.96794591658977" y="861.9639589154132"/>
-          <bendPoint x="418.41911779158977" y="873.2874452435382"/>
+          <bendPoint x="716.4171036314335" y="612.7235414349444"/>
+          <bendPoint x="664.8470352720585" y="608.0611268841632"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -1032,6 +1055,30 @@ and be able to write data selectively.
         <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>retry</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2cbdd209-016c-1000-1744-d4490f5f34e4</id>
+        <name/>
+        <bendPoints>
+          <bendPoint x="1680.3350830078125" y="461.7422790527344"/>
+          <bendPoint x="1945.09326171875" y="461.87225341796875"/>
+          <bendPoint x="1945.5025634765625" y="1025.9285888671875"/>
+        </bendPoints>
+        <labelIndex>0</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>99933473-5fbd-1c2b-1678-b21f261c56f6</sourceId>
+        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>0d7ad789-016b-1000-952f-d20e18a0390b</destinationId>
+        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -1062,9 +1109,7 @@ and be able to write data selectively.
       <connection>
         <id>dfcfc8bf-016b-1000-bd12-c3b58f52ab0f</id>
         <name/>
-        <bendPoints>
-          <bendPoint x="407.39166259765625" y="459.6017761230469"/>
-        </bendPoints>
+        <bendPoints/>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>99933473-5fbd-1c2b-1678-b21f261c56f6</sourceId>
@@ -1122,31 +1167,11 @@ and be able to write data selectively.
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>0d7bac9c-016b-1000-8f39-f4667f6eb4ee</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>99933473-5fbd-1c2b-1678-b21f261c56f6</sourceId>
-        <sourceGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>0d7ad789-016b-1000-952f-d20e18a0390b</destinationId>
-        <destinationGroupId>0d3a59b3-016b-1000-3219-73ec601dca9c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
         <id>9993347e-5fbd-1c2b-e9aa-62ed6628b6f2</id>
         <name/>
         <bendPoints>
-          <bendPoint x="659.1967772404068" y="712.8277831108146"/>
-          <bendPoint x="719.8469847599381" y="603.0605711967521"/>
+          <bendPoint x="1734.5665282169693" y="618.2969603569084"/>
+          <bendPoint x="1775.805480853688" y="607.8701415092521"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -2299,7 +2324,7 @@ and be able to write data selectively.
       </property>
       <property>
         <name>influxdb-token</name>
-        <value>enc{f592fd40ac9e90e1af19400b9b25001cc1d58061e8714d873ded9a462f174d5b}</value>
+        <value>enc{6860a4902706f531c8928a5893a0d2d82f06787290568f33749c18b18fe885e5}</value>
       </property>
     </controllerService>
     <controllerService>
