@@ -129,7 +129,8 @@ public class TestGetInfluxDatabaseRecordErrorHandling_2  extends AbstractTestGet
         // First is formatted message, Second Stack Trace
         Assert.assertEquals(2, errors.size());
 
-        Assert.assertEquals(errors.get(0).getArgs()[2], message);
+        Assert.assertTrue(errors.get(0).getArgs()[2].toString().contains("from(bucket:\"my-bucket\") |> range(start: 0) |> last()"));
+        Assert.assertEquals(errors.get(1).getThrowable().getLocalizedMessage(), message);
         Assert.assertTrue(exception.getClass().isAssignableFrom(errors.get(1).getThrowable().getClass()));
     }
 }

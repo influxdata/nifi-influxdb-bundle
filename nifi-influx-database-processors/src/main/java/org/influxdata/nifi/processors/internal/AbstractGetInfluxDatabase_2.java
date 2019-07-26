@@ -206,11 +206,10 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
             recordsPerFlowFile = context.getProperty(RECORDS_PER_FLOWFILE).evaluateAttributeExpressions().asLong();
         }
 
+        Query query = new Query()
+                .query(flux)
+                .dialect(dialect);
         try {
-
-            Query query = new Query()
-                    .query(flux)
-                    .dialect(dialect);
 
             QueryProcessor processor = new QueryProcessor(org, query, recordsPerFlowFile, flowFile, createdFlowFile, context, session);
 
@@ -222,13 +221,14 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
             }
 
         } catch (Exception e) {
-            catchException(e, Collections.singletonList(flowFile), context, session);
+            catchException(query, e, Collections.singletonList(flowFile), context, session);
         }
     }
 
     protected abstract Dialect prepareDialect(final ProcessContext context);
 
-    private void catchException(final Throwable e,
+    private void catchException(final Query query,
+                                final Throwable e,
                                 final List<FlowFile> flowFiles,
                                 final ProcessContext context,
                                 final ProcessSession session) {
@@ -259,7 +259,7 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
             session.transfer(flowFile, relationship);
         }
 
-        getLogger().error(message, new Object[]{status, e.getLocalizedMessage()}, e);
+        getLogger().error(message, new Object[]{status, query}, e);
         context.yield();
     }
 
@@ -310,7 +310,7 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
 
                 countDownLatch.await();
             } catch (Exception e) {
-                catchException(e, flowFiles, context, session);
+                catchException(query, e, flowFiles, context, session);
             }
         }
 
@@ -323,7 +323,7 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
 
                 countDownLatch.await();
             } catch (Exception e) {
-                catchException(e, flowFiles, context, session);
+                catchException(query, e, flowFiles, context, session);
             }
         }
 
@@ -386,7 +386,7 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
             stopWatch.stop();
             closeRecordWriter();
 
-            catchException(throwable, flowFiles, context, session);
+            catchException(query, throwable, flowFiles, context, session);
 
             countDownLatch.countDown();
         }
