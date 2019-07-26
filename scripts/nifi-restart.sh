@@ -163,6 +163,8 @@ docker run \
     --publish 8080:8080 \
 	--publish 8007:8000 \
 	--publish 6666:6666 \
+	--publish 8123:8123 \
+	--publish 8234:8234 \
 	--link=influxdb \
 	--link=influxdb_v2 \
 	--link=kafka \

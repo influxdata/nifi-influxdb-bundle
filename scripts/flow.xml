@@ -27,37 +27,21 @@
     <position x="0.0" y="0.0"/>
     <comment/>
     <label>
-      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
-      <position x="1145.261012394578" y="-596.720167086168"/>
-      <size height="163.47393798828125" width="414.004150390625"/>
+      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
+      <position x="1145.4612992598124" y="-407.1201983696658"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
       <styles>
         <style name="font-size">12px</style>
       </styles>
-      <value>Demo 1 User Story:
-
-
-As NiFi user I want to put my data (complex json structure) to
-InfluxDB in order to work with time series.
+      <value>Demo 2 User Story:
   
-* AC1: Count twitter messages, grouping by keywords and languages
 
+As NiFi user I want to reliably monitor multiple environments
+and be able to write data selectively.
+  
+* AC1: Partition and route metrics data using NiFi "Record Path language"
+   by type of measurement (name of container)
 </value>
-    </label>
-    <label>
-      <id>280850da-016c-1000-bb1f-063422ae1933</id>
-      <position x="1149.274867625133" y="-17.059789260861407"/>
-      <size height="172.25083923339844" width="415.77381896972656"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 4 User Story:
-   
-
-As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
-HTTP endpoint.
-  
-* AC1: Transforming Flux Result to JSON - data for HTML widget
-* AC2: Transforming Flux Result to XML - remote API for server application</value>
     </label>
     <label>
       <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
@@ -109,20 +93,37 @@ As NiFi user I want to store LineProtocol date into multiple environments
  - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
     </label>
     <label>
-      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
-      <position x="1145.4612992598124" y="-407.1201983696658"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
+      <id>280850da-016c-1000-bb1f-063422ae1933</id>
+      <position x="1149.274867625133" y="-17.059789260861407"/>
+      <size height="172.25083923339844" width="415.77381896972656"/>
       <styles>
         <style name="font-size">12px</style>
       </styles>
-      <value>Demo 2 User Story:
-  
+      <value>Demo 4 User Story:
+   
 
-As NiFi user I want to reliably monitor multiple environments
-and be able to write data selectively.
+As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
+HTTP endpoint.
   
-* AC1: Partition and route metrics data using NiFi "Record Path language"
-   by type of measurement (name of container)
+* AC1: Exposing a result of static Flux Query as data for HTML widget
+* AC2: Transforming Flux Result to XML or JSON - remote API
+ for server application</value>
+    </label>
+    <label>
+      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
+      <position x="1145.261012394578" y="-596.720167086168"/>
+      <size height="163.47393798828125" width="414.004150390625"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 1 User Story:
+
+
+As NiFi user I want to put my data (complex json structure) to
+InfluxDB in order to work with time series.
+  
+* AC1: Count twitter messages, grouping by keywords and languages
+
 </value>
     </label>
     <processGroup>
@@ -130,6 +131,383 @@ and be able to write data selectively.
       <name>Exposing InfluxDB 2.0</name>
       <position x="751.3459817261955" y="-15.869125218553108"/>
       <comment/>
+      <processor>
+        <id>2cc7f304-016c-1000-4465-8b3735ddd138</id>
+        <name>GetLastTweetHttpRequest</name>
+        <position x="517.0000007746532" y="72.99998339115086"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.HandleHttpRequest</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Listening Port</name>
+          <value>8123</value>
+        </property>
+        <property>
+          <name>Hostname</name>
+        </property>
+        <property>
+          <name>SSL Context Service</name>
+        </property>
+        <property>
+          <name>HTTP Context Map</name>
+          <value>2ccadaf3-016c-1000-3585-f572bed12b5f</value>
+        </property>
+        <property>
+          <name>Allowed Paths</name>
+        </property>
+        <property>
+          <name>Default URL Character Set</name>
+          <value>UTF-8</value>
+        </property>
+        <property>
+          <name>Allow GET</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>Allow POST</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Allow PUT</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Allow DELETE</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Allow HEAD</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Allow OPTIONS</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Additional HTTP Methods</name>
+        </property>
+        <property>
+          <name>Client Authentication</name>
+          <value>No Authentication</value>
+        </property>
+        <property>
+          <name>container-queue-size</name>
+          <value>50</value>
+        </property>
+        <property>
+          <name>multipart-request-max-size</name>
+          <value>1 MB</value>
+        </property>
+        <property>
+          <name>multipart-read-buffer-size</name>
+          <value>512 KB</value>
+        </property>
+      </processor>
+      <processor>
+        <id>2cc8621f-016c-1000-e58f-c709476d6c4b</id>
+        <name>GetInfluxDatabase_2</name>
+        <position x="524.0000007746532" y="310.99998339115086"/>
+        <styles/>
+        <comment/>
+        <class>org.influxdata.nifi.processors.GetInfluxDatabase_2</class>
+        <bundle>
+          <group>org.influxdata.nifi</group>
+          <artifact>nifi-influx-database-nar</artifact>
+          <version>1.2-SNAPSHOT</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>influxdb-service</name>
+          <value>fe4e410d-016b-1000-f0e5-c2e5647eb06b</value>
+        </property>
+        <property>
+          <name>influxdb-org</name>
+          <value>04374febbb552000</value>
+        </property>
+        <property>
+          <name>influxdb-flux</name>
+          <value>from(bucket: "my-bucket")
+  |&gt; range(start: 0)
+  |&gt; filter(fn: (r) =&gt; r._measurement == "tweets")
+  |&gt; drop(columns: ["keyword", "lang", "user_verified"])
+  |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+  |&gt; limit(n:1)
+  |&gt; keep(columns: ["tweet_id", "screen_name", "text"])</value>
+        </property>
+        <property>
+          <name>influxdb-dialect-header</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>influxdb-dialect-delimiter</name>
+          <value>,</value>
+        </property>
+        <property>
+          <name>influxdb-dialect-annotations</name>
+        </property>
+        <property>
+          <name>influxdb-dialect-commentPrefix</name>
+          <value>#</value>
+        </property>
+        <property>
+          <name>influxdb-dialect-dateTimeFormat</name>
+          <value>RFC3339</value>
+        </property>
+        <property>
+          <name>influxdb-records-per-flowfile</name>
+        </property>
+        <property>
+          <name>influxdb-enable-gzip</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>influxdb-log-level</name>
+          <value>BODY</value>
+        </property>
+      </processor>
+      <processor>
+        <id>2cc96734-016c-1000-5a86-6dd317f959db</id>
+        <name>ErrorLog</name>
+        <position x="-113.99999922534676" y="391.99998339115086"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.PutFile</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Directory</name>
+          <value>/opt/nifi/influx-err</value>
+        </property>
+        <property>
+          <name>Conflict Resolution Strategy</name>
+          <value>ignore</value>
+        </property>
+        <property>
+          <name>Create Missing Directories</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>Maximum File Count</name>
+        </property>
+        <property>
+          <name>Last Modified Time</name>
+        </property>
+        <property>
+          <name>Permissions</name>
+        </property>
+        <property>
+          <name>Owner</name>
+        </property>
+        <property>
+          <name>Group</name>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+      </processor>
+      <processor>
+        <id>2cc814ff-016c-1000-7d44-0e277649be12</id>
+        <name>GetLastTweetResponse</name>
+        <position x="522.0000007746532" y="554.9999833911509"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.HandleHttpResponse</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>HTTP Status Code</name>
+          <value>200</value>
+        </property>
+        <property>
+          <name>HTTP Context Map</name>
+          <value>2ccadaf3-016c-1000-3585-f572bed12b5f</value>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      </processor>
+      <label>
+        <id>2d482d5d-016c-1000-847d-197f5090d957</id>
+        <position x="62.500000774653245" y="80.99998339115086"/>
+        <size height="99.0" width="390.0"/>
+        <styles>
+          <style name="font-size">14px</style>
+        </styles>
+        <value>Display last Tweet about Bitcoin or Ethereum:
+  
+- curl -i -X GET http://localhost:8123
+- browser http://localhost:8123</value>
+      </label>
+      <connection>
+        <id>2d1a1f70-016c-1000-7838-0ecc90ff64e8</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2cc814ff-016c-1000-7d44-0e277649be12</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2cc96734-016c-1000-5a86-6dd317f959db</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2cc9c959-016c-1000-dd69-205480841d8a</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2cc8621f-016c-1000-e58f-c709476d6c4b</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2cc96734-016c-1000-5a86-6dd317f959db</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2cc88cab-016c-1000-7a9a-cd441779b43a</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2cc7f304-016c-1000-4465-8b3735ddd138</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2cc8621f-016c-1000-e58f-c709476d6c4b</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2cc8aebb-016c-1000-2942-9f646d6a1b6f</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2cc8621f-016c-1000-e58f-c709476d6c4b</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2cc814ff-016c-1000-7d44-0e277649be12</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2cc8d671-016c-1000-7522-66d4f6881035</id>
+        <name/>
+        <bendPoints>
+          <bendPoint x="987.0000007746532" y="350.99998339115086"/>
+          <bendPoint x="987.0000007746532" y="400.99998339115086"/>
+        </bendPoints>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2cc8621f-016c-1000-e58f-c709476d6c4b</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2cc8621f-016c-1000-e58f-c709476d6c4b</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>retry</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <controllerService>
+        <id>2ccadaf3-016c-1000-3585-f572bed12b5f</id>
+        <name>IOTDevicesHttpContextMap</name>
+        <comment/>
+        <class>org.apache.nifi.http.StandardHttpContextMap</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-http-context-map-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <enabled>true</enabled>
+        <property>
+          <name>Maximum Outstanding Requests</name>
+          <value>5000</value>
+        </property>
+        <property>
+          <name>Request Expiration</name>
+          <value>1 min</value>
+        </property>
+      </controllerService>
     </processGroup>
     <processGroup>
       <id>f84fd79f-0162-1000-c9dc-9ef8abe709be</id>
@@ -304,19 +682,19 @@ and be able to write data selectively.
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>enc{54d6ca3219232be083c8468b70e924c02fc5b1a8a5d8cf07a5199d32e54a87a3ba47b7a1d2e5b4680df3374f5b86c041}</value>
+          <value>enc{a56c6d495a1987aef4ce9c205ca4e94a4588b14fc7c8cf2fdd56687130d4b84c88016d82dae87641ac0094c969dd216f}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{87fbfbbbaee0221154689829d87d4e4d836530bba8512b09e0f99d9bc732b92de7b73d1b42741dabb95ffb49326009523536e1a25d8e281eeb469249445eae0913753b50ea721e446ddbfcd3feec579c}</value>
+          <value>enc{731368f8c1d31b499268b924d1e764ecf490814bd968e7afbdb33146c92b7c0f47c09c39d08140fb05b708aef754764d93d0ef3eaaadefa54fa0d2219b38a0133a12fda5702afb23db65aecd8a26a75b}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{3c2af736c0ae5b3ebc0225a64474ff0f558301970cee9445829811c0ceb02052f5349b230cfaea14b7f7f56d0ab7cfc47910b8e902e950de26be2702e873d4141f89446d9862c62e13c7922d07f6de91}</value>
+          <value>enc{c1cda67342bc14a6364fb02ee22c1a517ce42f186377d827c03dd75f32f05a5d8af0373bdf06b78bd6221deb89c0f2d536e3f2647d57e121349e73e3b28bf928c5d5a3d36afeabb48336af285eb8afca}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{5eb30d0d784628c2800f50bb84c965452c3dd618cd58f87646f2e8ead207725de236d5500db979e6024de7e43bbbb469f78efae609b59fa5a5e41a950453fb57}</value>
+          <value>enc{23b9239e5579b135659895cfaf71695875267f67a731d5080e8619a5fe598f0979b296113d31c67da3d0b7a1833404231fc18481250eb1480f8fd5e1a949d70e}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -2324,7 +2702,7 @@ and be able to write data selectively.
       </property>
       <property>
         <name>influxdb-token</name>
-        <value>enc{6860a4902706f531c8928a5893a0d2d82f06787290568f33749c18b18fe885e5}</value>
+        <value>enc{1da7b69d156cf4b074ff8283840ec4269622fdeca672262101531a3bb3258cf6}</value>
       </property>
     </controllerService>
     <controllerService>
