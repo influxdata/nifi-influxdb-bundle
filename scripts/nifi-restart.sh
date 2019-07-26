@@ -147,11 +147,15 @@ echo
 echo "Build Apache NiFi with demo..."
 echo
 
-gzip < ${SCRIPT_PATH}/flow.xml > ${SCRIPT_PATH}/flow.xml.gz
+ORGID=$(docker exec -it influxdb_v2 influx org find -t my-token | grep my-org  | awk '{ print $1 }')
+cp "${SCRIPT_PATH}"/flow.xml "${SCRIPT_PATH}"/flow.edited.xml
+sed -i.backup "s/influxdb-org-replacement-id/${ORGID}/g" "${SCRIPT_PATH}"/flow.edited.xml
+gzip < "${SCRIPT_PATH}"/flow.edited.xml > "${SCRIPT_PATH}"/flow.xml.gz
+
 # docker cp nifi:/opt/nifi/nifi-current/conf/flow.xml.gz scripts/
 # gunzip -f scripts/flow.xml.gz
 
-docker build -t nifi -f ${SCRIPT_PATH}/Dockerfile --build-arg NIFI_IMAGE=${NIFI_IMAGE} .
+docker build -t nifi -f "${SCRIPT_PATH}"/Dockerfile --build-arg NIFI_IMAGE="${NIFI_IMAGE}" .
 
 echo
 echo "Starting Apache NiFi..."
@@ -181,7 +185,7 @@ docker run \
     --name=telegraf \
     --net=container:nifi \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v ${SCRIPT_PATH}/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
+    -v "${SCRIPT_PATH}"/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
     ${TELEGRAF_IMAGE}
 
 echo

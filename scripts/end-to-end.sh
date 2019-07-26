@@ -157,3 +157,16 @@ else
     echo "> check: fail..."  ${nifi_logs_v2}
     exit 1
 fi
+
+echo
+echo "Get last Tweet about Bitcoin or Ethereum by:"
+echo "    curl -i -X GET http://localhost:8123"
+echo
+GetInfluxDatabase_2=$(curl -L http://localhost:8123 -o /dev/null -w '%{http_code}\n' -s)
+
+if [[ ${GetInfluxDatabase_2} == 200 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  "${GetInfluxDatabase_2}"
+    exit 1
+fi

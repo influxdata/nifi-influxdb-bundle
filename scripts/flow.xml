@@ -27,6 +27,23 @@
     <position x="0.0" y="0.0"/>
     <comment/>
     <label>
+      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
+      <position x="1145.261012394578" y="-596.720167086168"/>
+      <size height="163.47393798828125" width="414.004150390625"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 1 User Story:
+
+
+As NiFi user I want to put my data (complex json structure) to
+InfluxDB in order to work with time series.
+  
+* AC1: Count twitter messages, grouping by keywords and languages
+
+</value>
+    </label>
+    <label>
       <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
       <position x="1145.4612992598124" y="-407.1201983696658"/>
       <size height="170.00000762939453" width="416.8000030517578"/>
@@ -42,6 +59,23 @@ and be able to write data selectively.
 * AC1: Partition and route metrics data using NiFi "Record Path language"
    by type of measurement (name of container)
 </value>
+    </label>
+    <label>
+      <id>280850da-016c-1000-bb1f-063422ae1933</id>
+      <position x="1149.274867625133" y="-17.059789260861407"/>
+      <size height="172.25083923339844" width="415.77381896972656"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 4 User Story:
+   
+
+As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
+HTTP endpoint.
+  
+* AC1: Exposing a result of static Flux Query as data for HTML widget
+* AC2: Transforming Flux Result to XML or JSON - remote API
+ for server application</value>
     </label>
     <label>
       <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
@@ -92,40 +126,6 @@ Set as Line Protocol.</value>
 As NiFi user I want to store LineProtocol date into multiple environments
  - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
     </label>
-    <label>
-      <id>280850da-016c-1000-bb1f-063422ae1933</id>
-      <position x="1149.274867625133" y="-17.059789260861407"/>
-      <size height="172.25083923339844" width="415.77381896972656"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 4 User Story:
-   
-
-As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
-HTTP endpoint.
-  
-* AC1: Exposing a result of static Flux Query as data for HTML widget
-* AC2: Transforming Flux Result to XML or JSON - remote API
- for server application</value>
-    </label>
-    <label>
-      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
-      <position x="1145.261012394578" y="-596.720167086168"/>
-      <size height="163.47393798828125" width="414.004150390625"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 1 User Story:
-
-
-As NiFi user I want to put my data (complex json structure) to
-InfluxDB in order to work with time series.
-  
-* AC1: Count twitter messages, grouping by keywords and languages
-
-</value>
-    </label>
     <processGroup>
       <id>2807fffd-016c-1000-ff4c-eb46f296840c</id>
       <name>Exposing InfluxDB 2.0</name>
@@ -134,7 +134,7 @@ InfluxDB in order to work with time series.
       <processor>
         <id>2cc7f304-016c-1000-4465-8b3735ddd138</id>
         <name>GetLastTweetHttpRequest</name>
-        <position x="517.0000007746532" y="72.99998339115086"/>
+        <position x="522.9916999934032" y="73.99859484134618"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.HandleHttpRequest</class>
@@ -246,7 +246,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>influxdb-org</name>
-          <value>04374febbb552000</value>
+          <value>influxdb-org-replacement-id</value>
         </property>
         <property>
           <name>influxdb-flux</name>
@@ -286,13 +286,13 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>influxdb-log-level</name>
-          <value>BODY</value>
+          <value>NONE</value>
         </property>
       </processor>
       <processor>
         <id>2cc96734-016c-1000-5a86-6dd317f959db</id>
         <name>ErrorLog</name>
-        <position x="-113.99999922534676" y="391.99998339115086"/>
+        <position x="573.0000007746532" y="830.9999833911509"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.PutFile</class>
@@ -342,9 +342,55 @@ InfluxDB in order to work with time series.
         <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <processor>
+        <id>016c1004-14ff-1cc8-92a9-fdb3b774af08</id>
+        <name>AttributesToCSV</name>
+        <position x="1201.7394661323692" y="308.4530191826416"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.AttributesToCSV</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>attribute-list</name>
+          <value>influxdb.error.message</value>
+        </property>
+        <property>
+          <name>attributes-regex</name>
+        </property>
+        <property>
+          <name>destination</name>
+          <value>flowfile-content</value>
+        </property>
+        <property>
+          <name>include-core-attributes</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>null-value</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>include-schema</name>
+          <value>false</value>
+        </property>
+      </processor>
+      <processor>
         <id>2cc814ff-016c-1000-7d44-0e277649be12</id>
-        <name>GetLastTweetResponse</name>
-        <position x="522.0000007746532" y="554.9999833911509"/>
+        <name>GetLastTweetResponseSuccess</name>
+        <position x="334.00000077465324" y="595.9999833911509"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.HandleHttpResponse</class>
@@ -373,9 +419,41 @@ InfluxDB in order to work with time series.
         </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
       </processor>
+      <processor>
+        <id>016c1000-14ff-1cc8-fbce-f17ce2ba5c9f</id>
+        <name>GetLastTweetResponseError</name>
+        <position x="805.0000007746532" y="599.0013261645884"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.HandleHttpResponse</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>HTTP Status Code</name>
+          <value>500</value>
+        </property>
+        <property>
+          <name>HTTP Context Map</name>
+          <value>2ccadaf3-016c-1000-3585-f572bed12b5f</value>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      </processor>
       <label>
         <id>2d482d5d-016c-1000-847d-197f5090d957</id>
-        <position x="62.500000774653245" y="80.99998339115086"/>
+        <position x="499.89318925121574" y="-72.78666822017726"/>
         <size height="99.0" width="390.0"/>
         <styles>
           <style name="font-size">14px</style>
@@ -406,12 +484,54 @@ InfluxDB in order to work with time series.
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>2cc9c959-016c-1000-dd69-205480841d8a</id>
+        <id>016c1007-14ff-1cc8-cd23-89bfb73fbb5c</id>
+        <name/>
+        <bendPoints>
+          <bendPoint x="1377.4957275390625" y="897.6356811523438"/>
+        </bendPoints>
+        <labelIndex>0</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>016c1004-14ff-1cc8-92a9-fdb3b774af08</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2cc96734-016c-1000-5a86-6dd317f959db</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>016c1005-14ff-1cc8-2cea-6d37206b85c6</id>
         <name/>
         <bendPoints/>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
-        <sourceId>2cc8621f-016c-1000-e58f-c709476d6c4b</sourceId>
+        <sourceId>016c1004-14ff-1cc8-92a9-fdb3b774af08</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>016c1000-14ff-1cc8-fbce-f17ce2ba5c9f</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>016c1002-14ff-1cc8-94c3-1faa0d225447</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>016c1000-14ff-1cc8-fbce-f17ce2ba5c9f</sourceId>
         <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
         <sourceType>PROCESSOR</sourceType>
         <destinationId>2cc96734-016c-1000-5a86-6dd317f959db</destinationId>
@@ -446,6 +566,26 @@ InfluxDB in order to work with time series.
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
+        <id>016c1006-14ff-1cc8-f4d9-9bbfcee456f7</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2cc8621f-016c-1000-e58f-c709476d6c4b</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>016c1004-14ff-1cc8-92a9-fdb3b774af08</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
         <id>2cc8aebb-016c-1000-2942-9f646d6a1b6f</id>
         <name/>
         <bendPoints/>
@@ -469,8 +609,8 @@ InfluxDB in order to work with time series.
         <id>2cc8d671-016c-1000-7522-66d4f6881035</id>
         <name/>
         <bendPoints>
-          <bendPoint x="987.0000007746532" y="350.99998339115086"/>
-          <bendPoint x="987.0000007746532" y="400.99998339115086"/>
+          <bendPoint x="941.063660442622" y="518.7672258227915"/>
+          <bendPoint x="862.1730964777782" y="519.8350969165415"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -682,19 +822,19 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>enc{a56c6d495a1987aef4ce9c205ca4e94a4588b14fc7c8cf2fdd56687130d4b84c88016d82dae87641ac0094c969dd216f}</value>
+          <value>enc{a0d249abeff548524c50df2a8da3ba2163d692852dd99cf253b0a4f50b1d5224794a2cc87fe1924bfcc8e751adfa47e1}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{731368f8c1d31b499268b924d1e764ecf490814bd968e7afbdb33146c92b7c0f47c09c39d08140fb05b708aef754764d93d0ef3eaaadefa54fa0d2219b38a0133a12fda5702afb23db65aecd8a26a75b}</value>
+          <value>enc{a44f07f7be860dab7ef4e9591c3317b1c8ba4cb2533ab0df7193faf6883be5ffacfb19a1bca2774fb640a90acd4d79b006795668cd2242d3fa8abd1f762d27137a71452157d231f5abb2736467ca8ade}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{c1cda67342bc14a6364fb02ee22c1a517ce42f186377d827c03dd75f32f05a5d8af0373bdf06b78bd6221deb89c0f2d536e3f2647d57e121349e73e3b28bf928c5d5a3d36afeabb48336af285eb8afca}</value>
+          <value>enc{ea18c4a11a62b48ef5d49e3565e61a404d8c756c15b61e9a941ce06651a53d69085d9fe9715f0ee12d74b0b54a51806eff3d02472aa455666ef9fc2b432d966547d05f8573dc7cf4f0c8272283ecf43b}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{23b9239e5579b135659895cfaf71695875267f67a731d5080e8619a5fe598f0979b296113d31c67da3d0b7a1833404231fc18481250eb1480f8fd5e1a949d70e}</value>
+          <value>enc{7ca244175bba77160e18ab1934c0c14911ae05e88f1c83f9604b2d69fe9244689c40592fe94fff7f38226d0132150d04e9b9fb829ac36e4f191eb65eb03477bd}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -2702,7 +2842,7 @@ InfluxDB in order to work with time series.
       </property>
       <property>
         <name>influxdb-token</name>
-        <value>enc{1da7b69d156cf4b074ff8283840ec4269622fdeca672262101531a3bb3258cf6}</value>
+        <value>enc{10d626bc52200bd13031fc01218f00cac091d7a10122406c13c798cf5768b361}</value>
       </property>
     </controllerService>
     <controllerService>
