@@ -27,6 +27,19 @@
     <position x="0.0" y="0.0"/>
     <comment/>
     <label>
+      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
+      <position x="1149.66674359575" y="-208.8424884087283"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 3 User Story:
+   
+
+As NiFi user I want to store LineProtocol date into multiple environments
+ - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
+    </label>
+    <label>
       <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
       <position x="1145.4612992598124" y="-407.1201983696658"/>
       <size height="170.00000762939453" width="416.8000030517578"/>
@@ -44,17 +57,38 @@ and be able to write data selectively.
 </value>
     </label>
     <label>
-      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
-      <position x="1149.66674359575" y="-208.8424884087283"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
+      <id>280850da-016c-1000-bb1f-063422ae1933</id>
+      <position x="1149.274867625133" y="-17.059789260861407"/>
+      <size height="172.25083923339844" width="415.77381896972656"/>
       <styles>
         <style name="font-size">12px</style>
       </styles>
-      <value>Demo 3 User Story:
+      <value>Demo 4 User Story:
    
 
-As NiFi user I want to store LineProtocol date into multiple environments
- - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
+As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
+HTTP endpoint.
+  
+* AC1: Exposing a result of static Flux Query as data for HTML widget
+* AC2: Transforming Flux Result to XML or JSON - remote API
+ for server application</value>
+    </label>
+    <label>
+      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
+      <position x="1145.261012394578" y="-596.720167086168"/>
+      <size height="163.47393798828125" width="414.004150390625"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 1 User Story:
+
+
+As NiFi user I want to put my data (complex json structure) to
+InfluxDB in order to work with time series.
+  
+* AC1: Count twitter messages, grouping by keywords and languages
+
+</value>
     </label>
     <label>
       <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
@@ -92,40 +126,6 @@ NiFi flow produced by Telegraf.
 * InfluxLineProtocolRecordSetWriter – Writes the contents of a Record
 Set as Line Protocol.</value>
     </label>
-    <label>
-      <id>280850da-016c-1000-bb1f-063422ae1933</id>
-      <position x="1149.274867625133" y="-17.059789260861407"/>
-      <size height="172.25083923339844" width="415.77381896972656"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 4 User Story:
-   
-
-As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
-HTTP endpoint.
-  
-* AC1: Exposing a result of static Flux Query as data for HTML widget
-* AC2: Transforming Flux Result to XML or JSON - remote API
- for server application</value>
-    </label>
-    <label>
-      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
-      <position x="1145.261012394578" y="-596.720167086168"/>
-      <size height="163.47393798828125" width="414.004150390625"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 1 User Story:
-
-
-As NiFi user I want to put my data (complex json structure) to
-InfluxDB in order to work with time series.
-  
-* AC1: Count twitter messages, grouping by keywords and languages
-
-</value>
-    </label>
     <processGroup>
       <id>2807fffd-016c-1000-ff4c-eb46f296840c</id>
       <name>Exposing InfluxDB 2.0</name>
@@ -161,7 +161,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>include-zero-record-flowfiles</name>
-          <value>true</value>
+          <value>false</value>
         </property>
       </processor>
       <processor>
@@ -401,11 +401,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>influxdb-flux</name>
-          <value>from(bucket: "my-bucket")
-  |&gt; range(start: 0)
-  |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
-  |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
-  |&gt; limit(n:10, offset: 0)</value>
+          <value>${http.query.param.query}</value>
         </property>
         <property>
           <name>influxdb-dialect-dateTimeFormat</name>
@@ -531,7 +527,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>include-zero-record-flowfiles</name>
-          <value>true</value>
+          <value>false</value>
         </property>
       </processor>
       <processor>
@@ -824,7 +820,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>include-zero-record-flowfiles</name>
-          <value>true</value>
+          <value>false</value>
         </property>
       </processor>
       <processor>
@@ -859,6 +855,19 @@ InfluxDB in order to work with time series.
         </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
       </processor>
+      <label>
+        <id>2e0425e5-016c-1000-396e-9ec849acbcc8</id>
+        <position x="2217.6967266069423" y="-128.11581219901132"/>
+        <size height="158.97508239746094" width="472.10569763183594"/>
+        <styles>
+          <style name="font-size">12px</style>
+        </styles>
+        <value>curl -i -X GET -G http://localhost:8234 \
+ --data-urlencode 'query=from(bucket: "my-bucket")
+ |&gt; range(start: 0) |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
+ |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |&gt; limit(n:10, offset: 0)'</value>
+      </label>
       <label>
         <id>2d482d5d-016c-1000-847d-197f5090d957</id>
         <position x="499.89318925121574" y="-72.78666822017726"/>
@@ -1413,7 +1422,7 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Pretty Print JSON</name>
-          <value>false</value>
+          <value>true</value>
         </property>
         <property>
           <name>suppress-nulls</name>
@@ -1658,19 +1667,19 @@ InfluxDB in order to work with time series.
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>enc{cefad3ba5ec9506ada55e29b8b46e4379c35c5560831ce0ab875e6bebcc3759ae3f72e01f9dd84dc02e2bd5b1a39e956}</value>
+          <value>enc{e554dc3deda1afb58ebf4b6cf0a15a1b1b3b77a963b8145adacf0be51790e3e206826eeb007ec1603525ed9122e48514}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{501be6fc536c6005f203a81976889250bea4489523df1858c3677ae3cb12be813a08ab9ca8a800a499ae2ac9c9c014e199a4b637254a2abdb0bee347cdab21cf1b2ebb9a5d7b86b5748b22179513e5f5}</value>
+          <value>enc{a751d737dc57c856b65dbe0829ef1fbd34b3a543909c9d0ab48f88b4589d0fe85ac3021ecb240e45372cee68318e350e6241d39484efc8f0c56ff95b1b5e447f2f7bba8cb6322acf0bb51a9d0cfd8970}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{f081931e14a47ceae3ab698c4fa3773abdc5433731eadd69b9fb690c75dda7fc9f067b19ff437fce1e9504a8a150d93e7bae277ab2c257d4d26c300b36ab5654c5bc55fb930436dec0e7f5ef9cf47df5}</value>
+          <value>enc{002638cc148de7dd6ea488ee1c2fa6d39afba8e4452df6d4bb81f55a213ffff484d5ed86d641f19c30d32086f9969d70d2e69bb52948d3633e3da4bc05fda3010c2b62c46c8d25dd9adc298efdac79dc}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{a676ff26b8740ad2f66a98583c4b262f6002d1516c08ef900d22228d4f1faa2f3c3c7a5dfc61b87819bb25c1c1f28756051d9acc62f0dd97de4ffb1175323bd1}</value>
+          <value>enc{105ecfc7de019b3cfe48cf37e7fcc8d2b6dd8d2a0c3d69ffce6ecc28c9a68f4c662c2b9e107bcf33727b896f694735296d0d4eab9e6486d84886ae2d9f0fa233}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -3678,7 +3687,7 @@ InfluxDB in order to work with time series.
       </property>
       <property>
         <name>influxdb-token</name>
-        <value>enc{0ac271b0f64e640b879c6f271c38018a6b727e249a6132b4c1f99c8d52a33344}</value>
+        <value>enc{32d46ae8835f7ebf67c0fba2c3c3249c284f87c0c5444c48a87512bb1112b5ed}</value>
       </property>
     </controllerService>
     <controllerService>
