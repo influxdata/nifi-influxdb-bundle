@@ -27,6 +27,59 @@
     <position x="0.0" y="0.0"/>
     <comment/>
     <label>
+      <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
+      <position x="268.0609696699687" y="-600.9202250695664"/>
+      <size height="761.6532745361328" width="473.57989501953125"/>
+      <styles>
+        <style name="font-size">14px</style>
+      </styles>
+      <value>NiFi-InfluxDB  integration demo
+=========================
+  
+This demo shows how InfluxDB can be integrated with the
+NiFi data processing framework. To enable seamless 
+integration we implemented following NiFi extensions:
+  
+* InfluxDatabaseService, InfluxDatabaseService_2 – more NiFi 
+processors in flow can reuse one InfluxDB connection configuration 
+(url, credentials)
+  
+* PutInfluxDatabase, PutInfluxDatabase_2 – processors
+that puts InfluxDB Line Protocol data into InfluxDB
+  
+* PutInfluxDatabaseRecord, PutInfluxDatabaseRecord_2 – processors
+that puts structured data (json, csv, text, avro) into InfluxDB 
+using NiFi Record readers/writers.
+ 
+* GetInfluxDatabase_2, GetInfluxDatabaseRecord_2  – processors that
+are able use Flux query to get records from InfluxDB 2.0
+ 
+
+* InfluxLineProtocolReader – reader parses the InfluxDB Line Protocol 
+into NiFi Record. This allows filtering, partitioning line protocol data in 
+NiFi flow produced by Telegraf.
+  
+* InfluxLineProtocolRecordSetWriter – Writes the contents of a Record
+Set as Line Protocol.</value>
+    </label>
+    <label>
+      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
+      <position x="1145.261012394578" y="-596.720167086168"/>
+      <size height="163.47393798828125" width="414.004150390625"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 1 User Story:
+
+
+As NiFi user I want to put my data (complex json structure) to
+InfluxDB in order to work with time series.
+  
+* AC1: Count twitter messages, grouping by keywords and languages
+
+</value>
+    </label>
+    <label>
       <id>01631000-efa4-184f-e581-a743d2fe812a</id>
       <position x="1149.66674359575" y="-208.8424884087283"/>
       <size height="170.00000762939453" width="416.8000030517578"/>
@@ -73,59 +126,6 @@ HTTP endpoint.
 * AC2: Transforming Flux Result to XML or JSON - remote API
  for server application</value>
     </label>
-    <label>
-      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
-      <position x="1145.261012394578" y="-596.720167086168"/>
-      <size height="163.47393798828125" width="414.004150390625"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 1 User Story:
-
-
-As NiFi user I want to put my data (complex json structure) to
-InfluxDB in order to work with time series.
-  
-* AC1: Count twitter messages, grouping by keywords and languages
-
-</value>
-    </label>
-    <label>
-      <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
-      <position x="268.0609696699687" y="-600.9202250695664"/>
-      <size height="761.6532745361328" width="473.57989501953125"/>
-      <styles>
-        <style name="font-size">14px</style>
-      </styles>
-      <value>NiFi-InfluxDB  integration demo
-=========================
-  
-This demo shows how InfluxDB can be integrated with the
-NiFi data processing framework. To enable seamless 
-integration we implemented following NiFi extensions:
-  
-* InfluxDatabaseService, InfluxDatabaseService_2 – more NiFi 
-processors in flow can reuse one InfluxDB connection configuration 
-(url, credentials)
-  
-* PutInfluxDatabase, PutInfluxDatabase_2 – processors
-that puts InfluxDB Line Protocol data into InfluxDB
-  
-* PutInfluxDatabaseRecord, PutInfluxDatabaseRecord_2 – processors
-that puts structured data (json, csv, text, avro) into InfluxDB 
-using NiFi Record readers/writers.
- 
-* GetInfluxDatabase_2, GetInfluxDatabaseRecord_2  – processors that
-are able use Flux query to get records from InfluxDB 2.0
- 
-
-* InfluxLineProtocolReader – reader parses the InfluxDB Line Protocol 
-into NiFi Record. This allows filtering, partitioning line protocol data in 
-NiFi flow produced by Telegraf.
-  
-* InfluxLineProtocolRecordSetWriter – Writes the contents of a Record
-Set as Line Protocol.</value>
-    </label>
     <processGroup>
       <id>2807fffd-016c-1000-ff4c-eb46f296840c</id>
       <name>Exposing InfluxDB 2.0</name>
@@ -134,7 +134,7 @@ Set as Line Protocol.</value>
       <processor>
         <id>016c1002-7c72-1ddd-de29-fed8ee1f514e</id>
         <name>ResultToLineProtocol</name>
-        <position x="2680.7704763990378" y="857.1607924567633"/>
+        <position x="2430.2497244459128" y="855.534022437232"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.ConvertRecord</class>
@@ -155,6 +155,7 @@ Set as Line Protocol.</value>
         <runDurationNanos>0</runDurationNanos>
         <property>
           <name>record-reader</name>
+          <value>016c1017-7c72-1ddd-67df-755e87a446bc</value>
         </property>
         <property>
           <name>record-writer</name>
@@ -163,6 +164,7 @@ Set as Line Protocol.</value>
           <name>include-zero-record-flowfiles</name>
           <value>false</value>
         </property>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>2cc8621f-016c-1000-e58f-c709476d6c4b</id>
@@ -290,7 +292,7 @@ Set as Line Protocol.</value>
       <processor>
         <id>016c1014-7c72-1ddd-7680-39272d99c0d3</id>
         <name>FluxQueryHttpResponseError</name>
-        <position x="2677.488339622888" y="1159.859325603018"/>
+        <position x="2994.706357201013" y="1153.352245524893"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.HandleHttpResponse</class>
@@ -318,6 +320,42 @@ Set as Line Protocol.</value>
           <value>2dda9865-016c-1000-0bcd-057d362e91d9</value>
         </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      </processor>
+      <processor>
+        <id>2e171e29-016c-1000-e4f1-ef036647348b</id>
+        <name>ResultToCSV</name>
+        <position x="2821.8854778130108" y="858.0988234092595"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.ConvertRecord</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>record-reader</name>
+          <value>016c1017-7c72-1ddd-67df-755e87a446bc</value>
+        </property>
+        <property>
+          <name>record-writer</name>
+          <value>2e23a967-016c-1000-f35f-9b5e5f528f69</value>
+        </property>
+        <property>
+          <name>include-zero-record-flowfiles</name>
+          <value>false</value>
+        </property>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>016c1004-14ff-1cc8-92a9-fdb3b774af08</id>
@@ -368,7 +406,7 @@ Set as Line Protocol.</value>
       <processor>
         <id>2ddc6b66-016c-1000-a3f3-c3b1a1f1322d</id>
         <name>GetInfluxDatabaseRecord_2</name>
-        <position x="2209.5104993694067" y="335.5967167934332"/>
+        <position x="2214.3303235881567" y="330.7769230922613"/>
         <styles/>
         <comment/>
         <class>org.influxdata.nifi.processors.GetInfluxDatabaseRecord_2</class>
@@ -422,7 +460,7 @@ Set as Line Protocol.</value>
       <processor>
         <id>016c1008-7c72-1ddd-fa1c-6247e2848b72</id>
         <name>AttributesToCSV</name>
-        <position x="3190.412317694869" y="332.16438392873533"/>
+        <position x="3484.418177069869" y="332.16441444631346"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.AttributesToCSV</class>
@@ -466,6 +504,49 @@ Set as Line Protocol.</value>
         </property>
       </processor>
       <processor>
+        <id>2e15c3d4-016c-1000-598c-bfde67e12172</id>
+        <name>RouteOnAttribute</name>
+        <position x="2217.3228566768457" y="582.1552014538619"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.RouteOnAttribute</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-standard-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <executionNode>ALL</executionNode>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Routing Strategy</name>
+          <value>Route to Property name</value>
+        </property>
+        <property>
+          <name>lineprotocol</name>
+          <value>${http.query.param.accept:equals('lineprotocol')}</value>
+        </property>
+        <property>
+          <name>json</name>
+          <value>${http.query.param.accept:equals('json')}</value>
+        </property>
+        <property>
+          <name>xml</name>
+          <value>${http.query.param.accept:equals('xml')}</value>
+        </property>
+        <property>
+          <name>csv</name>
+          <value>${http.query.param.accept:equals('csv')}</value>
+        </property>
+      </processor>
+      <processor>
         <id>2cc814ff-016c-1000-7d44-0e277649be12</id>
         <name>GetLastTweetResponseSuccess</name>
         <position x="334.00000077465324" y="595.9999833911509"/>
@@ -500,7 +581,7 @@ Set as Line Protocol.</value>
       <processor>
         <id>016c1000-7c72-1ddd-a2c5-afa48afc0d7f</id>
         <name>ResultToXML</name>
-        <position x="2229.6015310865378" y="852.308680640357"/>
+        <position x="2036.0173025709128" y="852.308680640357"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.ConvertRecord</class>
@@ -515,20 +596,23 @@ Set as Line Protocol.</value>
         <yieldPeriod>1 sec</yieldPeriod>
         <bulletinLevel>WARN</bulletinLevel>
         <lossTolerant>false</lossTolerant>
-        <scheduledState>STOPPED</scheduledState>
+        <scheduledState>RUNNING</scheduledState>
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
         <property>
           <name>record-reader</name>
+          <value>016c1017-7c72-1ddd-67df-755e87a446bc</value>
         </property>
         <property>
           <name>record-writer</name>
+          <value>2e22da0a-016c-1000-5173-6c8a70770bd9</value>
         </property>
         <property>
           <name>include-zero-record-flowfiles</name>
           <value>false</value>
         </property>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>016c1000-14ff-1cc8-fbce-f17ce2ba5c9f</id>
@@ -791,7 +875,7 @@ Set as Line Protocol.</value>
       <processor>
         <id>2ddd7c72-016c-1000-adeb-839e5235afc1</id>
         <name>ResultToJSON</name>
-        <position x="1739.1244803052875" y="848.689295874732"/>
+        <position x="1644.77255159435" y="851.9428359137945"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.ConvertRecord</class>
@@ -822,6 +906,7 @@ Set as Line Protocol.</value>
           <name>include-zero-record-flowfiles</name>
           <value>false</value>
         </property>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>016c100a-7c72-1ddd-4591-18984291303c</id>
@@ -856,19 +941,6 @@ Set as Line Protocol.</value>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
       </processor>
       <label>
-        <id>2e0425e5-016c-1000-396e-9ec849acbcc8</id>
-        <position x="2217.6967266069423" y="-128.11581219901132"/>
-        <size height="158.97508239746094" width="472.10569763183594"/>
-        <styles>
-          <style name="font-size">12px</style>
-        </styles>
-        <value>curl -i -X GET -G http://localhost:8234 \
- --data-urlencode 'query=from(bucket: "my-bucket")
- |&gt; range(start: 0) |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
- |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
- |&gt; limit(n:10, offset: 0)'</value>
-      </label>
-      <label>
         <id>2d482d5d-016c-1000-847d-197f5090d957</id>
         <position x="499.89318925121574" y="-72.78666822017726"/>
         <size height="99.0" width="390.0"/>
@@ -879,6 +951,40 @@ Set as Line Protocol.</value>
   
 - curl -i -X GET http://localhost:8123
 - browser http://localhost:8123</value>
+      </label>
+      <label>
+        <id>2e0425e5-016c-1000-396e-9ec849acbcc8</id>
+        <position x="2617.3935039506923" y="-142.34530820120858"/>
+        <size height="409.44776916503906" width="557.7339935302734"/>
+        <styles>
+          <style name="font-size">12px</style>
+        </styles>
+        <value>CSV:
+  
+curl -i -X GET -G http://localhost:8234 \
+ --data-urlencode 'accept=csv'  \
+ --data-urlencode 'query=from(bucket: "my-bucket")
+ |&gt; range(start: 0) |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
+ |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |&gt; limit(n:10, offset: 0)'
+  
+XML:
+  
+curl -i -X GET -G http://localhost:8234 \
+ --data-urlencode 'accept=xml'  \
+ --data-urlencode 'query=from(bucket: "my-bucket")
+ |&gt; range(start: 0) |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
+ |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |&gt; limit(n:10, offset: 0)'
+  
+JSON:
+  
+curl -i -X GET -G http://localhost:8234 \
+ --data-urlencode 'accept=json'  \
+ --data-urlencode 'query=from(bucket: "my-bucket")
+ |&gt; range(start: 0) |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
+ |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |&gt; limit(n:10, offset: 0)'</value>
       </label>
       <connection>
         <id>2d1a1f70-016c-1000-7838-0ecc90ff64e8</id>
@@ -893,6 +999,26 @@ Set as Line Protocol.</value>
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2e162b8d-016c-1000-ea24-6a925329588d</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2ddc6b66-016c-1000-a3f3-c3b1a1f1322d</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2e15c3d4-016c-1000-598c-bfde67e12172</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -965,8 +1091,10 @@ Set as Line Protocol.</value>
       <connection>
         <id>016c100c-7c72-1ddd-88a5-31e26904c64a</id>
         <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
+        <bendPoints>
+          <bendPoint x="2263.114501953125" y="1070.3062744140625"/>
+        </bendPoints>
+        <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>016c1000-7c72-1ddd-a2c5-afa48afc0d7f</sourceId>
         <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
@@ -986,7 +1114,7 @@ Set as Line Protocol.</value>
         <id>016c1011-7c72-1ddd-45bf-b7ba26c507b9</id>
         <name/>
         <bendPoints>
-          <bendPoint x="3377.719970703125" y="1493.220458984375"/>
+          <bendPoint x="3671.725830078125" y="1493.2204895019531"/>
         </bendPoints>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
@@ -1005,20 +1133,21 @@ Set as Line Protocol.</value>
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>016c1010-7c72-1ddd-2969-b71a73a3ed49</id>
+        <id>2e181aa1-016c-1000-2774-d8e89dbc3903</id>
         <name/>
         <bendPoints>
-          <bendPoint x="1915.4658203125" y="1480.6148681640625"/>
+          <bendPoint x="2854.354736328125" y="774.3192138671875"/>
         </bendPoints>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
-        <sourceId>2ddd7c72-016c-1000-adeb-839e5235afc1</sourceId>
+        <sourceId>2e15c3d4-016c-1000-598c-bfde67e12172</sourceId>
         <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
         <sourceType>PROCESSOR</sourceType>
-        <destinationId>016c100f-7c72-1ddd-1874-2d9f34075df4</destinationId>
+        <destinationId>2e171e29-016c-1000-e4f1-ef036647348b</destinationId>
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
+        <relationship>csv</relationship>
+        <relationship>unmatched</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -1030,8 +1159,8 @@ Set as Line Protocol.</value>
         <id>016c1016-7c72-1ddd-cc56-6dfea74bc830</id>
         <name/>
         <bendPoints>
-          <bendPoint x="3199.97998046875" y="511.24139404296875"/>
-          <bendPoint x="3203.76171875" y="1224.7201538085938"/>
+          <bendPoint x="3493.98583984375" y="511.2414245605469"/>
+          <bendPoint x="3497.767578125" y="1224.7201843261719"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -1039,26 +1168,6 @@ Set as Line Protocol.</value>
         <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
         <sourceType>PROCESSOR</sourceType>
         <destinationId>016c1014-7c72-1ddd-7680-39272d99c0d3</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>success</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>2cc88cab-016c-1000-7a9a-cd441779b43a</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>2cc7f304-016c-1000-4465-8b3735ddd138</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>2cc8621f-016c-1000-e58f-c709476d6c4b</destinationId>
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>success</relationship>
@@ -1130,6 +1239,68 @@ Set as Line Protocol.</value>
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
+        <id>016c1009-7c72-1ddd-d364-65b4275c3da3</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2ddc6b66-016c-1000-a3f3-c3b1a1f1322d</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>016c1008-7c72-1ddd-fa1c-6247e2848b72</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2e180c3d-016c-1000-b6ee-841084f4867b</id>
+        <name/>
+        <bendPoints>
+          <bendPoint x="2834.857177734375" y="1072.2216796875"/>
+        </bendPoints>
+        <labelIndex>0</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2e171e29-016c-1000-e4f1-ef036647348b</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>016c100a-7c72-1ddd-4591-18984291303c</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2cc88cab-016c-1000-7a9a-cd441779b43a</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2cc7f304-016c-1000-4465-8b3735ddd138</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2cc8621f-016c-1000-e58f-c709476d6c4b</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
         <id>2cc8d671-016c-1000-7522-66d4f6881035</id>
         <name/>
         <bendPoints>
@@ -1145,26 +1316,6 @@ Set as Line Protocol.</value>
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>retry</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>016c1004-7c72-1ddd-9f57-916d34d50ec0</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>0</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>2ddc6b66-016c-1000-a3f3-c3b1a1f1322d</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>2ddd7c72-016c-1000-adeb-839e5235afc1</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>success</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -1193,10 +1344,34 @@ Set as Line Protocol.</value>
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
+        <id>2e1e9f4c-016c-1000-587c-65b41fbf127e</id>
+        <name/>
+        <bendPoints>
+          <bendPoint x="1940.2445068359375" y="777.1434326171875"/>
+        </bendPoints>
+        <labelIndex>0</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2e15c3d4-016c-1000-598c-bfde67e12172</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2ddd7c72-016c-1000-adeb-839e5235afc1</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>json</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
         <id>016c100b-7c72-1ddd-ee5f-dd6bb894c41a</id>
         <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
+        <bendPoints>
+          <bendPoint x="1998.7950439453125" y="1071.0908203125"/>
+        </bendPoints>
+        <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>2ddd7c72-016c-1000-adeb-839e5235afc1</sourceId>
         <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
@@ -1213,18 +1388,20 @@ Set as Line Protocol.</value>
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>016c1009-7c72-1ddd-d364-65b4275c3da3</id>
+        <id>2e1e8780-016c-1000-a402-e9e39c49bd77</id>
         <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
+        <bendPoints>
+          <bendPoint x="2259.3828125" y="774.3191528320312"/>
+        </bendPoints>
+        <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
-        <sourceId>2ddc6b66-016c-1000-a3f3-c3b1a1f1322d</sourceId>
+        <sourceId>2e15c3d4-016c-1000-598c-bfde67e12172</sourceId>
         <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
         <sourceType>PROCESSOR</sourceType>
-        <destinationId>016c1008-7c72-1ddd-fa1c-6247e2848b72</destinationId>
+        <destinationId>016c1000-7c72-1ddd-a2c5-afa48afc0d7f</destinationId>
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
+        <relationship>xml</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -1235,8 +1412,10 @@ Set as Line Protocol.</value>
       <connection>
         <id>016c100d-7c72-1ddd-7255-845ad256de30</id>
         <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
+        <bendPoints>
+          <bendPoint x="2554.30419921875" y="1070.4794921875"/>
+        </bendPoints>
+        <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>016c1002-7c72-1ddd-de29-fed8ee1f514e</sourceId>
         <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
@@ -1245,6 +1424,28 @@ Set as Line Protocol.</value>
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2e1f2336-016c-1000-71f6-32fdbd28ddc2</id>
+        <name/>
+        <bendPoints>
+          <bendPoint x="2547.45458984375" y="774.3192138671875"/>
+        </bendPoints>
+        <labelIndex>0</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2e15c3d4-016c-1000-598c-bfde67e12172</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>016c1002-7c72-1ddd-de29-fed8ee1f514e</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>lineprotocol</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -1276,8 +1477,8 @@ Set as Line Protocol.</value>
         <id>016c1006-7c72-1ddd-2fe4-8d637360efbc</id>
         <name/>
         <bendPoints>
-          <bendPoint x="2046.0102552287817" y="322.65305224265194"/>
-          <bendPoint x="2066.1794446819067" y="404.16712084616756"/>
+          <bendPoint x="2071.7158216350317" y="348.3584355434332"/>
+          <bendPoint x="2070.9992689006567" y="399.3473271449957"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -1313,6 +1514,82 @@ Set as Line Protocol.</value>
         <property>
           <name>Request Expiration</name>
           <value>1 min</value>
+        </property>
+      </controllerService>
+      <controllerService>
+        <id>2e22da0a-016c-1000-5173-6c8a70770bd9</id>
+        <name>XMLRecordSetWriter</name>
+        <comment/>
+        <class>org.apache.nifi.xml.XMLRecordSetWriter</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-record-serialization-services-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <enabled>true</enabled>
+        <property>
+          <name>Schema Write Strategy</name>
+          <value>no-schema</value>
+        </property>
+        <property>
+          <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-access-strategy</name>
+          <value>inherit-record-schema</value>
+        </property>
+        <property>
+          <name>schema-registry</name>
+        </property>
+        <property>
+          <name>schema-name</name>
+          <value>${schema.name}</value>
+        </property>
+        <property>
+          <name>schema-version</name>
+        </property>
+        <property>
+          <name>schema-branch</name>
+        </property>
+        <property>
+          <name>schema-text</name>
+          <value>${avro.schema}</value>
+        </property>
+        <property>
+          <name>Date Format</name>
+        </property>
+        <property>
+          <name>Time Format</name>
+        </property>
+        <property>
+          <name>Timestamp Format</name>
+        </property>
+        <property>
+          <name>suppress_nulls</name>
+          <value>never-suppress</value>
+        </property>
+        <property>
+          <name>pretty_print_xml</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>root_tag_name</name>
+          <value>records</value>
+        </property>
+        <property>
+          <name>record_tag_name</name>
+          <value>record</value>
+        </property>
+        <property>
+          <name>array_wrapping</name>
+          <value>no-wrapping</value>
+        </property>
+        <property>
+          <name>array_tag_name</name>
+        </property>
+        <property>
+          <name>Character Set</name>
+          <value>UTF-8</value>
         </property>
       </controllerService>
       <controllerService>
@@ -1370,6 +1647,101 @@ Set as Line Protocol.</value>
         <property>
           <name>cache-size</name>
           <value>1000</value>
+        </property>
+      </controllerService>
+      <controllerService>
+        <id>2e23a967-016c-1000-f35f-9b5e5f528f69</id>
+        <name>CSVRecordSetWriter</name>
+        <comment/>
+        <class>org.apache.nifi.csv.CSVRecordSetWriter</class>
+        <bundle>
+          <group>org.apache.nifi</group>
+          <artifact>nifi-record-serialization-services-nar</artifact>
+          <version>1.9.2</version>
+        </bundle>
+        <enabled>true</enabled>
+        <property>
+          <name>Schema Write Strategy</name>
+          <value>no-schema</value>
+        </property>
+        <property>
+          <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-access-strategy</name>
+          <value>inherit-record-schema</value>
+        </property>
+        <property>
+          <name>schema-registry</name>
+        </property>
+        <property>
+          <name>schema-name</name>
+          <value>${schema.name}</value>
+        </property>
+        <property>
+          <name>schema-version</name>
+        </property>
+        <property>
+          <name>schema-branch</name>
+        </property>
+        <property>
+          <name>schema-text</name>
+          <value>${avro.schema}</value>
+        </property>
+        <property>
+          <name>Date Format</name>
+        </property>
+        <property>
+          <name>Time Format</name>
+        </property>
+        <property>
+          <name>Timestamp Format</name>
+        </property>
+        <property>
+          <name>CSV Format</name>
+          <value>custom</value>
+        </property>
+        <property>
+          <name>Value Separator</name>
+          <value>,</value>
+        </property>
+        <property>
+          <name>Include Header Line</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Quote Character</name>
+          <value>"</value>
+        </property>
+        <property>
+          <name>Escape Character</name>
+          <value>\</value>
+        </property>
+        <property>
+          <name>Comment Marker</name>
+        </property>
+        <property>
+          <name>Null String</name>
+        </property>
+        <property>
+          <name>Trim Fields</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>Quote Mode</name>
+          <value>MINIMAL</value>
+        </property>
+        <property>
+          <name>Record Separator</name>
+          <value>\n</value>
+        </property>
+        <property>
+          <name>Include Trailing Delimiter</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>csvutils-character-set</name>
+          <value>UTF-8</value>
         </property>
       </controllerService>
       <controllerService>
@@ -1667,19 +2039,19 @@ Set as Line Protocol.</value>
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>enc{e554dc3deda1afb58ebf4b6cf0a15a1b1b3b77a963b8145adacf0be51790e3e206826eeb007ec1603525ed9122e48514}</value>
+          <value>enc{dae4ab7b660e0da144ad69046522e5d6e00041d2275ac5509fad9119e0a4efe5d6ed5a5d1178fc0db9fac508001a460f}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{a751d737dc57c856b65dbe0829ef1fbd34b3a543909c9d0ab48f88b4589d0fe85ac3021ecb240e45372cee68318e350e6241d39484efc8f0c56ff95b1b5e447f2f7bba8cb6322acf0bb51a9d0cfd8970}</value>
+          <value>enc{5ceca28a7d9a5f810ce392ff953398b1f9d9cb2d6dd2d6c3e4b2ba28a9f2bb90e59d9963d0d37c11d272563e94097785d4b1f82c1d3d108e3aba2a995ec2bed2842d3a87e9878ea270529e2335cc20d1}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{002638cc148de7dd6ea488ee1c2fa6d39afba8e4452df6d4bb81f55a213ffff484d5ed86d641f19c30d32086f9969d70d2e69bb52948d3633e3da4bc05fda3010c2b62c46c8d25dd9adc298efdac79dc}</value>
+          <value>enc{187fd7ccd0579d51d92ae053d6e60df23900920bbefbb501b10ce54bc959c5a73c8f7ca0a36f7698b0bd03fd69af518301bc9edbdd83aef377e7fb67e51772f7f91f85d2d6a457a1be6dec9b277808fe}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{105ecfc7de019b3cfe48cf37e7fcc8d2b6dd8d2a0c3d69ffce6ecc28c9a68f4c662c2b9e107bcf33727b896f694735296d0d4eab9e6486d84886ae2d9f0fa233}</value>
+          <value>enc{fe465454f866985b0544dc2edc5744d9d143de45fc1d16ad7e45f0e32c58001cb4ce3a3ba50f6a30a4be9a7a52ddaf5c6fe273142bf2351de5b2c2b7993d5add}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -3687,7 +4059,7 @@ Set as Line Protocol.</value>
       </property>
       <property>
         <name>influxdb-token</name>
-        <value>enc{32d46ae8835f7ebf67c0fba2c3c3249c284f87c0c5444c48a87512bb1112b5ed}</value>
+        <value>enc{77aa067c01c41ddab710284f48be6305a719f7a87d9893e31cec1baf4f43a41b}</value>
       </property>
     </controllerService>
     <controllerService>
