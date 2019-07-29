@@ -27,6 +27,70 @@
     <position x="0.0" y="0.0"/>
     <comment/>
     <label>
+      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
+      <position x="1145.4612992598124" y="-407.1201983696658"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 2 User Story:
+  
+
+As NiFi user I want to reliably monitor multiple environments
+and be able to write data selectively.
+  
+* AC1: Partition and route metrics data using NiFi "Record Path language"
+   by type of measurement (name of container)
+</value>
+    </label>
+    <label>
+      <id>280850da-016c-1000-bb1f-063422ae1933</id>
+      <position x="1149.274867625133" y="-17.059789260861407"/>
+      <size height="172.25083923339844" width="415.77381896972656"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 4 User Story:
+   
+
+As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
+HTTP endpoint.
+  
+* AC1: Exposing a result of static Flux Query as data for HTML widget
+* AC2: Transforming Flux Result to XML or JSON - remote API
+ for server application</value>
+    </label>
+    <label>
+      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
+      <position x="1149.66674359575" y="-208.8424884087283"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 3 User Story:
+   
+
+As NiFi user I want to store LineProtocol date into multiple environments
+ - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
+    </label>
+    <label>
+      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
+      <position x="1145.261012394578" y="-596.720167086168"/>
+      <size height="163.47393798828125" width="414.004150390625"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 1 User Story:
+
+
+As NiFi user I want to put my data (complex json structure) to
+InfluxDB in order to work with time series.
+  
+* AC1: Count twitter messages, grouping by keywords and languages
+
+</value>
+    </label>
+    <label>
       <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
       <position x="268.0609696699687" y="-600.9202250695664"/>
       <size height="761.6532745361328" width="473.57989501953125"/>
@@ -61,70 +125,6 @@ NiFi flow produced by Telegraf.
   
 * InfluxLineProtocolRecordSetWriter – Writes the contents of a Record
 Set as Line Protocol.</value>
-    </label>
-    <label>
-      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
-      <position x="1149.66674359575" y="-208.8424884087283"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 3 User Story:
-   
-
-As NiFi user I want to store LineProtocol date into multiple environments
- - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
-    </label>
-    <label>
-      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
-      <position x="1145.261012394578" y="-596.720167086168"/>
-      <size height="163.47393798828125" width="414.004150390625"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 1 User Story:
-
-
-As NiFi user I want to put my data (complex json structure) to
-InfluxDB in order to work with time series.
-  
-* AC1: Count twitter messages, grouping by keywords and languages
-
-</value>
-    </label>
-    <label>
-      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
-      <position x="1145.4612992598124" y="-407.1201983696658"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 2 User Story:
-  
-
-As NiFi user I want to reliably monitor multiple environments
-and be able to write data selectively.
-  
-* AC1: Partition and route metrics data using NiFi "Record Path language"
-   by type of measurement (name of container)
-</value>
-    </label>
-    <label>
-      <id>280850da-016c-1000-bb1f-063422ae1933</id>
-      <position x="1149.274867625133" y="-17.059789260861407"/>
-      <size height="172.25083923339844" width="415.77381896972656"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 4 User Story:
-   
-
-As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
-HTTP endpoint.
-  
-* AC1: Exposing a result of static Flux Query as data for HTML widget
-* AC2: Transforming Flux Result to XML or JSON - remote API
- for server application</value>
     </label>
     <processGroup>
       <id>2807fffd-016c-1000-ff4c-eb46f296840c</id>
@@ -1725,19 +1725,19 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>enc{6e527770c0199eaace82a11376faaeee802a18af8c8f9d8643693056850d00abde7ec6aafb7fb628fd7991e9657c5bc0}</value>
+          <value>enc{934a10f0c6c2cde7891c023473d0eff7c5b54a7f9b60a6571a1c106a5d5a671da9e2ea8b3c2e23abd79dd2821dc49a67}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{5f2a8265a805416e8dce0c90513ea94a8228803f9718f1c1bdc616c009e2408e14ab091df171f1454a14448b02f8b5807248a6e7e7e97add13b3eed5b7c0911adb446a8b2fa98a0214e4a1f0bbc6679a}</value>
+          <value>enc{cbbc9cf596e8e3081c7a01d5b14a18408a0397486f1f48ee778d536cbcfd68984f54d33a087746d004f747d78dc4bb0d3ae7107194e32185b1fac86d06d3c048bf1be5d9d5ef89ab30e7bab696d1bf0e}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{a011c18126b15d0c3dd7387f5e66e75f11aa6b5a73bc6ed9a7853fc726f458d0352c95b421488f2c10dca4cabdc897d18b12fa0d76f9b1a9fa9e16e5216b9a67973f88272c379bcc3337547b578ea1cf}</value>
+          <value>enc{0acd71aa0121a10b60a853f26643b94c52e43aef08b235fe739ef098065b61b867ff49c8523e5dc22f62e011305dcaad11f8bf2728345d3e8deb08726aa0ab6855ff4a03fe9db70ba959103024968c61}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{29ff2b564fe3e7f5009fc56a3a72fbc2035803a3badff66d8b4cdeec858315a0a60bcf27d0ad8cf0844a0dc5cf6b84ff27359a3fed1e235b5db6abe94e1cf402}</value>
+          <value>enc{bb4bcb7a5225cee9ef41861400fe7204da4947f3757109b567b16a9f4af297639b8ed87faf52f55f657ae87ec70ece8d9f88ba00bb8610bea98c52c91ae8ee7e}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -2270,7 +2270,7 @@ curl -i -X GET -G http://localhost:8234 \
       <processor>
         <id>9993347a-5fbd-1c2b-a6cf-829e9b16c88d</id>
         <name>PutInfluxDatabase</name>
-        <position x="1573.154113666188" y="683.2148985893302"/>
+        <position x="529.3148192325943" y="687.9812560112052"/>
         <styles/>
         <comment/>
         <class>org.influxdata.nifi.processors.PutInfluxDatabase</class>
@@ -2331,7 +2331,7 @@ curl -i -X GET -G http://localhost:8234 \
       <processor>
         <id>dfceea1c-016b-1000-b2ce-2d172775840b</id>
         <name>PutInfluxDatabase_2</name>
-        <position x="544.1536453794804" y="681.0541688763507"/>
+        <position x="1554.6283157896366" y="672.7129823529132"/>
         <styles/>
         <comment/>
         <class>org.influxdata.nifi.processors.PutInfluxDatabase_2</class>
@@ -2464,8 +2464,8 @@ curl -i -X GET -G http://localhost:8234 \
         <id>dfcf3302-016b-1000-50de-901254d75111</id>
         <name/>
         <bendPoints>
-          <bendPoint x="716.4171036314335" y="612.7235414349444"/>
-          <bendPoint x="664.8470352720585" y="608.0611268841632"/>
+          <bendPoint x="1825.7943619322148" y="605.5740053021319"/>
+          <bendPoint x="1743.2428482603398" y="599.7199403607257"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -2591,8 +2591,8 @@ curl -i -X GET -G http://localhost:8234 \
         <id>9993347e-5fbd-1c2b-e9aa-62ed6628b6f2</id>
         <name/>
         <bendPoints>
-          <bendPoint x="1734.5665282169693" y="618.2969603569084"/>
-          <bendPoint x="1775.805480853688" y="607.8701415092521"/>
+          <bendPoint x="690.7272337833756" y="623.0633177787834"/>
+          <bendPoint x="731.9661864200943" y="612.6364989311271"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -3745,7 +3745,7 @@ curl -i -X GET -G http://localhost:8234 \
       </property>
       <property>
         <name>influxdb-token</name>
-        <value>enc{c64de36e715cc2188839b440d41322345f888ba9013f2c5c259786c836a6cc59}</value>
+        <value>enc{b014836056e668bd988c8eeff7d219c00bfb7546131d1cb27aa87d7b634e384d}</value>
       </property>
     </controllerService>
     <controllerService>

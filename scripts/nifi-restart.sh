@@ -195,3 +195,5 @@ echo
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/nifi-dashboard.json
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/twitter-dashboard.json
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/nifi-logs-dashboard.json
+
+#curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Token my-password" http://localhost:9999/api/v2/dashboards  -d @scripts/influx2/nifi_dashboard.json

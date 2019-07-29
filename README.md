@@ -536,6 +536,45 @@ This example show how to store NiFi Records as a LineProtocol into multiple envi
 
 <img src="assets/doc/demo3-setwriter.png" height="250px">    
 
+### Expose data from InfluxDB 2.0 on the particular HTTP endpoint.
+
+This example show how to exposing InfluxDB 2.0 data by NiFi. 
+
+#### GetInfluxDatabase_2
+
+The processor is configured to invoke static flux query:
+
+```
+from(bucket: "my-bucket")
+  |> range(start: 0)
+  |> filter(fn: (r) => r._measurement == "tweets")
+  |> drop(columns: ["keyword", "lang", "user_verified"])
+  |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+  |> limit(n:1)
+  |> keep(columns: ["tweet_id", "screen_name", "text"])
+``` 
+
+The result is mapped as CSV and returned as a response to incoming HTTP request.
+
+<img src="assets/doc/demo4-static-query.png" height="250px">   
+
+#### GetInfluxDatabaseRecord_2
+
+The processor invoke a flux query that is pass as a http query parameter:
+
+```bash
+curl -i -X GET -G http://localhost:8234 \
+ --data-urlencode 'accept=xml'  \
+ --data-urlencode 'query=from(bucket: "my-bucket")
+ |> range(start: 0) |> filter(fn: (r) => r._measurement == "docker_container_status")
+ |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |> limit(n:10, offset: 0)'
+``` 
+
+The result is mapped to format that is specified in request `accept` parameter.
+
+<img src="assets/doc/demo4-dynamic-query.png" height="250px">   
+
 ## Contributing
 
 If you would like to contribute code you can do through GitHub by forking the repository and sending a pull request into the `master` branch.
