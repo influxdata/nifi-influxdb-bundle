@@ -73,7 +73,7 @@ public class ITGetInfluxDatabaseRecord_2 extends AbstractITInfluxDB_2 {
         runner.setProperty(GetInfluxDatabaseRecord_2.INFLUX_DB_SERVICE, "influxdb-service");
         runner.setProperty(GetInfluxDatabaseRecord_2.ORG, organization.getId());
         runner.setProperty(GetInfluxDatabaseRecord_2.QUERY, "from(bucket:\"" + bucketName + "\") |> range(start: 0)");
-        // runner.setProperty(GetInfluxDatabaseRecord_2.LOG_LEVEL, "BODY");
+         runner.setProperty(GetInfluxDatabaseRecord_2.LOG_LEVEL, "BODY");
 
         InfluxDatabaseService_2 influxDatabaseService = Mockito.spy(new StandardInfluxDatabaseService_2());
 
@@ -288,8 +288,7 @@ public class ITGetInfluxDatabaseRecord_2 extends AbstractITInfluxDB_2 {
         runner.assertTransferCount(GetInfluxDatabaseRecord_2.REL_FAILURE, 1);
 
         MockFlowFile flowFile = runner.getFlowFilesForRelationship(GetInfluxDatabaseRecord_2.REL_FAILURE).get(0);
-        Assert.assertEquals("error in evaluating AST while starting program: type error 1:45-1:51: undefined identifier \"rangex\"",
-                flowFile.getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE));
+        Assert.assertEquals("internal error", flowFile.getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE));
     }
 
     @Test

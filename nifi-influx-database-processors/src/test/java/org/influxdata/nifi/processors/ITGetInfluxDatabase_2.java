@@ -19,9 +19,11 @@ package org.influxdata.nifi.processors;
 import java.util.Arrays;
 
 import org.influxdata.client.domain.WritePrecision;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
 
+import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunners;
 import org.junit.Assert;
 import org.junit.Before;
@@ -111,12 +113,12 @@ public class ITGetInfluxDatabase_2 extends AbstractITInfluxDB_2 {
 
         runner.run(1);
 
-        runner.assertTransferCount(GetInfluxDatabase_2.REL_SUCCESS, 1);
+        runner.assertTransferCount(GetInfluxDatabase_2.REL_SUCCESS, 0);
         runner.assertTransferCount(GetInfluxDatabase_2.REL_RETRY, 0);
-        runner.assertTransferCount(GetInfluxDatabase_2.REL_FAILURE, 0);
+        runner.assertTransferCount(GetInfluxDatabase_2.REL_FAILURE, 1);
 
-        String data = new String(runner.getContentAsByteArray(runner.getFlowFilesForRelationship(GetInfluxDatabase_2.REL_SUCCESS).get(0))).trim();
-        Assert.assertEquals(",error,reference\n,\"error in evaluating AST while starting program: type error 1:45-1:51: undefined identifier \"\"rangex\"\"\",", data);
+        MockFlowFile flowFile = runner.getFlowFilesForRelationship(GetInfluxDatabaseRecord_2.REL_FAILURE).get(0);
+        Assert.assertEquals("internal error", flowFile.getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE));
     }
 
     @Test
