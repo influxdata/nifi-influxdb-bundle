@@ -16,5 +16,9 @@
 #
 
 org.influxdata.nifi.processors.PutInfluxDatabase
+org.influxdata.nifi.processors.PutInfluxDatabase_2
 org.influxdata.nifi.processors.ExecuteInfluxDatabaseQuery
 org.influxdata.nifi.processors.PutInfluxDatabaseRecord
+org.influxdata.nifi.processors.PutInfluxDatabaseRecord_2
+org.influxdata.nifi.processors.GetInfluxDatabase_2
+org.influxdata.nifi.processors.GetInfluxDatabaseRecord_2

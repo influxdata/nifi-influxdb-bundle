@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.util.PropertyValueUtils;
 
 import org.apache.nifi.annotation.behavior.EventDriven;
@@ -37,7 +38,6 @@ import org.apache.nifi.annotation.behavior.WritesAttributes;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
-import org.apache.nifi.annotation.lifecycle.OnStopped;
 import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.expression.ExpressionLanguageScope;
@@ -97,18 +97,6 @@ public class PutInfluxDatabase extends AbstractInfluxDatabaseProcessor {
             .sensitive(false)
             .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .build();
-
-    static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
-            .description("Successful FlowFiles that are saved to InfluxDB are routed to this relationship").build();
-
-    static final Relationship REL_FAILURE = new Relationship.Builder().name("failure")
-            .description("FlowFiles were not saved to InfluxDB are routed to this relationship").build();
-
-    static final Relationship REL_RETRY = new Relationship.Builder().name("retry")
-            .description("FlowFiles were not saved to InfluxDB due to retryable exception are routed to this relationship").build();
-
-    static final Relationship REL_MAX_SIZE_EXCEEDED = new Relationship.Builder().name("failure-max-size")
-            .description("FlowFiles exceeding max records size are routed to this relationship").build();
 
     private static final Set<Relationship> relationships;
     private static final List<PropertyDescriptor> propertyDescriptors;
@@ -201,13 +189,13 @@ public class PutInfluxDatabase extends AbstractInfluxDatabaseProcessor {
                         new Object[]{exception.getLocalizedMessage()}, exception);
                 session.transfer(flowFile, REL_RETRY);
             } else {
-                getLogger().error("Failed to insert into influxDB due to {}",
+                getLogger().error(INFLUX_DB_FAIL_TO_INSERT,
                         new Object[]{exception.getLocalizedMessage()}, exception);
                 session.transfer(flowFile, REL_FAILURE);
             }
             context.yield();
         } catch (Exception exception) {
-            getLogger().error("Failed to insert into influxDB due to {}",
+            getLogger().error(INFLUX_DB_FAIL_TO_INSERT,
                     new Object[]{exception.getLocalizedMessage()}, exception);
             flowFile = session.putAttribute(flowFile, INFLUX_DB_ERROR_MESSAGE, String.valueOf(exception.getMessage()));
             session.transfer(flowFile, REL_FAILURE);
@@ -221,10 +209,5 @@ public class PutInfluxDatabase extends AbstractInfluxDatabaseProcessor {
         } else {
             getInfluxDB(context).write(database, retentionPolicy, InfluxDB.ConsistencyLevel.valueOf(consistencyLevel), records);
         }
-    }
-
-    @OnStopped
-    public void close() {
-        super.close();
     }
 }

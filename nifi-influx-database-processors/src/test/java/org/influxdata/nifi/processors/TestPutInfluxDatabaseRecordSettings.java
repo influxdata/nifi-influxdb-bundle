@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.influxdata.nifi.processors.internal.WriteOptions;
 import org.influxdata.nifi.util.InfluxDBUtils;
 import org.influxdata.nifi.util.InfluxDBUtils.ComplexFieldBehaviour;
 import org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour;

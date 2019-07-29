@@ -30,7 +30,7 @@ import org.junit.After;
 /**
  * Base integration test class for InfluxDB processors
  */
-public class AbstractITInfluxDB {
+public abstract class AbstractITInfluxDB {
     protected TestRunner runner;
     protected InfluxDB influxDB;
     protected String dbName = "test";

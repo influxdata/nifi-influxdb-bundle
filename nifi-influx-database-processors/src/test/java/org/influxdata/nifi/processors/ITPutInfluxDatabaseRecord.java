@@ -17,7 +17,6 @@
 package org.influxdata.nifi.processors;
 
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,7 +88,7 @@ public class ITPutInfluxDatabaseRecord extends AbstractITInfluxDB {
     }
 
     @Test
-    public void storeComplexData() throws ParseException {
+    public void storeComplexData() {
 
         runner.setProperty(InfluxDBUtils.TAGS, "lang,keyword");
         runner.setProperty(InfluxDBUtils.TIMESTAMP_FIELD, "timestamp");

@@ -23,9 +23,16 @@
 #
 set -e
 
+DEFAULT_DOCKER_REGISTRY="quay.io/influxdb/"
+DOCKER_REGISTRY="${DOCKER_REGISTRY:-$DEFAULT_DOCKER_REGISTRY}"
+
 DEFAULT_INFLUXDB_VERSION="1.7"
 INFLUXDB_VERSION="${INFLUXDB_VERSION:-$DEFAULT_INFLUXDB_VERSION}"
 INFLUXDB_IMAGE=influxdb:${INFLUXDB_VERSION}-alpine
+
+DEFAULT_INFLUXDB_V2_VERSION="nightly"
+INFLUXDB_V2_VERSION="${INFLUXDB_V2_VERSION:-$DEFAULT_INFLUXDB_V2_VERSION}"
+INFLUXDB_V2_IMAGE=${DOCKER_REGISTRY}influx:${INFLUXDB_V2_VERSION}
 
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
@@ -35,9 +42,15 @@ docker rm influxdb || true
 docker kill influxdb-secured || true
 docker rm influxdb-secured || true
 
-docker pull ${INFLUXDB_IMAGE} || true
+docker kill influxdb_v2 || true
+docker rm influxdb_v2 || true
 
+docker pull ${INFLUXDB_IMAGE} || true
+docker pull ${INFLUXDB_V2_IMAGE} || true
+
+echo
 echo "Starting unsecured InfluxDB..."
+echo
 
 docker run \
           --detach \
@@ -47,7 +60,9 @@ docker run \
           --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/influxdb.conf:/etc/influxdb/influxdb.conf \
       ${INFLUXDB_IMAGE}
 
+echo
 echo "Starting secured InfluxDB..."
+echo
 
 docker run \
           --detach \
@@ -58,5 +73,35 @@ docker run \
           --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/ssl/influxdb-selfsigned.crt:/etc/influxdb/influxdb-selfsigned.crt \
           --volume ${SCRIPT_PATH}/../nifi-influx-database-services/src/test/resources/ssl/influxdb-selfsigned.key:/etc/influxdb/influxdb-selfsigned.key \
       ${INFLUXDB_IMAGE}
+
+
+#
+# InfluxDB 2.0
+#
+echo
+echo "Starting InfluxDB 2.0 [${INFLUXDB_V2_IMAGE}] ... "
+echo
+
+docker run \
+       --detach \
+       --name influxdb_v2 \
+       --link=influxdb \
+       --publish 9999:9999 \
+       ${INFLUXDB_V2_IMAGE}
+
+echo "Wait 5s to start InfluxDB 2.0"
+sleep 5
+
+echo
+echo "Post onBoarding request, to setup initial user (my-user@my-password), org (my-org) and bucket (my-bucket)"
+echo
+curl -i -X POST http://localhost:9999/api/v2/setup -H 'accept: application/json' \
+    -d '{
+            "username": "my-user",
+            "password": "my-password",
+            "org": "my-org",
+            "bucket": "my-bucket",
+            "token": "my-token"
+        }'
 
 docker ps

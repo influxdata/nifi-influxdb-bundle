@@ -10,11 +10,19 @@
 - [About this Project](#about-this-project)
 - [Installation](#installation)
 - [How To Use](#how-to-use)
-    - [PutInfluxDatabaseRecord](#putinfluxdatabaserecord)
-    - [InfluxLineProtocolReader](#influxlineprotocolreader)
-    - [InfluxDatabaseService](#influxdatabaseservice)
-    - [PutInfluxDatabase](#putinfluxdatabase)
-    - [InfluxLineProtocolRecordSetWriter](#influxlineprotocolrecordsetwriter)
+    - Writes
+        - [PutInfluxDatabaseRecord for InfluxDB 1.x](#putinfluxdatabaserecord)
+        - [PutInfluxDatabaseRecord for InfluxDB 2.0](#putinfluxdatabaserecord_2)
+        - [PutInfluxDatabase for InfluxDB 1.x](#putinfluxdatabase)
+        - [PutInfluxDatabase for InfluxDB 2.0](#putinfluxdatabase_2)
+    - Queries
+        - [GetInfluxDatabase for InfluxDB 2.0](#getinfluxdatabase_2)
+        - [GetInfluxDatabaseRecord for InfluxDB 2.0](#getinfluxdatabaserecord_2)
+    - Serializations
+        - [InfluxLineProtocolReader](#influxlineprotocolreader)
+        - [InfluxLineProtocolRecordSetWriter](#influxlineprotocolrecordsetwriter)
+    - [InfluxDatabaseService for InfluxDB 1.x](#influxdatabaseservice)
+    - [InfluxDatabaseService for InfluxDB 2.0](#influxdatabaseservice_2)
 - [Demo](#demo)
 - [Contributing](#contributing)
 - [License](#license)
@@ -35,6 +43,15 @@ to write any NiFi Record structured data into InfluxDB by `PutInfluxDatabaseReco
 The processor works similarly as others NiFi built-in NiFi Record based
 `Put*Record` processors (`PutDatabaseRecord`, `PutHBase`,`PutMongoRecord`, ...).
 
+We also support the InfluxDB 2.0 with several new processors:
+
+- Writes
+    - [PutInfluxDatabase_2](#putinfluxdatabase_2)
+    - [PutInfluxDatabaseRecord_2](#putinfluxdatabaserecord_2)
+- Queries
+    - [GetInfluxDatabase_2](#getinfluxdatabase_2)
+    - [GetInfluxDatabaseRecord_2](#getinfluxdatabaserecord_2)
+
 ## Installation
 
 To install the InfluxDB Processors you will need to copy the appropriate nar file into the lib directory of your NiFi installation (**$NIFI_HOME/lib**) and restart NiFi. 
@@ -50,7 +67,7 @@ Nar Version                                                                     
 For example, to install the nar after download it to `~/Downloads`:
 
 ```bash
-$ cp ~/Downloads/nifi-influx-database-nar-1.0.nar.nar $NIFI_HOME/lib
+$ cp ~/Downloads/nifi-influx-database-nar-1.1.nar $NIFI_HOME/lib
 ```
 
 ## How To Use
@@ -137,6 +154,71 @@ Batching is useful when the flow file contains large number of records. Records 
 | failure | All FlowFiles that cannot be written to InfluxDB are routed to this relationship |
 
 
+### PutInfluxDatabaseRecord_2
+
+Uses a specified RecordReader to write the content of a FlowFile into InfluxDB 2.0 database.
+
+#### Features
+
+* Input can be any built-in or custom implemented NiFi RecordReader (json, avro, csv, `InfluxLineProtocolReader`...)
+* Configurable mapping between NiFi Records and InfluxDB measurement, field and tags
+* Configurable timestamp precision 
+* Reusable connection settings (InfluxDB url, password) for more processors via `InfluxDatabaseService_2` controller
+* Advanced InfluxDB client settings
+  * Gzip compression
+  
+#### Mapping Records to InfluxDB Data Point
+
+##### Measurement
+The value is determined from the field in the Record Schema. If the field is not found in the schema then is used the value of `Measurement property`. 
+Any data type is converted into a String type and used as the value.
+
+##### Tags
+The name of the field in the Record Schema is used as the key of the Tag. The value of the field is used as the value of the Tag.
+Any data type is converted into a String type and used as the Tag value [see also handling complex types](#behavior-of-handling-complex-types-for-tags-and-fields).
+
+##### Timestamp
+The value is determined from the field in the Record Schema. If the field is not found in the schema 
+or field has not defined value the timestamp is not specified for the Data Point. 
+The precision for the supplied time value is determined from the property `Timestamp precision`.
+
+#### Behavior of handling complex types for Tags and Fields
+
+The Apache NiFi complex Record fields are handled by different strategy:
+- `Map` - keys are mapped as keys of Tags or Fields, values are mapped as values of Tags or Fields
+- `Choice` - for the value is used the compatible type from Choice definition
+- `Array`  - based on property the `Complex Field Behavior`
+- `Record` - based on property the `Complex Field Behavior`
+
+#### Properties
+
+| Property | Description |
+| --- | --- |
+| **Record Reader** | Specifies the Controller Service to use for parsing incoming data and determining the data's schema |
+| **InfluxDB Controller Service** | A controller service that provides connection to InfluxDB |
+| **Bucket** | Specifies the destination bucket for writes |
+| **Organization** | Specifies the destination organization for writes |
+| **Enable gzip compression** | Enable gzip compression for InfluxDB http request body |
+| **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
+| **Measurement** | The name of the measurement. If the Record contains a field with measurement property value, then value of the Record field is use as InfluxDB measurement |
+| Tags | A comma-separated list of record fields stored in InfluxDB as 'tag' |
+| Missing Tag Behavior | If the specified tag is not present in the document, this property specifies how to handle the situation. |
+| **Fields** | A comma-separated list of record fields stored in InfluxDB as 'field'. At least one field must be defined |
+| Missing Field Behavior | If the specified field is not present in the document, this property specifies how to handle the situation |
+| Timestamp field | A name of the record field that used as a 'timestamp' |
+| **Timestamp precision** | The timestamp precision is ignore when the 'Timestamp field' value is 'java.util.Date' |
+| **Complex Field Behavior** | Indicates how to handle complex fields, i.e. fields that do not have a primitive value |
+| **Null Values Behavior** | Indicates how to handle null fields, i.e. fields that do not have a defined value |
+| **Max size of records** | Maximum size of records allowed to be posted in one batch |
+
+#### Relationships
+
+| Property | Description |
+| --- | --- |
+| success | All FlowFiles that are written into InfluxDB are routed to this relationship |
+| retry | A FlowFile is routed to this relationship if the database cannot be updated but attempting the operation again may succeed. |
+| failure | All FlowFiles that cannot be written to InfluxDB are routed to this relationship |
+
 ### InfluxLineProtocolReader
 
 Parses the InfluxDB Line Protocol into NiFi Record. This allows processing, filtering and
@@ -150,7 +232,7 @@ partitioning data in NiFi obtained from Telegraf agents, IoT devices, InfluxDB s
 
 ### InfluxDatabaseService
 
-Allows sharing connection configuration among more NiFi processors. Also support a SSL connection.
+Allows sharing connection configuration to InfluxDB 1.x  among more NiFi processors. Also support a SSL connection.
 
 #### Properties
 
@@ -163,9 +245,23 @@ Allows sharing connection configuration among more NiFi processors. Also support
 | Username | Username which is used to authorize against the InfluxDB |
 | Password | Password for the username which is used to authorize against the InfluxDB. If the authorization fail the FlowFile will be penalized and routed to 'retry' relationship. |
 
+### InfluxDatabaseService_2
+
+Allows sharing connection configuration to InfluxDB 2.0 among more NiFi processors. Also support a SSL connection.
+
+#### Properties
+
+| Property | Description |
+| --- | --- |
+| SSL Context Service | The SSL Context Service used to provide client certificate information for TLS/SSL connections |
+| Client Auth | The client authentication policy to use for the SSL Context. Only used if an SSL Context Service is provided. |
+| **InfluxDB connection URL** | InfluxDB URL to connect to. Eg: http://influxdb:8086 |
+| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
+| **InfluxDB Access Token** | Access Token used for authenticating/authorizing the InfluxDB request sent by NiFi. |
+
 ### PutInfluxDatabase
 
-Processor to write the content of a FlowFile in 'line protocol'. Please check details of the 'line protocol' in InfluxDB documentation (https://www.influxdb.com/). The flow file can contain single measurement point or multiple measurement points separated by line seperator. The timestamp (last field) should be in nano-seconds resolution.
+Processor to write the content of a FlowFile in 'line protocol'. Please check details of the 'line protocol' in InfluxDB documentation (https://www.influxdb.com/). The flow file can contain single measurement point or multiple measurement points separated by line seperator.  The timestamp precision is defined by Timestamp property. If you do not specify precision then the InfluxDB assumes that timestamps are in nanoseconds.
 
 #### Properties
 
@@ -181,6 +277,56 @@ Processor to write the content of a FlowFile in 'line protocol'. Please check de
 | **Retention Policy** | Retention policy for the saving the records |
 | Timestamp precisions | The precision of the time stamps. InfluxDB assumes that timestamps are in nanoseconds if you do not specify precision |
 | **Max size of records** | Maximum size of records allowed to be posted in one batch |
+
+### PutInfluxDatabase_2
+
+Processor to write the content of a FlowFile in 'line protocol'. Please check details of the 'line protocol' in InfluxDB 2.0 documentation (https://www.influxdb.com/). The flow file can contain single measurement point or multiple measurement points separated by line separator. The timestamp precision is defined by Timestamp property.
+
+#### Properties
+
+| Property | Description |
+| --- | --- |
+| **InfluxDB Controller Service** | A controller service that provides connection to InfluxDB |
+| **Bucket** | Specifies the destination bucket for writes |
+| **Organization** | Specifies the destination organization for writes |
+| Timestamp precisions | The precision of the time stamps |
+| **Enable gzip compression** | Enable gzip compression for InfluxDB http request body |
+| **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
+| **Character Set** | Specifies the character set of the document data |
+| **Max size of records** | Maximum size of records allowed to be posted in one batch |
+
+### GetInfluxDatabase_2
+
+Creates FlowFiles from records in InfluxDB 2.0 loaded by a user-specified Flux query.
+
+| Property | Description |
+| --- | --- |
+| **InfluxDB Controller Service** | A controller service that provides connection to InfluxDB |
+| **Organization** | Specifies the source organization |
+| **Query** | A valid Flux query to use to execute against InfluxDB |
+| **Dialect Header** | If true, the results will contain a header row |
+| **Dialect Delimiter** | Separator between cells; the default is "," |
+| Dialect Annotations | Describing properties about the columns of the table. More than one can be supplied if comma separated. Allowable values: "group", "datatype", "default". |
+| **Dialect Comment Prefix** | Character prefixed to comment strings. |
+| **Dialect Date Time Format** | Format of timestamps. |
+| Results Per FlowFile | How many records to put into a FlowFile at once. The whole body will be treated as a CSV file. |
+| **Enable gzip compression** | Enable gzip compression for InfluxDB http request body |
+| **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
+
+### GetInfluxDatabaseRecord_2
+
+A record-based version of GetInfluxDatabase_2 that uses the Record writers to write the Flux result set.
+
+| Property | Description |
+| --- | --- |
+| **InfluxDB Controller Service** | A controller service that provides connection to InfluxDB |
+| **Record Writer** | The record writer to use to write the result sets |
+| **Organization** | Specifies the source organization |
+| **Query** | A valid Flux query to use to execute against InfluxDB |
+| **Dialect Date Time Format** | Format of timestamps. |
+| Results Per FlowFile | How many records to put into a FlowFile at once. The whole body will be treated as a set of Records. |
+| **Enable gzip compression** | Enable gzip compression for InfluxDB http request body |
+| **Log Level** | Controls the level of logging for the REST layer of InfluxDB client |
 
 ### InfluxLineProtocolRecordSetWriter
 
@@ -230,7 +376,7 @@ Select Twitter Filter Endpoint API, Auth keys and tokens, and fill keywords to b
 field. To access the Twitter API you need authorization keys that can be obtained from
 [Twitter Apps](https://developer.twitter.com/en/apps).
 
->  Note, that the credentials embeded in demo may not work in shared enviroment, it is better to
+>  Note, that the credentials embedded in demo may not work in shared environment, it is better to
    generate new for testing.
    
 <img src="assets/doc/demo1-gettwitter.png" height="250px"> 
@@ -351,6 +497,7 @@ The metrics from monitoring Docker containers are filtered in the NiFi. NiFi con
 1. **PartitionRecord** - Group incoming records by container name  
 1. **RouteOnAttribute** - Routes incoming container metrics: NiFi container metrics are routed to `PutInfluxDatabaseRecord` other metrics to `LogAttribute`
 1. **PutInfluxDatabaseRecord** - Writes NiFi container metrics to the InfluxDB
+1. **PutInfluxDatabaseRecord_2** - Writes NiFi container metrics to the InfluxDB 2.0
 1. **LogAttribute** - Log metrics that aren't written to the InfluxDB
 
 #### Result
@@ -388,7 +535,7 @@ time                container_image container_name container_status container_ve
 
 ### Write LineProtocol to multiple storage
 
-This example show how to store NiFi Records as a LineProtocol into multiple environments: InfluxDB and Kafka. 
+This example show how to store NiFi Records as a LineProtocol into multiple environments: InfluxDB, InfluxDB 2.0 and Kafka. 
 
 #### NiFi flow
 
@@ -397,6 +544,45 @@ This example show how to store NiFi Records as a LineProtocol into multiple envi
 ##### InfluxLineProtocolRecordSetWriter settings
 
 <img src="assets/doc/demo3-setwriter.png" height="250px">    
+
+### Expose data from InfluxDB 2.0 on the particular HTTP endpoint
+
+This example show how to exposing InfluxDB 2.0 data by NiFi. 
+
+#### GetInfluxDatabase2 configuration
+
+The processor is configured to invoke static flux query:
+
+```
+from(bucket: "my-bucket")
+  |> range(start: 0)
+  |> filter(fn: (r) => r._measurement == "tweets")
+  |> drop(columns: ["keyword", "lang", "user_verified"])
+  |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+  |> limit(n:1)
+  |> keep(columns: ["tweet_id", "screen_name", "text"])
+``` 
+
+The result is mapped as CSV and returned as a response to incoming HTTP request.
+
+<img src="assets/doc/demo4-static-query.png" height="250px">   
+
+#### GetInfluxDatabaseRecord_2 configuration
+
+The processor invoke a flux query that is pass as a http query parameter:
+
+```bash
+curl -i -X GET -G http://localhost:8234 \
+ --data-urlencode 'accept=xml'  \
+ --data-urlencode 'query=from(bucket: "my-bucket")
+ |> range(start: 0) |> filter(fn: (r) => r._measurement == "docker_container_status")
+ |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |> limit(n:10, offset: 0)'
+``` 
+
+The result is mapped to format that is specified in request `accept` parameter.
+
+<img src="assets/doc/demo4-dynamic-query.png" height="250px">   
 
 ## Contributing
 

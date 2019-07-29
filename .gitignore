@@ -3,6 +3,7 @@
 /target
 **/target
 **/flow.xml.gz
+**/flow.edited.xml*
 **/copy_dashboard.sh
 **/pom.xml.tag
 **/pom.xml.releaseBackup

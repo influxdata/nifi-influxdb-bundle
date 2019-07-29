@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.influxdata.nifi.processors;
+package org.influxdata.nifi.processors.internal;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -28,7 +28,9 @@ import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.processor.AbstractProcessor;
 import org.apache.nifi.processor.ProcessContext;
+import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
+import org.apache.nifi.serialization.RecordReaderFactory;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
@@ -36,6 +38,15 @@ import org.influxdb.InfluxDBFactory;
  * Abstract base class for InfluxDB processors
  */
 public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor {
+
+    public static final PropertyDescriptor RECORD_READER_FACTORY = new PropertyDescriptor.Builder()
+            .name("record-reader")
+            .displayName("Record Reader")
+            .description("Specifies the Controller Service to use for parsing incoming data "
+                    + "and determining the data's schema.")
+            .identifiesControllerService(RecordReaderFactory.class)
+            .required(true)
+            .build();
 
     public static final PropertyDescriptor CHARSET = new PropertyDescriptor.Builder()
             .name("influxdb-charset")
@@ -104,8 +115,23 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .addValidator(StandardValidators.DATA_SIZE_VALIDATOR)
             .build();
 
+    public static final Relationship REL_SUCCESS = new Relationship.Builder().name("success")
+            .description("Successful FlowFiles that are saved to InfluxDB are routed to this relationship").build();
+
+    public static final Relationship REL_FAILURE = new Relationship.Builder().name("failure")
+            .description("FlowFiles were not saved to InfluxDB are routed to this relationship").build();
+
+    public static final Relationship REL_RETRY = new Relationship.Builder().name("retry")
+            .description("FlowFiles were not saved to InfluxDB due to retryable exception are routed to this relationship").build();
+
+    public static final Relationship REL_MAX_SIZE_EXCEEDED = new Relationship.Builder().name("failure-max-size")
+            .description("FlowFiles exceeding max records size are routed to this relationship").build();
+
+
     public static final String INFLUX_DB_ERROR_MESSAGE = "influxdb.error.message";
     public static final String INFLUX_DB_ERROR_MESSAGE_LOG = "Failed procession flow file {} due to {}";
+    public static final String INFLUX_DB_FAIL_TO_INSERT = "Failed to insert into influxDB due to {}";
+    public static final String INFLUX_DB_FAIL_TO_QUERY = "Failed to execute Flux query due {} to {}";
 
     protected AtomicReference<InfluxDB> influxDB = new AtomicReference<>();
     protected long maxRecordsSize;
@@ -152,7 +178,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
         }
         if ( influxDB.get() != null ) {
             influxDB.get().close();
-            influxDB.set(null);;
+            influxDB.set(null);
         }
     }
 }

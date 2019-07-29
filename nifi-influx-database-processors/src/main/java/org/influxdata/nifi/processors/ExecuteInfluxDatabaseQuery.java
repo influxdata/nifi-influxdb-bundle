@@ -34,6 +34,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
+
 import com.google.gson.Gson;
 import org.apache.nifi.annotation.behavior.EventDriven;
 import org.apache.nifi.annotation.behavior.InputRequirement;
@@ -111,7 +113,7 @@ public class ExecuteInfluxDatabaseQuery extends AbstractInfluxDatabaseProcessor 
             .description("Successful InfluxDB queries are routed to this relationship").build();
 
     static final Relationship REL_FAILURE = new Relationship.Builder().name("failure")
-            .description("Falied InfluxDB queries are routed to this relationship").build();
+            .description("Failed InfluxDB queries are routed to this relationship").build();
 
     static final Relationship REL_RETRY = new Relationship.Builder().name("retry")
             .description("Failed queries that are retryable exception are routed to this relationship").build();

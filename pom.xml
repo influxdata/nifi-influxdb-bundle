@@ -208,6 +208,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.influxdata</groupId>
+                <artifactId>influxdb-client-java</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.8.1</version>
@@ -241,7 +247,7 @@
                     <excludes>**/target/**, **/*.jar, **/.git/**, **/.*, **/*.png, **/*.iml, .idea/**,
                         **/*nightly*/**, **/.m2/**, **/LICENSE, **/NOTICE, **/*.md, **/*.json, **/*.xml.gz, **/PLACEHOLDER,
                         **/test/resources/ssl/*, **/pom.xml.tag, **/pom.xml.releaseBackup, **/pom.xml.next, release.properties,
-                        **/PULL_REQUEST_TEMPLATE
+                        **/PULL_REQUEST_TEMPLATE, **/*.xml.backup
                     </excludes>
                     <properties>
                         <organizationName>${project.organization.name}</organizationName>
@@ -375,5 +381,21 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <repositories>
+
+        <repository>
+            <id>bonitoo-snapshot</id>
+            <name>Bonitoo.io snapshot repository</name>
+            <url>https://apitea.com/nexus/content/repositories/bonitoo-snapshot/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+    </repositories>
 
 </project>

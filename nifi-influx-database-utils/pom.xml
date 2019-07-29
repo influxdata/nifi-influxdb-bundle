@@ -56,6 +56,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.influxdata</groupId>
+            <artifactId>influxdb-client-java</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>

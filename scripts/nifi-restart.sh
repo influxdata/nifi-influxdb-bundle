@@ -35,6 +35,10 @@ DEFAULT_CHRONOGRAF_VERSION="1.7"
 CHRONOGRAF_VERSION="${CHRONOGRAF_VERSION:-$DEFAULT_CHRONOGRAF_VERSION}"
 CHRONOGRAF_IMAGE=chronograf:${CHRONOGRAF_VERSION}
 
+DEFAULT_INFLUXDB_V2_VERSION="nightly"
+INFLUXDB_V2_VERSION="${INFLUXDB_V2_VERSION:-$DEFAULT_INFLUXDB_V2_VERSION}"
+INFLUXDB_V2_IMAGE=quay.io/influxdb/influx:${INFLUXDB_V2_VERSION}
+
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 echo "Building nifi-influxdata-nar..."
@@ -62,6 +66,9 @@ docker rm nifi || true
 docker kill influxdb || true
 docker rm influxdb || true
 
+docker kill influxdb_v2 || true
+docker rm influxdb_v2 || true
+
 echo
 echo "Starting InfluxDB..."
 echo
@@ -75,6 +82,34 @@ docker run \
       ${INFLUXDB_IMAGE}
 
 sleep 5
+
+#
+# InfluxDB 2.0
+#
+echo
+echo "Starting InfluxDB 2.0 [${INFLUXDB_V2_IMAGE}] ... "
+echo
+
+docker pull ${INFLUXDB_V2_IMAGE} || true
+docker run \
+       --detach \
+       --name influxdb_v2 \
+       --publish 9999:9999 \
+       ${INFLUXDB_V2_IMAGE}
+
+sleep 5
+
+echo
+echo "Post onBoarding request, to setup initial user (my-user@my-password), org (my-org) and bucket (my-bucket)"
+echo
+curl -i -X POST http://localhost:9999/api/v2/setup -H 'accept: application/json' \
+    -d '{
+            "username": "my-user",
+            "password": "my-password",
+            "org": "my-org",
+            "bucket": "my-bucket",
+            "token": "my-token"
+        }'
 
 #
 # Create database for Twitter demo
@@ -112,11 +147,15 @@ echo
 echo "Build Apache NiFi with demo..."
 echo
 
-gzip < ${SCRIPT_PATH}/flow.xml > ${SCRIPT_PATH}/flow.xml.gz
-# docker cp nifi:/opt/nifi/nifi-current/conf/flow.xml.gz scripts/
+ORGID=$(docker exec -it influxdb_v2 influx org find -t my-token | grep my-org  | awk '{ print $1 }')
+cp "${SCRIPT_PATH}"/flow.xml "${SCRIPT_PATH}"/flow.edited.xml
+sed -i.backup "s/influxdb-org-replacement-id/${ORGID}/g" "${SCRIPT_PATH}"/flow.edited.xml
+gzip < "${SCRIPT_PATH}"/flow.edited.xml > "${SCRIPT_PATH}"/flow.xml.gz
+
+# docker cp nifi:/opt/nifi/nifi-current/conf/flow.xml.gz scripts/ && gunzip -f scripts/flow.xml.gz
 # gunzip -f scripts/flow.xml.gz
 
-docker build -t nifi -f ${SCRIPT_PATH}/Dockerfile --build-arg NIFI_IMAGE=${NIFI_IMAGE} .
+docker build -t nifi -f "${SCRIPT_PATH}"/Dockerfile --build-arg NIFI_IMAGE="${NIFI_IMAGE}" .
 
 echo
 echo "Starting Apache NiFi..."
@@ -128,7 +167,10 @@ docker run \
     --publish 8080:8080 \
 	--publish 8007:8000 \
 	--publish 6666:6666 \
+	--publish 8123:8123 \
+	--publish 8234:8234 \
 	--link=influxdb \
+	--link=influxdb_v2 \
 	--link=kafka \
 	nifi
 
@@ -143,7 +185,7 @@ docker run \
     --name=telegraf \
     --net=container:nifi \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v ${SCRIPT_PATH}/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
+    -v "${SCRIPT_PATH}"/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
     ${TELEGRAF_IMAGE}
 
 echo
@@ -153,3 +195,5 @@ echo
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/nifi-dashboard.json
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/twitter-dashboard.json
 curl -i -X POST -H "Content-Type: application/json" http://localhost:8888/chronograf/v1/dashboards -d @${SCRIPT_PATH}/chronograf/nifi-logs-dashboard.json
+
+#curl -i -X POST -H "Content-Type: application/json" -H "Authorization: Token my-password" http://localhost:9999/api/v2/dashboards  -d @scripts/influx2/nifi_dashboard.json

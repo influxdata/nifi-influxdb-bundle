@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import org.influxdata.client.domain.WritePrecision;
 import org.influxdata.nifi.util.InfluxDBUtils;
 import org.influxdata.nifi.util.InfluxDBUtils.ComplexFieldBehaviour;
 import org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour;
@@ -39,6 +40,7 @@ public final class MapperOptions implements Cloneable {
 
     private String timestamp;
     private TimeUnit precision = PRECISION_DEFAULT;
+    private WritePrecision writePrecision = WritePrecision.NS;
     private String measurement;
     private List<String> fields = new ArrayList<>();
     private MissingItemsBehaviour missingFields = MISSING_FIELDS_BEHAVIOUR_DEFAULT;
@@ -73,6 +75,22 @@ public final class MapperOptions implements Cloneable {
 
         MapperOptions clone = clone();
         clone.precision = precision;
+
+        return clone;
+    }
+
+    /**
+     * @param writePrecision Precision of timestamp
+     * @return immutable instance
+     * @see WritePrecision
+     */
+    @NonNull
+    public MapperOptions writePrecision(@NonNull final WritePrecision writePrecision) {
+
+        Objects.requireNonNull(writePrecision, "Precision of timestamp is required");
+
+        MapperOptions clone = clone();
+        clone.writePrecision = writePrecision;
 
         return clone;
     }
@@ -206,6 +224,14 @@ public final class MapperOptions implements Cloneable {
     @NonNull
     public TimeUnit getPrecision() {
         return precision;
+    }
+
+    /**
+     * @return Evaluated write precision
+     */
+    @NonNull
+    public WritePrecision getWritePrecision() {
+        return writePrecision;
     }
 
     /**

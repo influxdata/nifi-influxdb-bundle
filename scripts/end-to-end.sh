@@ -64,3 +64,150 @@ else
     echo "> check: fail..."  `(echo ${nifi_logs} | jq '.results[0].series[0].values[0][1]')`
     exit 1
 fi
+
+echo
+echo "Querying from InfluxDB 2.0 data by:"
+echo "  from(bucket: \"my-bucket\")"
+echo "      |> range(start: 0)"
+echo "      |> filter(fn: (r) => r._measurement == \"tweets\")"
+echo "      |> filter(fn: (r) => r._field == \"text\")"
+echo "      |> keep(columns: [\"_field\", \"_value\"])"
+echo "      |> count()"
+echo
+
+twitter_v2=`(curl -s POST \
+  http://localhost:9999/api/v2/query?org=my-org \
+  -H 'Authorization: Token my-token' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "query": "from(bucket:\"my-bucket\") |> range(start: 0) |> filter(fn: (r) => r._measurement == \"tweets\") |> filter(fn: (r) => r._field == \"text\") |> keep(columns: [\"_field\", \"_value\"]) |> count()",
+    "dialect" : {
+        "header": false,
+        "annotations": []
+    }
+}')`
+
+twitter_v2_count=`(echo ${twitter_v2} | head | cut -d ',' -f 5 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')`
+echo ${twitter_v2_count}
+if [[ ${twitter_v2_count} -gt 0 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  ${twitter_v2_count}
+    exit 1
+fi
+
+echo
+echo "Querying from InfluxDB 2.0 data by:"
+echo "  from(bucket: \"my-bucket\")"
+echo "      |> range(start: 0)"
+echo "      |> filter(fn: (r) => r._measurement == \"docker_container_status\")"
+echo "      |> filter(fn: (r) => r._field == \"started_at\")"
+echo "      |> keep(columns: [\"_field\", \"_value\"])"
+echo "      |> count()"
+echo
+
+docker_container_status_v2=`(curl -s POST \
+  http://localhost:9999/api/v2/query?org=my-org \
+  -H 'Authorization: Token my-token' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "query": "from(bucket:\"my-bucket\") |> range(start: 0) |> filter(fn: (r) => r._measurement == \"docker_container_status\") |> filter(fn: (r) => r._field == \"started_at\") |> keep(columns: [\"_field\", \"_value\"]) |> count()",
+    "dialect" : {
+        "header": false,
+        "annotations": []
+    }
+}')`
+
+docker_container_status_v2_count=`(echo ${docker_container_status_v2} | head | cut -d ',' -f 5 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')`
+echo ${docker_container_status_v2_count}
+if [[ ${docker_container_status_v2_count} -gt 0 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  ${docker_container_status_v2_count}
+    exit 1
+fi
+
+echo
+echo "Querying from InfluxDB 2.0 data by:"
+echo "  from(bucket: "my-bucket")"
+echo "      |> range(start: 0)"
+echo "      |> filter(fn: (r) => r._measurement == "nifi_logs")"
+echo "      |> filter(fn: (r) => r._field == "message")"
+echo "      |> drop(columns: ["thread", "level"])"
+echo "      |> count()"
+echo
+
+nifi_logs_v2=`(curl -s POST \
+  http://localhost:9999/api/v2/query?org=my-org \
+  -H 'Authorization: Token my-token' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "query": "from(bucket:\"my-bucket\") |> range(start: 0) |> filter(fn: (r) => r._measurement == \"nifi_logs\") |> filter(fn: (r) => r._field == \"message\") |> drop(columns: [\"thread\", \"level\"]) |> count()",
+    "dialect" : {
+        "header": false,
+        "annotations": []
+    }
+}')`
+
+nifi_logs_v2_count=`(echo ${nifi_logs_v2} | head | cut -d ',' -f 8 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')`
+echo ${nifi_logs_v2_count}
+if [[ ${nifi_logs_v2_count} -gt 0 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  ${nifi_logs_v2}
+    exit 1
+fi
+
+echo
+echo "Get last Tweet about Bitcoin or Ethereum by:"
+echo "    curl -i -X GET http://localhost:8123"
+echo
+GetInfluxDatabase_2=$(curl -L http://localhost:8123 -o /dev/null -w '%{http_code}\n' -s)
+
+if [[ ${GetInfluxDatabase_2} == 200 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  "${GetInfluxDatabase_2}"
+    exit 1
+fi
+
+echo
+echo "Flux Query to CSV:"
+echo
+
+FluxToCSV=$(curl -L -G http://localhost:8234  -o /dev/null -w '%{http_code}\n' -s --data-urlencode 'query=from(bucket: "my-bucket")
+ |> range(start: 0) |> filter(fn: (r) => r._measurement == "docker_container_status")
+ |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |> limit(n:10, offset: 0)')
+
+if [[ ${FluxToCSV} == 200 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  "${FluxToCSV}"
+    exit 1
+fi
+
+echo
+echo "Flux Query to XML:"
+echo
+
+FluxToXML=$(curl -L -G http://localhost:8234 -o /dev/null -w '%{http_code}\n' -s --data-urlencode 'accept=xml' --data-urlencode 'query=from(bucket: "my-bucket")
+ |> range(start: 0) |> filter(fn: (r) => r._measurement == "docker_container_status")
+ |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |> limit(n:10, offset: 0)')
+
+echo
+echo "Flux Query to JSON:"
+echo
+
+FluxToJSON=$(curl -L -G http://localhost:8234 -o /dev/null -w '%{http_code}\n' -s --data-urlencode 'accept=json' --data-urlencode 'query=from(bucket: "my-bucket")
+ |> range(start: 0) |> filter(fn: (r) => r._measurement == "docker_container_status")
+ |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |> limit(n:10, offset: 0)')
+
+if [[ ${FluxToXML} == 200 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  "${FluxToJSON}"
+    exit 1
+fi

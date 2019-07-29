@@ -16,3 +16,4 @@
 #
 
 org.influxdata.nifi.services.StandardInfluxDatabaseService
+org.influxdata.nifi.services.StandardInfluxDatabaseService_2
