@@ -43,6 +43,15 @@ to write any NiFi Record structured data into InfluxDB by `PutInfluxDatabaseReco
 The processor works similarly as others NiFi built-in NiFi Record based
 `Put*Record` processors (`PutDatabaseRecord`, `PutHBase`,`PutMongoRecord`, ...).
 
+We also support the InfluxDB 2.0 with several new processors:
+
+- Writes
+    - [PutInfluxDatabase_2](#putinfluxdatabase_2)
+    - [PutInfluxDatabaseRecord_2](#putinfluxdatabaserecord_2)
+- Queries
+    - [GetInfluxDatabase_2](#getinfluxdatabase_2)
+    - [GetInfluxDatabaseRecord_2](#getinfluxdatabaserecord_2)
+
 ## Installation
 
 To install the InfluxDB Processors you will need to copy the appropriate nar file into the lib directory of your NiFi installation (**$NIFI_HOME/lib**) and restart NiFi. 
@@ -536,11 +545,11 @@ This example show how to store NiFi Records as a LineProtocol into multiple envi
 
 <img src="assets/doc/demo3-setwriter.png" height="250px">    
 
-### Expose data from InfluxDB 2.0 on the particular HTTP endpoint.
+### Expose data from InfluxDB 2.0 on the particular HTTP endpoint
 
 This example show how to exposing InfluxDB 2.0 data by NiFi. 
 
-#### GetInfluxDatabase_2
+#### GetInfluxDatabase2 configuration
 
 The processor is configured to invoke static flux query:
 
@@ -558,7 +567,7 @@ The result is mapped as CSV and returned as a response to incoming HTTP request.
 
 <img src="assets/doc/demo4-static-query.png" height="250px">   
 
-#### GetInfluxDatabaseRecord_2
+#### GetInfluxDatabaseRecord_2 configuration
 
 The processor invoke a flux query that is pass as a http query parameter:
 
