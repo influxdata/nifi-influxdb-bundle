@@ -170,3 +170,44 @@ else
     echo "> check: fail..."  "${GetInfluxDatabase_2}"
     exit 1
 fi
+
+echo
+echo "Flux Query to CSV:"
+echo
+
+FluxToCSV=$(curl -L -G http://localhost:8234  -o /dev/null -w '%{http_code}\n' -s --data-urlencode 'query=from(bucket: "my-bucket")
+ |> range(start: 0) |> filter(fn: (r) => r._measurement == "docker_container_status")
+ |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |> limit(n:10, offset: 0)')
+
+if [[ ${FluxToCSV} == 200 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  "${FluxToCSV}"
+    exit 1
+fi
+
+echo
+echo "Flux Query to XML:"
+echo
+
+FluxToXML=$(curl -L -G http://localhost:8234 -o /dev/null -w '%{http_code}\n' -s --data-urlencode 'accept=xml' --data-urlencode 'query=from(bucket: "my-bucket")
+ |> range(start: 0) |> filter(fn: (r) => r._measurement == "docker_container_status")
+ |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |> limit(n:10, offset: 0)')
+
+echo
+echo "Flux Query to JSON:"
+echo
+
+FluxToJSON=$(curl -L -G http://localhost:8234 -o /dev/null -w '%{http_code}\n' -s --data-urlencode 'accept=json' --data-urlencode 'query=from(bucket: "my-bucket")
+ |> range(start: 0) |> filter(fn: (r) => r._measurement == "docker_container_status")
+ |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+ |> limit(n:10, offset: 0)')
+
+if [[ ${FluxToXML} == 200 ]]; then
+    echo "> check: success"
+else
+    echo "> check: fail..."  "${FluxToJSON}"
+    exit 1
+fi

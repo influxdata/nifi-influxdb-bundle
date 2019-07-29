@@ -63,6 +63,19 @@ NiFi flow produced by Telegraf.
 Set as Line Protocol.</value>
     </label>
     <label>
+      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
+      <position x="1149.66674359575" y="-208.8424884087283"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 3 User Story:
+   
+
+As NiFi user I want to store LineProtocol date into multiple environments
+ - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
+    </label>
+    <label>
       <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
       <position x="1145.261012394578" y="-596.720167086168"/>
       <size height="163.47393798828125" width="414.004150390625"/>
@@ -78,19 +91,6 @@ InfluxDB in order to work with time series.
 * AC1: Count twitter messages, grouping by keywords and languages
 
 </value>
-    </label>
-    <label>
-      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
-      <position x="1149.66674359575" y="-208.8424884087283"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 3 User Story:
-   
-
-As NiFi user I want to store LineProtocol date into multiple environments
- - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
     </label>
     <label>
       <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
@@ -131,41 +131,6 @@ HTTP endpoint.
       <name>Exposing InfluxDB 2.0</name>
       <position x="751.3459817261955" y="-15.869125218553108"/>
       <comment/>
-      <processor>
-        <id>016c1002-7c72-1ddd-de29-fed8ee1f514e</id>
-        <name>ResultToLineProtocol</name>
-        <position x="2430.2497244459128" y="855.534022437232"/>
-        <styles/>
-        <comment/>
-        <class>org.apache.nifi.processors.standard.ConvertRecord</class>
-        <bundle>
-          <group>org.apache.nifi</group>
-          <artifact>nifi-standard-nar</artifact>
-          <version>1.9.2</version>
-        </bundle>
-        <maxConcurrentTasks>1</maxConcurrentTasks>
-        <schedulingPeriod>0 sec</schedulingPeriod>
-        <penalizationPeriod>30 sec</penalizationPeriod>
-        <yieldPeriod>1 sec</yieldPeriod>
-        <bulletinLevel>WARN</bulletinLevel>
-        <lossTolerant>false</lossTolerant>
-        <scheduledState>STOPPED</scheduledState>
-        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-        <executionNode>ALL</executionNode>
-        <runDurationNanos>0</runDurationNanos>
-        <property>
-          <name>record-reader</name>
-          <value>016c1017-7c72-1ddd-67df-755e87a446bc</value>
-        </property>
-        <property>
-          <name>record-writer</name>
-        </property>
-        <property>
-          <name>include-zero-record-flowfiles</name>
-          <value>false</value>
-        </property>
-        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
-      </processor>
       <processor>
         <id>2cc8621f-016c-1000-e58f-c709476d6c4b</id>
         <name>GetInfluxDatabase_2</name>
@@ -238,61 +203,9 @@ HTTP endpoint.
         </property>
       </processor>
       <processor>
-        <id>2cc96734-016c-1000-5a86-6dd317f959db</id>
-        <name>ErrorLog</name>
-        <position x="573.0000007746532" y="830.9999833911509"/>
-        <styles/>
-        <comment/>
-        <class>org.apache.nifi.processors.standard.PutFile</class>
-        <bundle>
-          <group>org.apache.nifi</group>
-          <artifact>nifi-standard-nar</artifact>
-          <version>1.9.2</version>
-        </bundle>
-        <maxConcurrentTasks>1</maxConcurrentTasks>
-        <schedulingPeriod>0 sec</schedulingPeriod>
-        <penalizationPeriod>30 sec</penalizationPeriod>
-        <yieldPeriod>1 sec</yieldPeriod>
-        <bulletinLevel>WARN</bulletinLevel>
-        <lossTolerant>false</lossTolerant>
-        <scheduledState>RUNNING</scheduledState>
-        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-        <executionNode>ALL</executionNode>
-        <runDurationNanos>0</runDurationNanos>
-        <property>
-          <name>Directory</name>
-          <value>/opt/nifi/influx-err</value>
-        </property>
-        <property>
-          <name>Conflict Resolution Strategy</name>
-          <value>ignore</value>
-        </property>
-        <property>
-          <name>Create Missing Directories</name>
-          <value>true</value>
-        </property>
-        <property>
-          <name>Maximum File Count</name>
-        </property>
-        <property>
-          <name>Last Modified Time</name>
-        </property>
-        <property>
-          <name>Permissions</name>
-        </property>
-        <property>
-          <name>Owner</name>
-        </property>
-        <property>
-          <name>Group</name>
-        </property>
-        <autoTerminatedRelationship>success</autoTerminatedRelationship>
-        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
-      </processor>
-      <processor>
         <id>016c1014-7c72-1ddd-7680-39272d99c0d3</id>
         <name>FluxQueryHttpResponseError</name>
-        <position x="2994.706357201013" y="1153.352245524893"/>
+        <position x="2509.042782982263" y="1143.7824899706939"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.HandleHttpResponse</class>
@@ -320,11 +233,12 @@ HTTP endpoint.
           <value>2dda9865-016c-1000-0bcd-057d362e91d9</value>
         </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>2e171e29-016c-1000-e4f1-ef036647348b</id>
         <name>ResultToCSV</name>
-        <position x="2821.8854778130108" y="858.0988234092595"/>
+        <position x="2375.6970012505108" y="840.1555937339665"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.ConvertRecord</class>
@@ -402,11 +316,12 @@ HTTP endpoint.
           <name>include-schema</name>
           <value>false</value>
         </property>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>2ddc6b66-016c-1000-a3f3-c3b1a1f1322d</id>
         <name>GetInfluxDatabaseRecord_2</name>
-        <position x="2214.3303235881567" y="330.7769230922613"/>
+        <position x="1964.3212903850317" y="311.6374653896246"/>
         <styles/>
         <comment/>
         <class>org.influxdata.nifi.processors.GetInfluxDatabaseRecord_2</class>
@@ -460,7 +375,7 @@ HTTP endpoint.
       <processor>
         <id>016c1008-7c72-1ddd-fa1c-6247e2848b72</id>
         <name>AttributesToCSV</name>
-        <position x="3484.418177069869" y="332.16441444631346"/>
+        <position x="2601.611048163619" y="317.8098383354736"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.AttributesToCSV</class>
@@ -502,11 +417,12 @@ HTTP endpoint.
           <name>include-schema</name>
           <value>false</value>
         </property>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>2e15c3d4-016c-1000-598c-bfde67e12172</id>
         <name>RouteOnAttribute</name>
-        <position x="2217.3228566768457" y="582.1552014538619"/>
+        <position x="1967.3138234737207" y="563.0157437512252"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.RouteOnAttribute</class>
@@ -528,10 +444,6 @@ HTTP endpoint.
         <property>
           <name>Routing Strategy</name>
           <value>Route to Property name</value>
-        </property>
-        <property>
-          <name>lineprotocol</name>
-          <value>${http.query.param.accept:equals('lineprotocol')}</value>
         </property>
         <property>
           <name>json</name>
@@ -577,11 +489,12 @@ HTTP endpoint.
           <value>2ccadaf3-016c-1000-3585-f572bed12b5f</value>
         </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <processor>
         <id>016c1000-7c72-1ddd-a2c5-afa48afc0d7f</id>
         <name>ResultToXML</name>
-        <position x="2036.0173025709128" y="852.308680640357"/>
+        <position x="1972.6178885084128" y="839.1503020392828"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.ConvertRecord</class>
@@ -643,57 +556,6 @@ HTTP endpoint.
         <property>
           <name>HTTP Context Map</name>
           <value>2ccadaf3-016c-1000-3585-f572bed12b5f</value>
-        </property>
-        <autoTerminatedRelationship>success</autoTerminatedRelationship>
-      </processor>
-      <processor>
-        <id>016c100f-7c72-1ddd-1874-2d9f34075df4</id>
-        <name>ErrorLog</name>
-        <position x="2234.458008587153" y="1425.6964555591196"/>
-        <styles/>
-        <comment/>
-        <class>org.apache.nifi.processors.standard.PutFile</class>
-        <bundle>
-          <group>org.apache.nifi</group>
-          <artifact>nifi-standard-nar</artifact>
-          <version>1.9.2</version>
-        </bundle>
-        <maxConcurrentTasks>1</maxConcurrentTasks>
-        <schedulingPeriod>0 sec</schedulingPeriod>
-        <penalizationPeriod>30 sec</penalizationPeriod>
-        <yieldPeriod>1 sec</yieldPeriod>
-        <bulletinLevel>WARN</bulletinLevel>
-        <lossTolerant>false</lossTolerant>
-        <scheduledState>RUNNING</scheduledState>
-        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-        <executionNode>ALL</executionNode>
-        <runDurationNanos>0</runDurationNanos>
-        <property>
-          <name>Directory</name>
-          <value>/opt/nifi/influx-err</value>
-        </property>
-        <property>
-          <name>Conflict Resolution Strategy</name>
-          <value>ignore</value>
-        </property>
-        <property>
-          <name>Create Missing Directories</name>
-          <value>true</value>
-        </property>
-        <property>
-          <name>Maximum File Count</name>
-        </property>
-        <property>
-          <name>Last Modified Time</name>
-        </property>
-        <property>
-          <name>Permissions</name>
-        </property>
-        <property>
-          <name>Owner</name>
-        </property>
-        <property>
-          <name>Group</name>
         </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
         <autoTerminatedRelationship>failure</autoTerminatedRelationship>
@@ -788,7 +650,7 @@ HTTP endpoint.
       <processor>
         <id>2dd9b57d-016c-1000-3d06-8f2a86b14885</id>
         <name>FluxQueryHttpRequest</name>
-        <position x="2213.292417686998" y="91.04738696009139"/>
+        <position x="1963.2833844838729" y="71.90792925745467"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.HandleHttpRequest</class>
@@ -875,7 +737,7 @@ HTTP endpoint.
       <processor>
         <id>2ddd7c72-016c-1000-adeb-839e5235afc1</id>
         <name>ResultToJSON</name>
-        <position x="1644.77255159435" y="851.9428359137945"/>
+        <position x="1571.8031912427875" y="843.569308386939"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.ConvertRecord</class>
@@ -911,7 +773,7 @@ HTTP endpoint.
       <processor>
         <id>016c100a-7c72-1ddd-4591-18984291303c</id>
         <name>FluxQueryHttpResponseSuccess</name>
-        <position x="2233.981259544763" y="1156.2888910327056"/>
+        <position x="1973.206113060388" y="1137.1494333300689"/>
         <styles/>
         <comment/>
         <class>org.apache.nifi.processors.standard.HandleHttpResponse</class>
@@ -939,10 +801,11 @@ HTTP endpoint.
           <value>2dda9865-016c-1000-0bcd-057d362e91d9</value>
         </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <label>
         <id>2d482d5d-016c-1000-847d-197f5090d957</id>
-        <position x="499.89318925121574" y="-72.78666822017726"/>
+        <position x="944.885437786372" y="73.15165956912938"/>
         <size height="99.0" width="390.0"/>
         <styles>
           <style name="font-size">14px</style>
@@ -954,8 +817,8 @@ HTTP endpoint.
       </label>
       <label>
         <id>2e0425e5-016c-1000-396e-9ec849acbcc8</id>
-        <position x="2617.3935039506923" y="-142.34530820120858"/>
-        <size height="409.44776916503906" width="557.7339935302734"/>
+        <position x="2367.9879863725673" y="-105.71933163870858"/>
+        <size height="392.00682067871094" width="465.29701232910156"/>
         <styles>
           <style name="font-size">12px</style>
         </styles>
@@ -987,26 +850,6 @@ curl -i -X GET -G http://localhost:8234 \
  |&gt; limit(n:10, offset: 0)'</value>
       </label>
       <connection>
-        <id>2d1a1f70-016c-1000-7838-0ecc90ff64e8</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>2cc814ff-016c-1000-7d44-0e277649be12</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>2cc96734-016c-1000-5a86-6dd317f959db</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
         <id>2e162b8d-016c-1000-ea24-6a925329588d</id>
         <name/>
         <bendPoints/>
@@ -1019,28 +862,6 @@ curl -i -X GET -G http://localhost:8234 \
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>success</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>016c1007-14ff-1cc8-cd23-89bfb73fbb5c</id>
-        <name/>
-        <bendPoints>
-          <bendPoint x="1377.4957275390625" y="897.6356811523438"/>
-        </bendPoints>
-        <labelIndex>0</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>016c1004-14ff-1cc8-92a9-fdb3b774af08</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>2cc96734-016c-1000-5a86-6dd317f959db</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -1069,31 +890,9 @@ curl -i -X GET -G http://localhost:8234 \
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>016c1002-14ff-1cc8-94c3-1faa0d225447</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>016c1000-14ff-1cc8-fbce-f17ce2ba5c9f</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>2cc96734-016c-1000-5a86-6dd317f959db</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
         <id>016c100c-7c72-1ddd-88a5-31e26904c64a</id>
         <name/>
-        <bendPoints>
-          <bendPoint x="2263.114501953125" y="1070.3062744140625"/>
-        </bendPoints>
+        <bendPoints/>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>016c1000-7c72-1ddd-a2c5-afa48afc0d7f</sourceId>
@@ -1111,32 +910,10 @@ curl -i -X GET -G http://localhost:8234 \
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>016c1011-7c72-1ddd-45bf-b7ba26c507b9</id>
-        <name/>
-        <bendPoints>
-          <bendPoint x="3671.725830078125" y="1493.2204895019531"/>
-        </bendPoints>
-        <labelIndex>0</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>016c1008-7c72-1ddd-fa1c-6247e2848b72</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>016c100f-7c72-1ddd-1874-2d9f34075df4</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
         <id>2e181aa1-016c-1000-2774-d8e89dbc3903</id>
         <name/>
         <bendPoints>
-          <bendPoint x="2854.354736328125" y="774.3192138671875"/>
+          <bendPoint x="2420.424072265625" y="765.7322998046875"/>
         </bendPoints>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
@@ -1156,18 +933,57 @@ curl -i -X GET -G http://localhost:8234 \
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
+        <id>2e180c3d-016c-1000-b6ee-841084f4867b</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>0</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2e171e29-016c-1000-e4f1-ef036647348b</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>016c100a-7c72-1ddd-4591-18984291303c</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
         <id>016c1016-7c72-1ddd-cc56-6dfea74bc830</id>
         <name/>
         <bendPoints>
-          <bendPoint x="3493.98583984375" y="511.2414245605469"/>
-          <bendPoint x="3497.767578125" y="1224.7201843261719"/>
+          <bendPoint x="2780.0380859375" y="1073.9970397949219"/>
         </bendPoints>
-        <labelIndex>1</labelIndex>
+        <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>016c1008-7c72-1ddd-fa1c-6247e2848b72</sourceId>
         <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
         <sourceType>PROCESSOR</sourceType>
         <destinationId>016c1014-7c72-1ddd-7680-39272d99c0d3</destinationId>
+        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>10000</maxWorkQueueSize>
+        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+        <partitioningAttribute/>
+        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+      </connection>
+      <connection>
+        <id>2cc88cab-016c-1000-7a9a-cd441779b43a</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2cc7f304-016c-1000-4465-8b3735ddd138</sourceId>
+        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2cc8621f-016c-1000-e58f-c709476d6c4b</destinationId>
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>success</relationship>
@@ -1211,88 +1027,6 @@ curl -i -X GET -G http://localhost:8234 \
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>failure</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>016c1015-7c72-1ddd-c276-3fdb2c0039cd</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>016c1014-7c72-1ddd-7680-39272d99c0d3</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>016c100f-7c72-1ddd-1874-2d9f34075df4</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>016c1009-7c72-1ddd-d364-65b4275c3da3</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>2ddc6b66-016c-1000-a3f3-c3b1a1f1322d</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>016c1008-7c72-1ddd-fa1c-6247e2848b72</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>2e180c3d-016c-1000-b6ee-841084f4867b</id>
-        <name/>
-        <bendPoints>
-          <bendPoint x="2834.857177734375" y="1072.2216796875"/>
-        </bendPoints>
-        <labelIndex>0</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>2e171e29-016c-1000-e4f1-ef036647348b</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>016c100a-7c72-1ddd-4591-18984291303c</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>success</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>2cc88cab-016c-1000-7a9a-cd441779b43a</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>2cc7f304-016c-1000-4465-8b3735ddd138</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>2cc8621f-016c-1000-e58f-c709476d6c4b</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>success</relationship>
         <maxWorkQueueSize>10000</maxWorkQueueSize>
         <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
         <flowFileExpiration>0 sec</flowFileExpiration>
@@ -1347,7 +1081,7 @@ curl -i -X GET -G http://localhost:8234 \
         <id>2e1e9f4c-016c-1000-587c-65b41fbf127e</id>
         <name/>
         <bendPoints>
-          <bendPoint x="1940.2445068359375" y="777.1434326171875"/>
+          <bendPoint x="1872.5572509765625" y="765.7322387695312"/>
         </bendPoints>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
@@ -1368,9 +1102,7 @@ curl -i -X GET -G http://localhost:8234 \
       <connection>
         <id>016c100b-7c72-1ddd-ee5f-dd6bb894c41a</id>
         <name/>
-        <bendPoints>
-          <bendPoint x="1998.7950439453125" y="1071.0908203125"/>
-        </bendPoints>
+        <bendPoints/>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>2ddd7c72-016c-1000-adeb-839e5235afc1</sourceId>
@@ -1390,9 +1122,7 @@ curl -i -X GET -G http://localhost:8234 \
       <connection>
         <id>2e1e8780-016c-1000-a402-e9e39c49bd77</id>
         <name/>
-        <bendPoints>
-          <bendPoint x="2259.3828125" y="774.3191528320312"/>
-        </bendPoints>
+        <bendPoints/>
         <labelIndex>0</labelIndex>
         <zIndex>0</zIndex>
         <sourceId>2e15c3d4-016c-1000-598c-bfde67e12172</sourceId>
@@ -1410,59 +1140,15 @@ curl -i -X GET -G http://localhost:8234 \
         <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
       </connection>
       <connection>
-        <id>016c100d-7c72-1ddd-7255-845ad256de30</id>
-        <name/>
-        <bendPoints>
-          <bendPoint x="2554.30419921875" y="1070.4794921875"/>
-        </bendPoints>
-        <labelIndex>0</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>016c1002-7c72-1ddd-de29-fed8ee1f514e</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>016c100a-7c72-1ddd-4591-18984291303c</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>success</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>2e1f2336-016c-1000-71f6-32fdbd28ddc2</id>
-        <name/>
-        <bendPoints>
-          <bendPoint x="2547.45458984375" y="774.3192138671875"/>
-        </bendPoints>
-        <labelIndex>0</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>2e15c3d4-016c-1000-598c-bfde67e12172</sourceId>
-        <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>016c1002-7c72-1ddd-de29-fed8ee1f514e</destinationId>
-        <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>lineprotocol</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>016c1012-7c72-1ddd-4220-a7f7e92c8aed</id>
+        <id>016c1009-7c72-1ddd-d364-65b4275c3da3</id>
         <name/>
         <bendPoints/>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
-        <sourceId>016c100a-7c72-1ddd-4591-18984291303c</sourceId>
+        <sourceId>2ddc6b66-016c-1000-a3f3-c3b1a1f1322d</sourceId>
         <sourceGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</sourceGroupId>
         <sourceType>PROCESSOR</sourceType>
-        <destinationId>016c100f-7c72-1ddd-1874-2d9f34075df4</destinationId>
+        <destinationId>016c1008-7c72-1ddd-fa1c-6247e2848b72</destinationId>
         <destinationGroupId>2807fffd-016c-1000-ff4c-eb46f296840c</destinationGroupId>
         <destinationType>PROCESSOR</destinationType>
         <relationship>failure</relationship>
@@ -1477,8 +1163,8 @@ curl -i -X GET -G http://localhost:8234 \
         <id>016c1006-7c72-1ddd-2fe4-8d637360efbc</id>
         <name/>
         <bendPoints>
-          <bendPoint x="2071.7158216350317" y="348.3584355434332"/>
-          <bendPoint x="2070.9992689006567" y="399.3473271449957"/>
+          <bendPoint x="1821.7067884319067" y="329.21897784079647"/>
+          <bendPoint x="1820.9902356975317" y="380.20786944235897"/>
         </bendPoints>
         <labelIndex>1</labelIndex>
         <zIndex>0</zIndex>
@@ -2039,19 +1725,19 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>Consumer Key</name>
-          <value>enc{dae4ab7b660e0da144ad69046522e5d6e00041d2275ac5509fad9119e0a4efe5d6ed5a5d1178fc0db9fac508001a460f}</value>
+          <value>enc{6e527770c0199eaace82a11376faaeee802a18af8c8f9d8643693056850d00abde7ec6aafb7fb628fd7991e9657c5bc0}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{5ceca28a7d9a5f810ce392ff953398b1f9d9cb2d6dd2d6c3e4b2ba28a9f2bb90e59d9963d0d37c11d272563e94097785d4b1f82c1d3d108e3aba2a995ec2bed2842d3a87e9878ea270529e2335cc20d1}</value>
+          <value>enc{5f2a8265a805416e8dce0c90513ea94a8228803f9718f1c1bdc616c009e2408e14ab091df171f1454a14448b02f8b5807248a6e7e7e97add13b3eed5b7c0911adb446a8b2fa98a0214e4a1f0bbc6679a}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{187fd7ccd0579d51d92ae053d6e60df23900920bbefbb501b10ce54bc959c5a73c8f7ca0a36f7698b0bd03fd69af518301bc9edbdd83aef377e7fb67e51772f7f91f85d2d6a457a1be6dec9b277808fe}</value>
+          <value>enc{a011c18126b15d0c3dd7387f5e66e75f11aa6b5a73bc6ed9a7853fc726f458d0352c95b421488f2c10dca4cabdc897d18b12fa0d76f9b1a9fa9e16e5216b9a67973f88272c379bcc3337547b578ea1cf}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{fe465454f866985b0544dc2edc5744d9d143de45fc1d16ad7e45f0e32c58001cb4ce3a3ba50f6a30a4be9a7a52ddaf5c6fe273142bf2351de5b2c2b7993d5add}</value>
+          <value>enc{29ff2b564fe3e7f5009fc56a3a72fbc2035803a3badff66d8b4cdeec858315a0a60bcf27d0ad8cf0844a0dc5cf6b84ff27359a3fed1e235b5db6abe94e1cf402}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -4059,7 +3745,7 @@ curl -i -X GET -G http://localhost:8234 \
       </property>
       <property>
         <name>influxdb-token</name>
-        <value>enc{77aa067c01c41ddab710284f48be6305a719f7a87d9893e31cec1baf4f43a41b}</value>
+        <value>enc{c64de36e715cc2188839b440d41322345f888ba9013f2c5c259786c836a6cc59}</value>
       </property>
     </controllerService>
     <controllerService>

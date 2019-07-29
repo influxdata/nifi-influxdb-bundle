@@ -152,7 +152,7 @@ cp "${SCRIPT_PATH}"/flow.xml "${SCRIPT_PATH}"/flow.edited.xml
 sed -i.backup "s/influxdb-org-replacement-id/${ORGID}/g" "${SCRIPT_PATH}"/flow.edited.xml
 gzip < "${SCRIPT_PATH}"/flow.edited.xml > "${SCRIPT_PATH}"/flow.xml.gz
 
-# docker cp nifi:/opt/nifi/nifi-current/conf/flow.xml.gz scripts/
+# docker cp nifi:/opt/nifi/nifi-current/conf/flow.xml.gz scripts/ && gunzip -f scripts/flow.xml.gz
 # gunzip -f scripts/flow.xml.gz
 
 docker build -t nifi -f "${SCRIPT_PATH}"/Dockerfile --build-arg NIFI_IMAGE="${NIFI_IMAGE}" .
