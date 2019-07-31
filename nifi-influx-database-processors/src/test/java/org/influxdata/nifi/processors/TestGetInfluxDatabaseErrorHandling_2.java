@@ -19,8 +19,8 @@ package org.influxdata.nifi.processors;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
-import org.influxdata.exceptions.InfluxException;
-import org.influxdata.exceptions.NotFoundException;
+import com.influxdb.exceptions.InfluxException;
+import com.influxdb.exceptions.NotFoundException;
 import org.influxdata.nifi.processors.internal.AbstractGetInfluxDatabase_2;
 
 import edu.umd.cs.findbugs.annotations.NonNull;

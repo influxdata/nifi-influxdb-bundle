@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import org.influxdata.client.domain.WritePrecision;
+import com.influxdb.client.domain.WritePrecision;
 import org.influxdata.nifi.util.InfluxDBUtils;
 import org.influxdata.nifi.util.InfluxDBUtils.ComplexFieldBehaviour;
 import org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour;

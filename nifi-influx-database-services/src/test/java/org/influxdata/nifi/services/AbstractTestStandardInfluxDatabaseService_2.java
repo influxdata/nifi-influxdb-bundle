@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.influxdata.client.InfluxDBClient;
-import org.influxdata.client.domain.Check;
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.domain.Check;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.components.PropertyDescriptor;

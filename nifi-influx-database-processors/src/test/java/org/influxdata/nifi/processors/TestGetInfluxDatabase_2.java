@@ -18,8 +18,8 @@ package org.influxdata.nifi.processors;
 
 import java.util.List;
 
-import org.influxdata.client.domain.Dialect;
-import org.influxdata.client.domain.Query;
+import com.influxdb.client.domain.Dialect;
+import com.influxdb.client.domain.Query;
 
 import org.apache.nifi.provenance.ProvenanceEventRecord;
 import org.apache.nifi.provenance.ProvenanceEventType;

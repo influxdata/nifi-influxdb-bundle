@@ -32,11 +32,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 
-import org.influxdata.Cancellable;
-import org.influxdata.client.domain.Dialect;
-import org.influxdata.client.domain.Query;
-import org.influxdata.exceptions.InfluxException;
-import org.influxdata.query.FluxRecord;
+import com.influxdb.Cancellable;
+import com.influxdb.client.domain.Dialect;
+import com.influxdb.client.domain.Query;
+import com.influxdb.exceptions.InfluxException;
+import com.influxdb.query.FluxRecord;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;

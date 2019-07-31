@@ -21,10 +21,10 @@ import java.net.SocketTimeoutException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
-import org.influxdata.client.InfluxDBClient;
-import org.influxdata.client.WriteApiBlocking;
-import org.influxdata.client.domain.WritePrecision;
-import org.influxdata.exceptions.InfluxException;
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.WriteApiBlocking;
+import com.influxdb.client.domain.WritePrecision;
+import com.influxdb.exceptions.InfluxException;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
 

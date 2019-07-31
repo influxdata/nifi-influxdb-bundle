@@ -18,7 +18,7 @@ package org.influxdata.nifi.processors;
 
 import java.util.Arrays;
 
-import org.influxdata.client.domain.WritePrecision;
+import com.influxdb.client.domain.WritePrecision;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;

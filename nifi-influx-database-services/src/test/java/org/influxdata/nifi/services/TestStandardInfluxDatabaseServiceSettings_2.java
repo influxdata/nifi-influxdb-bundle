@@ -19,7 +19,7 @@ package org.influxdata.nifi.services;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-import org.influxdata.client.InfluxDBClient;
+import com.influxdb.client.InfluxDBClient;
 
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.ssl.SSLContextService;

@@ -19,8 +19,8 @@ package org.influxdata.nifi.processors.internal;
 import java.util.List;
 import java.util.Objects;
 
-import org.influxdata.client.InfluxDBClient;
-import org.influxdata.client.write.Point;
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.write.Point;
 import org.influxdata.nifi.processors.RecordToPointMapper;
 
 import edu.umd.cs.findbugs.annotations.NonNull;

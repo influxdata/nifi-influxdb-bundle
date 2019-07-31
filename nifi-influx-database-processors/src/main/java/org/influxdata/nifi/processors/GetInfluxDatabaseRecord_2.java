@@ -22,7 +22,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.influxdata.client.domain.Dialect;
+import com.influxdb.client.domain.Dialect;
 import org.influxdata.nifi.processors.internal.AbstractGetInfluxDatabase_2;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 

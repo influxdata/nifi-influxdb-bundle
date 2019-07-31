@@ -54,7 +54,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.influxdata</groupId>
+            <groupId>com.influxdb</groupId>
             <artifactId>influxdb-client-java</artifactId>
         </dependency>
 

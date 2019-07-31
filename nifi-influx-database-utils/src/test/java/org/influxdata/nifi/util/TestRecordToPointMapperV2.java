@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.influxdata.client.domain.WritePrecision;
-import org.influxdata.client.write.Point;
+import com.influxdb.client.domain.WritePrecision;
+import com.influxdb.client.write.Point;
 import org.influxdata.nifi.processors.MapperOptions;
 import org.influxdata.nifi.processors.RecordToPointMapper;
 

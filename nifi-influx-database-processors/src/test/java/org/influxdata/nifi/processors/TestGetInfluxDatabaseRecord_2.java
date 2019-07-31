@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
-import org.influxdata.query.FluxRecord;
+import com.influxdb.query.FluxRecord;
 
 import org.apache.nifi.provenance.ProvenanceEventRecord;
 import org.apache.nifi.provenance.ProvenanceEventType;

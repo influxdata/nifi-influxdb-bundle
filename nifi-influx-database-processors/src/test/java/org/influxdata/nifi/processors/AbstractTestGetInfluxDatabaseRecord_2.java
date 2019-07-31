@@ -23,13 +23,13 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.influxdata.Cancellable;
-import org.influxdata.client.InfluxDBClient;
-import org.influxdata.client.QueryApi;
-import org.influxdata.client.domain.Query;
+import com.influxdb.Cancellable;
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.QueryApi;
+import com.influxdb.client.domain.Query;
+import com.influxdb.query.FluxRecord;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
-import org.influxdata.query.FluxRecord;
 
 import com.google.common.collect.Lists;
 import org.apache.nifi.reporting.InitializationException;

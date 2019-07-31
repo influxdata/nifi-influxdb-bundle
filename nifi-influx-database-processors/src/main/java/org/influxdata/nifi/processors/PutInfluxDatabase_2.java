@@ -26,8 +26,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.influxdata.client.domain.WritePrecision;
-import org.influxdata.exceptions.InfluxException;
+import com.influxdb.client.domain.WritePrecision;
+import com.influxdb.exceptions.InfluxException;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2;
 import org.influxdata.nifi.util.PropertyValueUtils;
 

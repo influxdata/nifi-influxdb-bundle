@@ -18,16 +18,16 @@ package org.influxdata.nifi.processors;
 
 import java.util.Arrays;
 
-import org.influxdata.client.InfluxDBClient;
-import org.influxdata.client.InfluxDBClientFactory;
-import org.influxdata.client.InfluxDBClientOptions;
-import org.influxdata.client.QueryApi;
-import org.influxdata.client.domain.Authorization;
-import org.influxdata.client.domain.Bucket;
-import org.influxdata.client.domain.BucketRetentionRules;
-import org.influxdata.client.domain.Organization;
-import org.influxdata.client.domain.Permission;
-import org.influxdata.client.domain.PermissionResource;
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.InfluxDBClientFactory;
+import com.influxdb.client.InfluxDBClientOptions;
+import com.influxdb.client.QueryApi;
+import com.influxdb.client.domain.Authorization;
+import com.influxdb.client.domain.Bucket;
+import com.influxdb.client.domain.BucketRetentionRules;
+import com.influxdb.client.domain.Organization;
+import com.influxdb.client.domain.Permission;
+import com.influxdb.client.domain.PermissionResource;
 
 import org.apache.nifi.util.TestRunner;
 import org.junit.After;

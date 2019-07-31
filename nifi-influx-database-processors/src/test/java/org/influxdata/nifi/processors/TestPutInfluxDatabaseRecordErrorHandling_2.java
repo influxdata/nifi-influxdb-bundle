@@ -20,9 +20,9 @@ import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Map;
 
-import org.influxdata.client.write.Point;
-import org.influxdata.exceptions.InfluxException;
-import org.influxdata.exceptions.NotFoundException;
+import com.influxdb.client.write.Point;
+import com.influxdb.exceptions.InfluxException;
+import com.influxdb.exceptions.NotFoundException;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2;
 import org.influxdata.nifi.util.InfluxDBUtils;

@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import org.influxdata.client.domain.WritePrecision;
+import com.influxdb.client.domain.WritePrecision;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -83,7 +83,7 @@ public final class RecordToPointMapper {
     }
 
     @NonNull
-    public List<org.influxdata.client.write.Point > mapRecordV2(@Nullable final Record record) {
+    public List<com.influxdb.client.write.Point> mapRecordV2(@Nullable final Record record) {
 
         if (record == null) {
             return new ArrayList<>();
@@ -97,7 +97,7 @@ public final class RecordToPointMapper {
             measurement = options.getMeasurement();
         }
 
-        PointBuilder<org.influxdata.client.write.Point> point = PointBuilderV2.measurement(measurement);
+        PointBuilder<com.influxdb.client.write.Point> point = PointBuilderV2.measurement(measurement);
 
         return mapRecord(record, point);
     }
@@ -577,9 +577,9 @@ public final class RecordToPointMapper {
         }
     }
 
-    private static class PointBuilderV2 extends PointBuilder<org.influxdata.client.write.Point> {
+    private static class PointBuilderV2 extends PointBuilder<com.influxdb.client.write.Point> {
 
-        private org.influxdata.client.write.Point point;
+        private com.influxdb.client.write.Point point;
 
         public static PointBuilderV2 measurement(final String measurement) {
 
@@ -587,7 +587,7 @@ public final class RecordToPointMapper {
         }
 
         private PointBuilderV2(final String measurement) {
-            this.point = org.influxdata.client.write.Point.measurement(measurement);
+            this.point = com.influxdb.client.write.Point.measurement(measurement);
         }
 
         @Override
@@ -641,7 +641,7 @@ public final class RecordToPointMapper {
         }
 
         @Override
-        public org.influxdata.client.write.Point build() {
+        public com.influxdb.client.write.Point build() {
             return point;
         }
     }

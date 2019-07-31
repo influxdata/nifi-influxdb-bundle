@@ -22,13 +22,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.influxdb.query.FluxRecord;
+import com.influxdb.query.FluxTable;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.serialization.InfluxLineProtocolReader;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
 import org.influxdata.nifi.util.InfluxDBUtils;
-import org.influxdata.query.FluxRecord;
-import org.influxdata.query.FluxTable;
 
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.serialization.record.MockRecordParser;

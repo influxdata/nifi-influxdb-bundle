@@ -20,9 +20,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.influxdata.LogLevel;
-import org.influxdata.client.InfluxDBClient;
-import org.influxdata.client.domain.WritePrecision;
+import com.influxdb.LogLevel;
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.domain.WritePrecision;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 
 import edu.umd.cs.findbugs.annotations.NonNull;

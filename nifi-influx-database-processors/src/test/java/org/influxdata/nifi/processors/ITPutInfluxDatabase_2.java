@@ -20,11 +20,11 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import org.influxdata.client.domain.WritePrecision;
+import com.influxdb.client.domain.WritePrecision;
+import com.influxdb.query.FluxTable;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
-import org.influxdata.query.FluxTable;
 
 import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunners;
