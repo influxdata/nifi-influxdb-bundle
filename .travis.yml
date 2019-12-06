@@ -42,7 +42,7 @@ install: true
 script:
   - ./scripts/influxdb-restart.sh
   - mvn -B clean verify failsafe:integration-test failsafe:verify
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) || true
 
 jobs:
   include:
