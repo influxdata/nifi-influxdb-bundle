@@ -24,8 +24,8 @@
 language: java
 
 jdk:
-  - oraclejdk8
-  - oraclejdk11
+  - openjdk8
+  - openjdk11
 
 sudo: required
 
@@ -47,14 +47,14 @@ script:
 jobs:
   include:
     - stage: end-to-end
-      jdk: oraclejdk8
+      jdk: openjdk8
       script:
         - ./scripts/nifi-restart.sh
         - sleep 30
         - ./scripts/end-to-end.sh
     - stage: deploy
       if: branch = master AND repo = influxdata/nifi-influxdb-bundle AND type IN (push)
-      jdk: oraclejdk8
+      jdk: openjdk8
       script: skip
       deploy:
         provider: script
