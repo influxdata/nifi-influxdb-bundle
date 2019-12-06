@@ -1,4 +1,4 @@
-## v1.2 [unreleased]
+## v1.2 [2019-12-06]
 
 ### Features
 
