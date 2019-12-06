@@ -90,7 +90,7 @@ public class ITPutInfluxDatabase_2 extends AbstractITInfluxDB_2 {
         List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(AbstractInfluxDatabaseProcessor.REL_FAILURE);
 
         assertEquals(1, flowFiles.size());
-        assertEquals("unable to parse points: unable to parse 'water,country=US,city=newark': missing fields",
+        assertEquals("unable to parse 'water,country=US,city=newark': missing fields",
                 flowFiles.get(0).getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE));
     }
 

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.domain.Check;
+import com.influxdb.client.domain.HealthCheck;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -69,9 +69,9 @@ public abstract class AbstractTestStandardInfluxDatabaseService_2 {
 
         InfluxDBClient client = service.create();
 
-        Check result = client.health();
+        HealthCheck result = client.health();
 
-        Assert.assertEquals("Unexpected health check: " + result, Check.StatusEnum.PASS, result.getStatus());
+        Assert.assertEquals("Unexpected health check: " + result, HealthCheck.StatusEnum.PASS, result.getStatus());
     }
 
     public static class ServiceProcessor extends AbstractProcessor {
