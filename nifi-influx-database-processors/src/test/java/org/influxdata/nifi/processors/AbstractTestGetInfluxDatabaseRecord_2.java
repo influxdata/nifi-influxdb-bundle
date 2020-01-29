@@ -23,15 +23,12 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import com.google.common.collect.Lists;
 import com.influxdb.Cancellable;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.QueryApi;
 import com.influxdb.client.domain.Query;
 import com.influxdb.query.FluxRecord;
-import org.influxdata.nifi.services.InfluxDatabaseService_2;
-import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
-
-import com.google.common.collect.Lists;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.serialization.record.ArrayListRecordWriter;
 import org.apache.nifi.serialization.record.RecordSchema;
@@ -40,6 +37,8 @@ import org.apache.nifi.util.MockProcessContext;
 import org.apache.nifi.util.MockProcessorInitializationContext;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
+import org.influxdata.nifi.services.InfluxDatabaseService_2;
+import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
 import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
@@ -70,13 +69,13 @@ abstract class AbstractTestGetInfluxDatabaseRecord_2 {
         Mockito.doAnswer(invocation -> {
             if (queryOnErrorValue != null) {
                 //noinspection unchecked
-                Consumer<Exception> onError = invocation.getArgumentAt(3, Consumer.class);
+                Consumer<Exception> onError = invocation.getArgument(3, Consumer.class);
                 onError.accept(queryOnErrorValue);
             }
 
             queryOnResponseRecords.forEach(record -> {
                 //noinspection unchecked
-                BiConsumer<Cancellable, FluxRecord> onRecord = invocation.getArgumentAt(2, BiConsumer.class);
+                BiConsumer<Cancellable, FluxRecord> onRecord = invocation.getArgument(2, BiConsumer.class);
                 onRecord.accept(Mockito.mock(Cancellable.class), record);
             });
 
@@ -88,7 +87,7 @@ abstract class AbstractTestGetInfluxDatabaseRecord_2 {
                 throw e;
             } finally {
                 if (!wasException) {
-                    Runnable onComplete = invocation.getArgumentAt(4, Runnable.class);
+                    Runnable onComplete = invocation.getArgument(4, Runnable.class);
                     onComplete.run();
                 }
             }

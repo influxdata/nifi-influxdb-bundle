@@ -1025,6 +1025,16 @@ public class TestInfluxLineProtocolParser {
                 .validate("t159,label=another a=2i,value=1i 1");
     }
 
+	@Test
+	public void tagsAreNotNull() throws NotParsableInlineProtocolData
+	{
+		InfluxLineProtocolParser parser = InfluxLineProtocolParser.parse("cpu value=1.0 1000000000");
+
+		Assert.assertNotNull(parser);
+		Assert.assertNotNull(parser.getTags());
+		Assert.assertTrue(parser.getTags().isEmpty());
+	}
+
     private static final class ExpectedResult {
 
         private static final Logger LOG = LoggerFactory.getLogger(ExpectedResult.class);
@@ -1083,7 +1093,7 @@ public class TestInfluxLineProtocolParser {
 
             Stream.of(lineProtocols).forEach(lineProtocol -> {
 
-                InfluxLineProtocolParser parse = null;
+                InfluxLineProtocolParser parse;
                 try {
                     parse = InfluxLineProtocolParser.parse(lineProtocol).report();
 

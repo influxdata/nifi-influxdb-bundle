@@ -22,12 +22,12 @@ import java.util.List;
 
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.query.FluxTable;
+import org.apache.nifi.util.MockFlowFile;
+import org.apache.nifi.util.TestRunners;
+import org.assertj.core.api.Assertions;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
-
-import org.apache.nifi.util.MockFlowFile;
-import org.apache.nifi.util.TestRunners;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,8 +90,8 @@ public class ITPutInfluxDatabase_2 extends AbstractITInfluxDB_2 {
         List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(AbstractInfluxDatabaseProcessor.REL_FAILURE);
 
         assertEquals(1, flowFiles.size());
-        assertEquals("unable to parse 'water,country=US,city=newark': missing fields",
-                flowFiles.get(0).getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE));
+		Assertions.assertThat(flowFiles.get(0).getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE))
+				.isEqualTo("unable to parse 'water,country=US,city=newark': missing fields");
     }
 
     @Test

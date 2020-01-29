@@ -30,9 +30,6 @@ import java.util.stream.Collectors;
 
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
-import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
-import org.influxdata.nifi.util.InfluxDBUtils;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -45,6 +42,8 @@ import org.apache.nifi.serialization.record.RecordField;
 import org.apache.nifi.serialization.record.RecordFieldType;
 import org.apache.nifi.util.LogMessage;
 import org.apache.nifi.util.MockFlowFile;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
+import org.influxdata.nifi.util.InfluxDBUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -259,7 +258,7 @@ public class TestPutInfluxDatabaseRecord_2 extends AbstractTestPutInfluxDatabase
         Assert.assertEquals(1, points.size());
 
         Assert.assertEquals(55.5F, getField("nifi-float", points.get(0)));
-        Assert.assertEquals(150F, getField("nifi-long", points.get(0)));
+        Assert.assertEquals(150L, getField("nifi-long", points.get(0)));
         Assert.assertEquals(true, getField("nifi-boolean", points.get(0)));
         Assert.assertEquals("string value", getField("nifi-string", points.get(0)));
     }
@@ -318,7 +317,7 @@ public class TestPutInfluxDatabaseRecord_2 extends AbstractTestPutInfluxDatabase
         addFieldByType(new Object[]{25L, 55L}, null, dataType, false, AbstractInfluxDatabaseProcessor.REL_FAILURE);
 
         List<LogMessage> messages = logger.getErrorMessages();
-        Assert.assertEquals(3, messages.size());
+        Assert.assertEquals(2, messages.size());
         Assert.assertTrue(messages.get(0).getMsg().contains("Complex value found for nifi-field; routing to failure"));
     }
 
@@ -358,7 +357,7 @@ public class TestPutInfluxDatabaseRecord_2 extends AbstractTestPutInfluxDatabase
         addFieldRecordType(false, AbstractInfluxDatabaseProcessor.REL_FAILURE);
 
         List<LogMessage> messages = logger.getErrorMessages();
-        Assert.assertEquals(3, messages.size());
+        Assert.assertEquals(2, messages.size());
         Assert.assertTrue(messages.get(0).getMsg().contains("Complex value found for nifi-field; routing to failure"));
     }
 
@@ -665,7 +664,7 @@ public class TestPutInfluxDatabaseRecord_2 extends AbstractTestPutInfluxDatabase
         addTagByType(new Object[]{25L, 55L}, null, dataType, false, AbstractInfluxDatabaseProcessor.REL_FAILURE);
 
         List<LogMessage> messages = logger.getErrorMessages();
-        Assert.assertEquals(3, messages.size());
+        Assert.assertEquals(2, messages.size());
         Assert.assertTrue(messages.get(0).getMsg().contains("Complex value found for nifi-tag; routing to failure"));
     }
 
@@ -705,7 +704,7 @@ public class TestPutInfluxDatabaseRecord_2 extends AbstractTestPutInfluxDatabase
         addTagRecordType(false, AbstractInfluxDatabaseProcessor.REL_FAILURE);
 
         List<LogMessage> messages = logger.getErrorMessages();
-        Assert.assertEquals(3, messages.size());
+        Assert.assertEquals(2, messages.size());
         Assert.assertTrue(messages.get(0).getMsg().contains("Complex value found for nifi-tag; routing to failure"));
     }
 

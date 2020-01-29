@@ -37,7 +37,6 @@ import com.influxdb.client.domain.Dialect;
 import com.influxdb.client.domain.Query;
 import com.influxdb.exceptions.InfluxException;
 import com.influxdb.query.FluxRecord;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -340,7 +339,7 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
                 final RecordSchema recordSchema = record.getSchema();
                 try {
                     out = session.write(flowFile);
-                    writer = writerFactory.createWriter(getLogger(), recordSchema, out);
+                    writer = writerFactory.createWriter(getLogger(), recordSchema, out, flowFile);
                     writer.beginRecordSet();
                 } catch (Exception e) {
                     cancellable.cancel();

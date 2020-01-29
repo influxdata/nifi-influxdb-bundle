@@ -21,12 +21,11 @@ import java.util.List;
 
 import com.influxdb.exceptions.InfluxException;
 import com.influxdb.exceptions.NotFoundException;
-import org.influxdata.nifi.processors.internal.AbstractGetInfluxDatabase_2;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.util.LogMessage;
 import org.apache.nifi.util.MockFlowFile;
+import org.influxdata.nifi.processors.internal.AbstractGetInfluxDatabase_2;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -127,10 +126,9 @@ public class TestGetInfluxDatabaseRecordErrorHandling_2  extends AbstractTestGet
         List<LogMessage> errors = logger.getErrorMessages();
 
         // First is formatted message, Second Stack Trace
-        Assert.assertEquals(2, errors.size());
+        Assert.assertEquals(1, errors.size());
 
         Assert.assertTrue(errors.get(0).getArgs()[2].toString().contains("from(bucket:\"my-bucket\") |> range(start: 0) |> last()"));
-        Assert.assertEquals(errors.get(1).getThrowable().getLocalizedMessage(), message);
-        Assert.assertTrue(exception.getClass().isAssignableFrom(errors.get(1).getThrowable().getClass()));
+		Assert.assertEquals(errors.get(0).getArgs()[3], exception.toString());
     }
 }

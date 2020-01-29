@@ -20,19 +20,18 @@ import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Map;
 
+import avro.shaded.com.google.common.collect.Maps;
 import com.influxdb.client.write.Point;
 import com.influxdb.exceptions.InfluxException;
 import com.influxdb.exceptions.NotFoundException;
-import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
-import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2;
-import org.influxdata.nifi.util.InfluxDBUtils;
-
-import avro.shaded.com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.serialization.record.RecordFieldType;
 import org.apache.nifi.util.LogMessage;
 import org.apache.nifi.util.MockFlowFile;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2;
+import org.influxdata.nifi.util.InfluxDBUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -218,10 +217,10 @@ public class TestPutInfluxDatabaseRecordErrorHandling_2 extends AbstractTestPutI
         List<LogMessage> errors = logger.getErrorMessages();
 
         // First is formatted message, Second Stack Trace
-        Assert.assertEquals(2, errors.size());
+        Assert.assertEquals(1, errors.size());
 
         Assert.assertTrue(errors.get(0).getMsg().contains("Failed to insert into influxDB due"));
-        Assert.assertTrue(errors.get(1).getThrowable() instanceof InfluxException);
+		Assert.assertEquals("com.influxdb.exceptions.InfluxException: unable to parse", errors.get(0).getArgs()[2]);
     }
 
     @Test
@@ -232,10 +231,10 @@ public class TestPutInfluxDatabaseRecordErrorHandling_2 extends AbstractTestPutI
         List<LogMessage> errors = logger.getErrorMessages();
 
         // First is formatted message, Second Stack Trace
-        Assert.assertEquals(2, errors.size());
+        Assert.assertEquals(1, errors.size());
 
         Assert.assertTrue(errors.get(0).getMsg().contains("Failed to insert into influxDB due "));
-        Assert.assertTrue(errors.get(1).getThrowable() instanceof InfluxException);
+		Assert.assertEquals("com.influxdb.exceptions.InfluxException: Simulate error: 503", errors.get(0).getArgs()[3]);
     }
 
     private void errorToRetryRelationship(@NonNull final InfluxException exception,

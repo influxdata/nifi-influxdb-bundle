@@ -6,6 +6,9 @@
 
 * [23](https://github.com/influxdata/nifi-influxdb-bundle/issues/23): Added support for InfluxDB v2.0
 
+### Others
+* [11](https://github.com/influxdata/nifi-influxdb-bundle/pulls/27): Updated to Apache NiFi 1.10.0
+
 ## v1.1 [2019-06-06]
 
 ### Features

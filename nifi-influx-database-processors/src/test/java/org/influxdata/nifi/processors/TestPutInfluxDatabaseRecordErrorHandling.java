@@ -22,8 +22,6 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 
-import org.influxdata.nifi.util.InfluxDBUtils;
-
 import avro.shaded.com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.processor.Relationship;
@@ -31,6 +29,7 @@ import org.apache.nifi.serialization.record.RecordFieldType;
 import org.apache.nifi.util.LogMessage;
 import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.MockProcessContext;
+import org.influxdata.nifi.util.InfluxDBUtils;
 import org.influxdb.InfluxDBException;
 import org.influxdb.InfluxDBIOException;
 import org.influxdb.dto.Point;
@@ -284,10 +283,10 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
         List<LogMessage> errors = logger.getErrorMessages();
 
         // First is formatted message, Second Stack Trace
-        Assert.assertEquals(2, errors.size());
+        Assert.assertEquals(1, errors.size());
 
         Assert.assertTrue(errors.get(0).getMsg().contains(INFLUX_DB_ERROR_MESSAGE_LOG));
-        Assert.assertTrue(errors.get(1).getThrowable() instanceof InfluxDBException.UnableToParseException);
+		Assert.assertEquals("org.influxdb.InfluxDBException$UnableToParseException: unable to parse", errors.get(0).getArgs()[3]);
     }
 
     @Test
@@ -298,10 +297,10 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
         List<LogMessage> errors = logger.getErrorMessages();
 
         // First is formatted message, Second Stack Trace
-        Assert.assertEquals(2, errors.size());
+        Assert.assertEquals(1, errors.size());
 
         Assert.assertTrue(errors.get(0).getMsg().contains(INFLUX_DB_ERROR_MESSAGE_LOG));
-        Assert.assertTrue(errors.get(1).getThrowable() instanceof InfluxDBException.AuthorizationFailedException);
+        Assert.assertEquals("org.influxdb.InfluxDBException$AuthorizationFailedException: authorization failed", errors.get(0).getArgs()[3]);
     }
 
     private void errorToRetryRelationship(@NonNull final Class<? extends InfluxDBException> exceptionType,

@@ -21,6 +21,7 @@ import java.security.GeneralSecurityException;
 
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.ssl.SSLContextService;
+import org.apache.nifi.ssl.StandardSSLContextService;
 import org.influxdb.InfluxDB;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +64,17 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
 
         SSLContextService sslContextService = Mockito.mock(SSLContextService.class);
         when(sslContextService.getIdentifier()).thenReturn("inluxdb-ssl");
+
+        when(sslContextService.getTrustStoreType()).thenReturn(StandardSSLContextService.STORE_TYPE_JKS);
+		when(sslContextService.getTrustStoreFile()).thenReturn("src/test/resources/ssl/truststore.jks");
+		when(sslContextService.getTrustStorePassword()).thenReturn("changeme");
+		when(sslContextService.isTrustStoreConfigured()).thenReturn(true);
+
+		when(sslContextService.getKeyStoreFile()).thenReturn("src/test/resources/ssl/keystore.jks");
+		when(sslContextService.getKeyStorePassword()).thenReturn("changeme");
+		when(sslContextService.getKeyStoreType()).thenReturn(StandardSSLContextService.STORE_TYPE_JKS);
+		when(sslContextService.isKeyStoreConfigured()).thenReturn(true);
+		
         testRunner.addControllerService("inluxdb-ssl", sslContextService);
         testRunner.enableControllerService(sslContextService);
 
@@ -103,7 +115,7 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
     @Test
     public void url() throws IOException, GeneralSecurityException {
 
-        testRunner.setProperty(service, InfluxDatabaseService.INFLUX_DB_URL, "http://influxdb:8886");
+        testRunner.setProperty(service, InfluxDatabaseService.INFLUX_DB_URL, "http://localhost:8886");
         testRunner.assertValid(service);
         testRunner.enableControllerService(service);
 
@@ -114,7 +126,7 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
                 Mockito.eq(null),
                 Mockito.eq(null),
                 Mockito.eq(InfluxDatabaseService.DEFAULT_CLIENT_AUTH),
-                Mockito.eq("http://influxdb:8886"),
+                Mockito.eq("http://localhost:8886"),
                 Mockito.eq(0L));
     }
 

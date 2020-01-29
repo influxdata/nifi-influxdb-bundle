@@ -22,10 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.influxdata.nifi.processors.MapperOptions;
-import org.influxdata.nifi.util.InfluxDBUtils;
-import org.influxdata.nifi.util.PropertyValueUtils;
-
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.annotation.lifecycle.OnEnabled;
@@ -38,6 +34,9 @@ import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.serialization.RecordSetWriter;
 import org.apache.nifi.serialization.RecordSetWriterFactory;
 import org.apache.nifi.serialization.record.RecordSchema;
+import org.influxdata.nifi.processors.MapperOptions;
+import org.influxdata.nifi.util.InfluxDBUtils;
+import org.influxdata.nifi.util.PropertyValueUtils;
 
 /**
  * @author Jakub Bednar (bednar@github) (29/05/2019 09:07)
@@ -93,7 +92,7 @@ public class InfluxLineProtocolRecordSetWriter extends AbstractControllerService
     }
 
     @Override
-    public RecordSetWriter createWriter(final ComponentLog componentLog, final RecordSchema recordSchema, final OutputStream outputStream) {
+    public RecordSetWriter createWriter(final ComponentLog componentLog, final RecordSchema recordSchema, final OutputStream outputStream, final Map<String, String> variables) {
         return new WriteInfluxLineProtocolResult(outputStream, recordSchema, componentLog, mapperOptions, charSet);
     }
 }

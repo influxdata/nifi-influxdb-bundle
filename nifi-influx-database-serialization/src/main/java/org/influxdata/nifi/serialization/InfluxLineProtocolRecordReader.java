@@ -66,7 +66,7 @@ public class InfluxLineProtocolRecordReader implements RecordReader {
 
         // tags
         DataType mapDataType = RecordFieldType.MAP.getMapDataType(RecordFieldType.STRING.getDataType());
-        fields.add(new RecordField(TAG_SET, mapDataType, true));
+        fields.add(new RecordField(TAG_SET, mapDataType, false));
 
         // fields
         DataType choiceDataType = RecordFieldType.CHOICE.getChoiceDataType(

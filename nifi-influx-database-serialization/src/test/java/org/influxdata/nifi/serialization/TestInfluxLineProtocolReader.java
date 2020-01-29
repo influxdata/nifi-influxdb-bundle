@@ -25,6 +25,7 @@ import org.apache.avro.file.DataFileStream;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.util.Utf8;
+import org.apache.nifi.avro.AvroReaderWithEmbeddedSchema;
 import org.apache.nifi.avro.AvroRecordSetWriter;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.processors.standard.ConvertRecord;
@@ -33,6 +34,7 @@ import org.apache.nifi.schema.access.SchemaNotFoundException;
 import org.apache.nifi.serialization.MalformedRecordException;
 import org.apache.nifi.serialization.RecordReader;
 import org.apache.nifi.serialization.record.MockRecordWriter;
+import org.apache.nifi.serialization.record.Record;
 import org.apache.nifi.serialization.record.RecordSchema;
 import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunner;
@@ -46,7 +48,7 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
     @Test
     public void createReaderFromMap() throws SchemaNotFoundException, MalformedRecordException, IOException {
 
-        RecordReader reader = readerFactory.createRecordReader(variables, null, logger);
+        RecordReader reader = readerFactory.createRecordReader(variables, null, -1, logger);
 
         Assert.assertNotNull(reader);
     }
@@ -72,7 +74,8 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
     }
 
     @Test
-    public void processIncomingLineProtocolToAVRO() throws InitializationException, IOException {
+    public void processIncomingLineProtocolToAVRO() throws InitializationException, IOException, MalformedRecordException
+	{
 
         String data = "weather,location=us-midwest "
                 + "field-float=82.5,field-integer=85i,field-bool=True,field-string=\"hello\" 1465839830100400200";
@@ -118,13 +121,20 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
         Assert.assertEquals(4, ((Map) next.get("fields")).size());
         Assert.assertEquals(true, ((Map) next.get("fields")).get(new Utf8("field-bool")));
         Assert.assertEquals(new Utf8("hello"), ((Map) next.get("fields")).get(new Utf8("field-string")));
-        Assert.assertEquals(85.F, ((Map) next.get("fields")).get(new Utf8("field-integer")));
+        Assert.assertEquals(85L, ((Map) next.get("fields")).get(new Utf8("field-integer")));
         Assert.assertEquals(82.5F, ((Map) next.get("fields")).get(new Utf8("field-float")));
 
         // timestamp
         Assert.assertEquals(1465839830100400200L, next.get("timestamp"));
 
         Assert.assertFalse(avroReader.hasNext());
+
+        // Read via Embedded reader
+		AvroReaderWithEmbeddedSchema avroReaderWithEmbeddedSchema = new AvroReaderWithEmbeddedSchema(new ByteArrayInputStream(success.toByteArray()));
+		Record record = avroReaderWithEmbeddedSchema.nextRecord();
+
+		Assert.assertNotNull(record);
+		Assert.assertNull(avroReaderWithEmbeddedSchema.nextRecord());
     }
 
     @Test
