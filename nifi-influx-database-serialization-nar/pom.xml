@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.influxdata.nifi</groupId>
         <artifactId>nifi-influx-database-bundle</artifactId>
-        <version>1.3-SNAPSHOT</version>
+        <version>1.3</version>
     </parent>
 
     <artifactId>nifi-influx-database-serialization-nar</artifactId>
