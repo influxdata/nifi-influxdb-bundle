@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -15,7 +16,6 @@
 # limitations under the License.
 #
 
-#!/usr/bin/env bash
 
 set -e
 
@@ -23,7 +23,7 @@ DEFAULT_INFLUXDB_VERSION="1.7"
 INFLUXDB_VERSION="${INFLUXDB_VERSION:-$DEFAULT_INFLUXDB_VERSION}"
 INFLUXDB_IMAGE=influxdb:${INFLUXDB_VERSION}-alpine
 
-DEFAULT_NIFI_VERSION="1.9.2"
+DEFAULT_NIFI_VERSION="1.10.0"
 NIFI_VERSION="${NIFI_VERSION:-$DEFAULT_NIFI_VERSION}"
 NIFI_IMAGE=apache/nifi:${NIFI_VERSION}
 

@@ -19,12 +19,12 @@ package org.influxdata.nifi.processors;
 import java.util.Arrays;
 
 import com.influxdb.client.domain.WritePrecision;
+import org.apache.nifi.util.MockFlowFile;
+import org.apache.nifi.util.TestRunners;
+import org.assertj.core.api.Assertions;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
-
-import org.apache.nifi.util.MockFlowFile;
-import org.apache.nifi.util.TestRunners;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -118,7 +118,7 @@ public class ITGetInfluxDatabase_2 extends AbstractITInfluxDB_2 {
         runner.assertTransferCount(GetInfluxDatabase_2.REL_FAILURE, 1);
 
         MockFlowFile flowFile = runner.getFlowFilesForRelationship(GetInfluxDatabaseRecord_2.REL_FAILURE).get(0);
-        Assert.assertEquals("type error 1:45-1:51: undefined identifier \"rangex\"", flowFile.getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE));
+		Assertions.assertThat(flowFile.getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE)).contains("undefined identifier \"rangex\"");
     }
 
     @Test

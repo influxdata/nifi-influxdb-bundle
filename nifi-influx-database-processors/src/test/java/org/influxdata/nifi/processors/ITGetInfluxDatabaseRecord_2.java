@@ -18,20 +18,13 @@ package org.influxdata.nifi.processors;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-
-import com.influxdb.client.domain.WritePrecision;
-import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
-import org.influxdata.nifi.services.InfluxDatabaseService_2;
-import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
 
 import com.google.common.collect.Lists;
-import groovy.json.JsonSlurper;
+import com.influxdb.client.domain.WritePrecision;
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
@@ -46,6 +39,12 @@ import org.apache.nifi.schema.access.SchemaAccessUtils;
 import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunners;
 import org.apache.nifi.xml.XMLRecordSetWriter;
+import org.assertj.core.api.Assertions;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
+import org.influxdata.nifi.services.InfluxDatabaseService_2;
+import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -198,18 +197,18 @@ public class ITGetInfluxDatabaseRecord_2 extends AbstractITInfluxDB_2 {
         MockFlowFile flowFile = runner.getFlowFilesForRelationship(GetInfluxDatabaseRecord_2.REL_SUCCESS).get(0);
 
         String json = new String(runner.getContentAsByteArray(flowFile));
-        List<Map<String, Object>> parsedJson = (List<Map<String, Object>>) new JsonSlurper().parseText(json);
+		JSONObject parsedJson = (new JSONArray(json)).getJSONObject(0);
 
-        Assert.assertEquals(1, parsedJson.size());
-        Assert.assertEquals("_result", parsedJson.get(0).get("result"));
-        Assert.assertEquals(0, parsedJson.get(0).get("table"));
-        Assert.assertEquals(0, parsedJson.get(0).get("_start"));
-        Assert.assertEquals(0, parsedJson.get(0).get("_time"));
-        Assert.assertTrue((long) parsedJson.get(0).get("_stop") > from.getTime());
-        Assert.assertEquals("humidity", parsedJson.get(0).get("_field"));
-        Assert.assertEquals("newark", parsedJson.get(0).get("city"));
-        Assert.assertEquals("US", parsedJson.get(0).get("country"));
-        Assert.assertEquals(BigDecimal.valueOf(0.6D), parsedJson.get(0).get("_value"));
+        Assert.assertNotNull(parsedJson);
+        Assert.assertEquals("_result", parsedJson.get("result"));
+        Assert.assertEquals(0, parsedJson.get("table"));
+        Assert.assertEquals(0, parsedJson.get("_start"));
+        Assert.assertEquals(0, parsedJson.get("_time"));
+        Assert.assertTrue((long) parsedJson.get("_stop") > from.getTime());
+        Assert.assertEquals("humidity", parsedJson.get("_field"));
+        Assert.assertEquals("newark", parsedJson.get("city"));
+        Assert.assertEquals("US", parsedJson.get("country"));
+        Assert.assertEquals(0.6D, parsedJson.get("_value"));
     }
 
     @Test
@@ -288,7 +287,7 @@ public class ITGetInfluxDatabaseRecord_2 extends AbstractITInfluxDB_2 {
         runner.assertTransferCount(GetInfluxDatabaseRecord_2.REL_FAILURE, 1);
 
         MockFlowFile flowFile = runner.getFlowFilesForRelationship(GetInfluxDatabaseRecord_2.REL_FAILURE).get(0);
-        Assert.assertEquals("type error 1:45-1:51: undefined identifier \"rangex\"", flowFile.getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE));
+        Assertions.assertThat(flowFile.getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE)).contains("undefined identifier \"rangex\"");
     }
 
     @Test

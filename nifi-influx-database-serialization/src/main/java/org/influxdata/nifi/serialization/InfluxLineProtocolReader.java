@@ -83,6 +83,7 @@ public class InfluxLineProtocolReader extends AbstractControllerService implemen
     @Override
     public RecordReader createRecordReader(final Map<String, String> variables,
                                            final InputStream in,
+										   long inputLength,
                                            final ComponentLog logger)
 
             throws MalformedRecordException, IOException, SchemaNotFoundException {

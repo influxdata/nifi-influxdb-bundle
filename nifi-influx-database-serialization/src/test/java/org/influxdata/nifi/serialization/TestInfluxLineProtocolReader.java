@@ -46,7 +46,7 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
     @Test
     public void createReaderFromMap() throws SchemaNotFoundException, MalformedRecordException, IOException {
 
-        RecordReader reader = readerFactory.createRecordReader(variables, null, logger);
+        RecordReader reader = readerFactory.createRecordReader(variables, null, -1, logger);
 
         Assert.assertNotNull(reader);
     }
@@ -118,7 +118,7 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
         Assert.assertEquals(4, ((Map) next.get("fields")).size());
         Assert.assertEquals(true, ((Map) next.get("fields")).get(new Utf8("field-bool")));
         Assert.assertEquals(new Utf8("hello"), ((Map) next.get("fields")).get(new Utf8("field-string")));
-        Assert.assertEquals(85.F, ((Map) next.get("fields")).get(new Utf8("field-integer")));
+        Assert.assertEquals(85L, ((Map) next.get("fields")).get(new Utf8("field-integer")));
         Assert.assertEquals(82.5F, ((Map) next.get("fields")).get(new Utf8("field-float")));
 
         // timestamp

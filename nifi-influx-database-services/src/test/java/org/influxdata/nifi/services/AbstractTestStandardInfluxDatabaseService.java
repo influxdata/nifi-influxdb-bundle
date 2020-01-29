@@ -54,8 +54,8 @@ public abstract class AbstractTestStandardInfluxDatabaseService {
         // Mock response
         Mockito.doAnswer(invocation -> answerConnect.get().answer(invocation))
                 .when(service)
-                .connect(Mockito.anyString(),
-                        Mockito.anyString(),
+                .connect(Mockito.any(),
+                        Mockito.any(),
                         Mockito.any(),
                         Mockito.any(),
                         Mockito.any(),

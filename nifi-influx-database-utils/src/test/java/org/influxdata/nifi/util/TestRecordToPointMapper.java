@@ -24,15 +24,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.influxdata.nifi.processors.MapperOptions;
-import org.influxdata.nifi.processors.RecordToPointMapper;
-
 import org.apache.nifi.logging.ComponentLog;
 import org.apache.nifi.serialization.SimpleRecordSchema;
 import org.apache.nifi.serialization.record.MapRecord;
 import org.apache.nifi.serialization.record.Record;
 import org.apache.nifi.serialization.record.RecordField;
 import org.apache.nifi.serialization.record.RecordFieldType;
+import org.influxdata.nifi.processors.MapperOptions;
+import org.influxdata.nifi.processors.RecordToPointMapper;
 import org.influxdb.dto.Point;
 import org.junit.Assert;
 import org.junit.Before;
@@ -312,7 +311,7 @@ public class TestRecordToPointMapper {
         List<Point> points = mapper.mapRecord(record);
 
         Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 boolean=true,field1=25.0,field2=true,float=55.5,long=150.0,string=\"string value\" 123456789", points.get(0).lineProtocol());
+        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 boolean=true,field1=25.0,field2=true,float=55.5,long=150i,string=\"string value\" 123456789", points.get(0).lineProtocol());
     }
 
     @Test

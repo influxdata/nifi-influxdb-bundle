@@ -50,7 +50,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
     @Test
     public void schemaNotNull() throws SchemaNotFoundException, MalformedRecordException, IOException {
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertNotNull(schema);
@@ -59,7 +59,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
     @Test
     public void recordNotNull() throws MalformedRecordException, IOException, SchemaNotFoundException {
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         Record record = recordReader.nextRecord();
         Assert.assertNotNull(record);
@@ -74,7 +74,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather temperature=82 1465839830100400200" + System.lineSeparator()
                 + "weather temperature=80 1465839830100450200";
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Assert.assertNotNull(record);
@@ -88,7 +88,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         InputStream spiedInputStream = Mockito.spy(toInputData());
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, spiedInputStream, logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, spiedInputStream, -1, logger);
         recordReader.close();
 
         Mockito.verify(spiedInputStream, Mockito.times(1)).close();
@@ -97,7 +97,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
     @Test
     public void emptyData() throws SchemaNotFoundException, MalformedRecordException, IOException {
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(" "), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(" "), -1, logger);
 
         Assert.assertNull(recordReader.nextRecord());
     }
@@ -105,7 +105,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
     @Test
     public void measurement() throws SchemaNotFoundException, MalformedRecordException, IOException {
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(STRING, schema.getDataType(InfluxLineProtocolRecordReader.MEASUREMENT).get().getFieldType());
@@ -119,7 +119,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "wea\\ ther,location=us-midwest temperature=82 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Assert.assertEquals("wea ther", record.getValue(InfluxLineProtocolRecordReader.MEASUREMENT));
@@ -130,7 +130,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "wea\\,ther,location=us-midwest temperature=82 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Assert.assertEquals("wea,ther", record.getValue(InfluxLineProtocolRecordReader.MEASUREMENT));
@@ -139,7 +139,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
     @Test
     public void tags() throws SchemaNotFoundException, MalformedRecordException, IOException {
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.TAG_SET).get().getFieldType());
@@ -156,7 +156,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather temperature=82 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.TAG_SET).get().getFieldType());
@@ -172,7 +172,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us-midwest,season=summer temperature=82 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.TAG_SET).get().getFieldType());
@@ -190,7 +190,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us\\,midwest temperature=82 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
@@ -204,7 +204,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,loca\\=tion=us-midwest temperature=82 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
@@ -218,7 +218,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us\\ midwest temperature=82 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
@@ -230,7 +230,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
     @Test
     public void fields() throws SchemaNotFoundException, MalformedRecordException, IOException {
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
@@ -247,7 +247,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         expectedException.expect(MalformedRecordException.class);
         expectedException.expectMessage("Not parsable data: 'weather 1465839830100400200'");
@@ -260,7 +260,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather value 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         expectedException.expect(MalformedRecordException.class);
         expectedException.expectMessage("Not parsable data: 'weather value 1465839830100400200'");
@@ -273,7 +273,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather value=82 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
@@ -290,7 +290,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather value=83i 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
@@ -310,7 +310,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
                 + "inodes_total=9223372036854775807i,inodes_free=9223372036853280100i,inodes_used=1495707i "
                 + "1525932900000000000";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
 
@@ -326,7 +326,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather value=\"84\" 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
@@ -344,7 +344,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         String data = "weather true1=t,true2=T,true3=true,true4=True,true5=TRUE,"
                 + "false1=f,false2=F,false3=false,false4=False,false5=FALSE 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
@@ -370,7 +370,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather value=84";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
@@ -391,7 +391,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us-midwest temperature=\"82 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         expectedException.expect(MalformedRecordException.class);
         expectedException
@@ -405,7 +405,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us-midwest temperature=82,measure=\"Cel\\,sius\" 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
@@ -419,7 +419,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us-midwest temperature=82,measure=\"Cel\\=sius\" 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
@@ -433,7 +433,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us-midwest temperature=82,measure=\"Cel\\ sius\" 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
@@ -447,7 +447,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "system,host=pikachu.local uptime_format=\"7 days,  5:38\" 1525951350000000000";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
@@ -461,7 +461,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "system,host=tomcat2 uptime_format=\" 2:25\" 1526037880000000000";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
@@ -475,7 +475,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us-midwest temperature=82,measure=\"Cel\\\\\"sius\" 1465839830100400200";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
@@ -487,7 +487,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
     @Test
     public void timestamp() throws SchemaNotFoundException, MalformedRecordException, IOException {
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(LONG, schema.getDataType(InfluxLineProtocolRecordReader.TIMESTAMP).get().getFieldType());
@@ -501,7 +501,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us-midwest temperature=82 2016-10-31T06:52:20.020Z";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(LONG, schema.getDataType(InfluxLineProtocolRecordReader.TIMESTAMP).get().getFieldType());
@@ -517,7 +517,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us-midwest temperature=82 wrong_format";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         expectedException.expect(MalformedRecordException.class);
         expectedException
@@ -531,7 +531,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         String data = "weather,location=us-midwest temperature=82";
 
-        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), logger);
+        RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
         Assert.assertEquals(LONG, schema.getDataType(InfluxLineProtocolRecordReader.TIMESTAMP).get().getFieldType());
