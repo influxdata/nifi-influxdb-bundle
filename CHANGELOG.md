@@ -1,4 +1,8 @@
-## v1.5 [unreleased]    
+## v1.5.0 [unreleased]    
+
+### Others
+* [30](https://github.com/influxdata/nifi-influxdb-bundle/pull/31): Updated to Apache NiFi 1.11.1
+
 
 ## v1.4 [2020-01-30]    
 
