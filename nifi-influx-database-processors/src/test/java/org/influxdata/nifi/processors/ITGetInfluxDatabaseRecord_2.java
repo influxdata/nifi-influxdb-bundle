@@ -287,7 +287,7 @@ public class ITGetInfluxDatabaseRecord_2 extends AbstractITInfluxDB_2 {
         runner.assertTransferCount(GetInfluxDatabaseRecord_2.REL_FAILURE, 1);
 
         MockFlowFile flowFile = runner.getFlowFilesForRelationship(GetInfluxDatabaseRecord_2.REL_FAILURE).get(0);
-        Assertions.assertThat(flowFile.getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE)).contains("undefined identifier \"rangex\"");
+        Assertions.assertThat(flowFile.getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE)).contains("undefined identifier rangex");
     }
 
     @Test

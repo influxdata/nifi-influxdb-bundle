@@ -24,11 +24,9 @@ import com.influxdb.client.InfluxDBClientOptions;
 import com.influxdb.client.QueryApi;
 import com.influxdb.client.domain.Authorization;
 import com.influxdb.client.domain.Bucket;
-import com.influxdb.client.domain.BucketRetentionRules;
 import com.influxdb.client.domain.Organization;
 import com.influxdb.client.domain.Permission;
 import com.influxdb.client.domain.PermissionResource;
-
 import org.apache.nifi.util.TestRunner;
 import org.junit.After;
 
@@ -57,7 +55,7 @@ abstract class AbstractITInfluxDB_2 {
         bucketName = "nifi-bucket-" + System.currentTimeMillis();
 
         Bucket bucket = influxDBClient.getBucketsApi()
-                .createBucket(bucketName, new BucketRetentionRules().everySeconds(3600), organization);
+                .createBucket(bucketName, null, organization);
 
         PermissionResource resource = new PermissionResource();
         resource.setId(bucket.getId());
