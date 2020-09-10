@@ -94,6 +94,7 @@ echo
 docker pull ${INFLUXDB_V2_IMAGE} || true
 docker run \
        --detach \
+       --env INFLUXD_HTTP_BIND_ADDRESS=:9999 \
        --name influxdb_v2 \
        --publish 9999:9999 \
        ${INFLUXDB_V2_IMAGE}
