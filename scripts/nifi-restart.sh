@@ -19,6 +19,9 @@
 
 set -e
 
+DEFAULT_DOCKER_REGISTRY="quay.io/influxdb/"
+DOCKER_REGISTRY="${DOCKER_REGISTRY:-$DEFAULT_DOCKER_REGISTRY}"
+
 DEFAULT_INFLUXDB_VERSION="1.7"
 INFLUXDB_VERSION="${INFLUXDB_VERSION:-$DEFAULT_INFLUXDB_VERSION}"
 INFLUXDB_IMAGE=influxdb:${INFLUXDB_VERSION}-alpine
@@ -35,9 +38,11 @@ DEFAULT_CHRONOGRAF_VERSION="1.7"
 CHRONOGRAF_VERSION="${CHRONOGRAF_VERSION:-$DEFAULT_CHRONOGRAF_VERSION}"
 CHRONOGRAF_IMAGE=chronograf:${CHRONOGRAF_VERSION}
 
-DEFAULT_INFLUXDB_V2_VERSION="nightly"
+DEFAULT_INFLUXDB_V2_REPOSITORY="influxdb"
+DEFAULT_INFLUXDB_V2_VERSION="2.0.0-beta"
+INFLUXDB_V2_REPOSITORY="${INFLUXDB_V2_REPOSITORY:-$DEFAULT_INFLUXDB_V2_REPOSITORY}"
 INFLUXDB_V2_VERSION="${INFLUXDB_V2_VERSION:-$DEFAULT_INFLUXDB_V2_VERSION}"
-INFLUXDB_V2_IMAGE=quay.io/influxdb/influx:${INFLUXDB_V2_VERSION}
+INFLUXDB_V2_IMAGE=${DOCKER_REGISTRY}${INFLUXDB_V2_REPOSITORY}:${INFLUXDB_V2_VERSION}
 
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
@@ -94,6 +99,7 @@ echo
 docker pull ${INFLUXDB_V2_IMAGE} || true
 docker run \
        --detach \
+       --env INFLUXD_HTTP_BIND_ADDRESS=:9999 \
        --name influxdb_v2 \
        --publish 9999:9999 \
        ${INFLUXDB_V2_IMAGE}
@@ -149,7 +155,7 @@ echo
 echo "Build Apache NiFi with demo..."
 echo
 
-ORGID=$(docker exec -it influxdb_v2 influx org find -t my-token | grep my-org  | awk '{ print $1 }')
+ORGID=$(docker exec -it influxdb_v2 influx org find -t my-token --host http://localhost:9999 | grep my-org  | awk '{ print $1 }')
 cp "${SCRIPT_PATH}"/flow.xml "${SCRIPT_PATH}"/flow.edited.xml
 sed -i.backup "s/influxdb-org-replacement-id/${ORGID}/g" "${SCRIPT_PATH}"/flow.edited.xml
 gzip < "${SCRIPT_PATH}"/flow.edited.xml > "${SCRIPT_PATH}"/flow.xml.gz

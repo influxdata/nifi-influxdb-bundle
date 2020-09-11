@@ -89,6 +89,7 @@ echo
 
 docker run \
        --detach \
+       --env INFLUXD_HTTP_BIND_ADDRESS=:9999 \
        --name influxdb_v2 \
        --link=influxdb \
        --publish 9999:9999 \
