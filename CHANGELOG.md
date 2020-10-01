@@ -3,6 +3,9 @@
 ### API
 * [#36](https://github.com/influxdata/nifi-influxdb-bundle/pull/36): Default port changed from 9999 -> 8086
 
+### Others
+* [38](https://github.com/influxdata/nifi-influxdb-bundle/pull/38): Updated NiFi to 1.12.1, InfluxDB v1 to 1.8, Chronograf to 1.7, influxdb-client-java to 1.11.0 and influxdb-java to 2.20
+
 ## v1.7.0 [2020-04-17]
 
 ### Others

@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.nifi</groupId>
         <artifactId>nifi-nar-bundles</artifactId>
-        <version>1.11.4</version>
+        <version>1.12.1</version>
     </parent>
 
     <artifactId>nifi-influx-database-bundle</artifactId>
@@ -100,8 +100,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- skip until remove org.json from Java client -->
+        <enforcer.skip>true</enforcer.skip>
 
-        <nifi.version>1.11.4</nifi.version>
+        <nifi.version>1.12.1</nifi.version>
 
         <plugin.surefire.version>2.22.0</plugin.surefire.version>
         <plugin.jacoco.version>0.8.2</plugin.jacoco.version>
@@ -204,13 +206,13 @@
             <dependency>
                 <groupId>org.influxdb</groupId>
                 <artifactId>influxdb-java</artifactId>
-                <version>2.17</version>
+                <version>2.20</version>
             </dependency>
 
             <dependency>
                 <groupId>com.influxdb</groupId>
                 <artifactId>influxdb-client-java</artifactId>
-                <version>1.4.0</version>
+                <version>1.11.0</version>
             </dependency>
 
             <dependency>
