@@ -1,4 +1,4 @@
-## v1.8.0 [unreleased]
+## v1.8.0 [2020-10-02]
 
 ### API
 * [#36](https://github.com/influxdata/nifi-influxdb-bundle/pull/36): Default port changed from 9999 -> 8086
