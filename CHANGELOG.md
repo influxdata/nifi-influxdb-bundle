@@ -1,7 +1,7 @@
 ## v1.9.0 [unreleased]
 
 ### CI
-* [#41](https://github.com/influxdata/nifi-influxdb-bundle/pull/41): Updated default docker image to v2.0.2
+* [#42](https://github.com/influxdata/nifi-influxdb-bundle/pull/42): Updated default docker image to v2.0.3
 
 ## v1.8.0 [2020-10-02]
 
