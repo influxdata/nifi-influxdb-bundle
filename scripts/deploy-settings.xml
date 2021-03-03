@@ -21,8 +21,7 @@
     <servers>
         <server>
             <id>github</id>
-            <username>${env.BONITOO_GITHUB_USER}</username>
-            <password>${env.BONITOO_GITHUB_TOKEN}</password>
+            <privateKey>${env.BONITOO_GITHUB_TOKEN}</privateKey>
         </server>
     </servers>
 </settings>
