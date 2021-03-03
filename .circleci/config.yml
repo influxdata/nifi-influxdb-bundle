@@ -36,9 +36,11 @@ commands:
         default: &default-jdk-version "8"
     steps:
       - run:
-          name: Install OpenJDK
+          name: Install OpenJDK << parameters.jdk-version >>
           command: |
             sudo apt-get update && sudo apt-get install openjdk-<< parameters.jdk-version >>-jdk
+            sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-<< parameters.jdk-version >>-openjdk-amd64/bin/java 1200
+            sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-<< parameters.jdk-version >>-openjdk-amd64/bin/javac 1200
             sudo update-alternatives --set java /usr/lib/jvm/java-<< parameters.jdk-version >>-openjdk-amd64/bin/java
             sudo update-alternatives --set javac /usr/lib/jvm/java-<< parameters.jdk-version >>-openjdk-amd64/bin/javac
             java -version
@@ -72,37 +74,14 @@ commands:
           when: always
           command: |
             mkdir test-results
-            mkdir test-results/nifi-influx-database-nar
-            cp -r nifi-influx-database-nar/target/*/TEST-*.xml test-results/nifi-influx-database-nar || true
             mkdir test-results/nifi-influx-database-serialization
             cp -r nifi-influx-database-serialization/target/*/TEST-*.xml test-results/nifi-influx-database-serialization || true
-            mkdir test-results/nifi-influx-database-serialization-nar
-            cp -r nifi-influx-database-serialization-nar/target/*/TEST-*.xml test-results/nifi-influx-database-serialization-nar || true
             mkdir test-results/nifi-influx-database-services
             cp -r nifi-influx-database-services/target/*/TEST-*.xml test-results/nifi-influx-database-services || true
-            mkdir test-results/nifi-influx-database-services-api
-            cp -r nifi-influx-database-services-api/target/*/TEST-*.xml test-results/nifi-influx-database-services-api || true
-            mkdir test-results/nifi-influx-database-services-nar
-            cp -r nifi-influx-database-services-nar/target/*/TEST-*.xml test-results/nifi-influx-database-services-nar || true
             mkdir test-results/nifi-influx-database-utils
             cp -r nifi-influx-database-utils/target/*/TEST-*.xml test-results/nifi-influx-database-utils || true
       - store_test_results:
           path: test-results
-  storing-artifacts:
-    steps:
-      - run:
-          name: "Copying artifacts"
-          command: |
-            mkdir artifacts
-            cp -r nifi-influx-database-nar/target/*.jar artifacts/
-            cp -r nifi-influx-database-serialization/target/*.jar artifacts/
-            cp -r nifi-influx-database-serialization-nar/target/*.jar artifacts/
-            cp -r nifi-influx-database-services/target/*.jar artifacts/
-            cp -r nifi-influx-database-services-api/target/*.jar artifacts/
-            cp -r nifi-influx-database-services-nar/target/*.jar artifacts/
-            cp -r nifi-influx-database-utils/target/*.jar artifacts/
-      - store_artifacts:
-          path: artifacts
 
 jobs:
 
@@ -118,7 +97,6 @@ jobs:
       - client-test:
           jdk-version: << parameters.jdk-version >>
       - storing-test-results
-      - storing-artifacts
       - run:
           name: "Collecting coverage reports"
           command: bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
