@@ -65,14 +65,14 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
         SSLContextService sslContextService = Mockito.mock(SSLContextService.class);
         when(sslContextService.getIdentifier()).thenReturn("inluxdb-ssl");
 
-        when(sslContextService.getTrustStoreType()).thenReturn(StandardSSLContextService.STORE_TYPE_JKS);
+        when(sslContextService.getTrustStoreType()).thenReturn(StandardSSLContextService.TRUSTSTORE_TYPE.getName());
 		when(sslContextService.getTrustStoreFile()).thenReturn("src/test/resources/ssl/truststore.jks");
 		when(sslContextService.getTrustStorePassword()).thenReturn("changeme");
 		when(sslContextService.isTrustStoreConfigured()).thenReturn(true);
 
 		when(sslContextService.getKeyStoreFile()).thenReturn("src/test/resources/ssl/keystore.jks");
 		when(sslContextService.getKeyStorePassword()).thenReturn("changeme");
-		when(sslContextService.getKeyStoreType()).thenReturn(StandardSSLContextService.STORE_TYPE_JKS);
+		when(sslContextService.getKeyStoreType()).thenReturn(StandardSSLContextService.KEYSTORE_TYPE.getName());
 		when(sslContextService.isKeyStoreConfigured()).thenReturn(true);
 		
         testRunner.addControllerService("inluxdb-ssl", sslContextService);
