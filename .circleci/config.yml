@@ -51,13 +51,14 @@ commands:
         type: string
         default: *default-jdk-version
     steps:
+      - prepare
+      - install-jdk:
+          jdk-version: << parameters.jdk-version >>
       - restore_cache:
           name: Restoring Maven Cache
           keys:
             - &cache-key maven-cache_v1-<< parameters.jdk-version >>-{{ checksum "pom.xml" }}-{{ checksum "nifi-influx-database-nar/pom.xml" }}-{{ checksum "nifi-influx-database-serialization/pom.xml" }}-{{ checksum "nifi-influx-database-serialization-nar/pom.xml" }}-{{ checksum "nifi-influx-database-services/pom.xml" }}-{{ checksum "nifi-influx-database-services-api/pom.xml" }}-{{ checksum "nifi-influx-database-services-nar/pom.xml" }}-{{ checksum "nifi-influx-database-utils/pom.xml" }}
             - maven-cache_v1-<< parameters.jdk-version >>-
-      - install-jdk:
-          jdk-version: << parameters.jdk-version >>
       - run:
           name: "Running tests"
           command: |
@@ -93,13 +94,23 @@ jobs:
         type: string
         default: *default-jdk-version
     steps:
-      - prepare
       - client-test:
           jdk-version: << parameters.jdk-version >>
       - storing-test-results
       - run:
           name: "Collecting coverage reports"
           command: bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
+
+  end-to-end:
+    machine:
+      image: *default-machine-executor
+    steps:
+      - checkout
+      - install-jdk:
+          jdk-version:  *default-jdk-version
+      - run: ./scripts/nifi-restart.sh
+      - run: sleep 30
+      - run: ./scripts/end-to-end.sh
 
   deploy-snapshot:
     machine:
@@ -148,10 +159,13 @@ workflows:
       - tests-java:
           name: jdk-11
           jdk-version: "11"
-      - deploy-snapshot:
+      - end-to-end:
           requires:
             - jdk-8
             - jdk-11
+      - deploy-snapshot:
+          requires:
+            - end-to-end
           filters:
             branches:
               only: master
