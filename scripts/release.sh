@@ -96,7 +96,7 @@ echo "Prepared the next development iteration ${developmentVersion}!"
 echo
 echo "Next steps"
 echo
-echo "  1. wait for finish build on Travis CI: https://travis-ci.org/influxdata/nifi-influxdb-bundle"
+echo "  1. wait for finish build on Travis CI: https://app.circleci.com/pipelines/github/influxdata/nifi-influxdb-bundle"
 echo "  2. add ${developmentVersion} iteration to CHANGELOG.md"
 echo "  3. add ${developmentVersion} iteration to README.md compatibility matrix"
 echo "  4. commit changes: git commit -am \"chore(release): prepare for next development iteration ${developmentVersion}\""

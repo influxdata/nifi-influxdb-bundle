@@ -2,6 +2,7 @@
 
 ### CI
 * [#42](https://github.com/influxdata/nifi-influxdb-bundle/pull/42): Updated default docker image to v2.0.3
+* [#45](https://github.com/influxdata/nifi-influxdb-bundle/pull/45): changed CI service from travis-ci.org to CircleCI
 
 ## v1.8.0 [2020-10-02]
 
