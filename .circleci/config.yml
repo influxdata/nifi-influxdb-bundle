@@ -108,9 +108,19 @@ jobs:
       - checkout
       - install-jdk:
           jdk-version:  *default-jdk-version
+      - restore_cache:
+          name: Restoring Maven Cache
+          keys:
+            - &cache-end-to-end-key maven-cache-end-to-end_v1-{{ checksum "pom.xml" }}-{{ checksum "nifi-influx-database-nar/pom.xml" }}-{{ checksum "nifi-influx-database-serialization/pom.xml" }}-{{ checksum "nifi-influx-database-serialization-nar/pom.xml" }}-{{ checksum "nifi-influx-database-services/pom.xml" }}-{{ checksum "nifi-influx-database-services-api/pom.xml" }}-{{ checksum "nifi-influx-database-services-nar/pom.xml" }}-{{ checksum "nifi-influx-database-utils/pom.xml" }}
+            - maven-cache-end-to-end_v1-
       - run: ./scripts/nifi-restart.sh
       - run: sleep 30
       - run: ./scripts/end-to-end.sh
+      - save_cache:
+          name: Saving Maven Cache
+          key: *cache-end-to-end-key
+          paths:
+            - ~/.m2
 
   deploy-snapshot:
     machine:
