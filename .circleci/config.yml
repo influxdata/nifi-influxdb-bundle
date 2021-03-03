@@ -167,9 +167,9 @@ workflows:
       - deploy-snapshot:
           requires:
             - end-to-end
-          filters:
-            branches:
-              only: master
+#          filters:
+#            branches:
+#              only: master
 
   nightly:
     triggers:
