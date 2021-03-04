@@ -2143,14 +2143,14 @@ curl -i -X GET -G http://localhost:8234 \
       </processor>
       <processor>
         <id>0da4cb96-016b-1000-471a-93377cc20d0d</id>
-        <name>PublishKafka_0_11</name>
+        <name>PublishKafka_1_0</name>
         <position x="1047.893615619313" y="682.185540679174"/>
         <styles/>
         <comment/>
-        <class>org.apache.nifi.processors.kafka.pubsub.PublishKafka_0_11</class>
+        <class>org.apache.nifi.processors.kafka.pubsub.PublishKafka_1_0</class>
         <bundle>
           <group>org.apache.nifi</group>
-          <artifact>nifi-kafka-0-11-nar</artifact>
+          <artifact>nifi-kafka-1-0-nar</artifact>
           <version>1.13.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
