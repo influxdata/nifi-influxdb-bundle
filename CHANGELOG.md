@@ -1,5 +1,8 @@
 ## v1.9.0 [unreleased]
 
+### Others
+* [46](https://github.com/influxdata/nifi-influxdb-bundle/pull/46): Updated to Apache NiFi 1.13.0
+
 ### CI
 * [#42](https://github.com/influxdata/nifi-influxdb-bundle/pull/42): Updated default docker image to v2.0.3
 * [#45](https://github.com/influxdata/nifi-influxdb-bundle/pull/45): changed CI service from travis-ci.org to CircleCI

@@ -26,7 +26,7 @@ DEFAULT_INFLUXDB_VERSION="1.8"
 INFLUXDB_VERSION="${INFLUXDB_VERSION:-$DEFAULT_INFLUXDB_VERSION}"
 INFLUXDB_IMAGE=influxdb:${INFLUXDB_VERSION}-alpine
 
-DEFAULT_NIFI_VERSION="1.12.1"
+DEFAULT_NIFI_VERSION="1.13.0"
 NIFI_VERSION="${NIFI_VERSION:-$DEFAULT_NIFI_VERSION}"
 NIFI_IMAGE=apache/nifi:${NIFI_VERSION}
 
@@ -161,7 +161,6 @@ sed -i.backup "s/influxdb-org-replacement-id/${ORGID}/g" "${SCRIPT_PATH}"/flow.e
 gzip < "${SCRIPT_PATH}"/flow.edited.xml > "${SCRIPT_PATH}"/flow.xml.gz
 
 # docker cp nifi:/opt/nifi/nifi-current/conf/flow.xml.gz scripts/ && gunzip -f scripts/flow.xml.gz
-# gunzip -f scripts/flow.xml.gz
 
 docker build -t nifi -f "${SCRIPT_PATH}"/Dockerfile --build-arg NIFI_IMAGE="${NIFI_IMAGE}" .
 
