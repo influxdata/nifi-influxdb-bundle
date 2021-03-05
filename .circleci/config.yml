@@ -122,7 +122,7 @@ jobs:
           paths:
             - ~/.m2
 
-  deploy-snapshot:
+  deploy:
     machine:
       image: *default-machine-executor
     steps:
@@ -164,7 +164,7 @@ workflows:
           requires:
             - jdk-8
             - jdk-11
-      - deploy-snapshot:
+      - deploy:
           requires:
             - end-to-end
           filters:
