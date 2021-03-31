@@ -1,73 +1,77 @@
 ## v1.10.0 [unreleased]
 
 ### Others
-* [48](https://github.com/influxdata/nifi-influxdb-bundle/pull/48): Update to Apache NiFi 1.13.2
+1. [48](https://github.com/influxdata/nifi-influxdb-bundle/pull/48): Update to Apache NiFi 1.13.2
+
+### Dependencies
+1. [#49](https://github.com/influxdata/nifi-influxdb-bundle/pull/49): Update dependencies:
+    - Guava to 30.1-jre
 
 ## v1.9.0 [2021-03-05]
 
 ### Others
-* [46](https://github.com/influxdata/nifi-influxdb-bundle/pull/46): Update to Apache NiFi 1.13.0
+1. [46](https://github.com/influxdata/nifi-influxdb-bundle/pull/46): Update to Apache NiFi 1.13.0
 
 ### CI
-* [#44](https://github.com/influxdata/nifi-influxdb-bundle/pull/44): Update stable image to `influxdb:latest`
-* [#45](https://github.com/influxdata/nifi-influxdb-bundle/pull/45): Change CI service from travis-ci.org to CircleCI
+1. [#44](https://github.com/influxdata/nifi-influxdb-bundle/pull/44): Update stable image to `influxdb:latest`
+1. [#45](https://github.com/influxdata/nifi-influxdb-bundle/pull/45): Change CI service from travis-ci.org to CircleCI
 
 ## v1.8.0 [2020-10-02]
 
 ### API
-* [#36](https://github.com/influxdata/nifi-influxdb-bundle/pull/36): Default port changed from 9999 -> 8086
+1. [#36](https://github.com/influxdata/nifi-influxdb-bundle/pull/36): Default port changed from 9999 -> 8086
 
 ### Others
-* [38](https://github.com/influxdata/nifi-influxdb-bundle/pull/38): Update NiFi to 1.12.1, InfluxDB v1 to 1.8, Chronograf to 1.7, influxdb-client-java to 1.11.0 and influxdb-java to 2.20
+1. [38](https://github.com/influxdata/nifi-influxdb-bundle/pull/38): Update NiFi to 1.12.1, InfluxDB v1 to 1.8, Chronograf to 1.7, influxdb-client-java to 1.11.0 and influxdb-java to 2.20
 
 ## v1.7.0 [2020-04-17]
 
 ### Others
-* [32](https://github.com/influxdata/nifi-influxdb-bundle/pull/33): Update to Apache NiFi 1.11.4
+1. [32](https://github.com/influxdata/nifi-influxdb-bundle/pull/33): Update to Apache NiFi 1.11.4
 
 ## v1.6.0 [2020-03-13]
 
 ### Others
-* [32](https://github.com/influxdata/nifi-influxdb-bundle/pull/32): Update to Apache NiFi 1.11.3
+1. [32](https://github.com/influxdata/nifi-influxdb-bundle/pull/32): Update to Apache NiFi 1.11.3
 
 ## v1.5.0 [2020-02-17]    
 
 ### Others
-* [31](https://github.com/influxdata/nifi-influxdb-bundle/pull/31): Update to Apache NiFi 1.11.1
+1. [31](https://github.com/influxdata/nifi-influxdb-bundle/pull/31): Update to Apache NiFi 1.11.1
 
 ## v1.4 [2020-01-30]    
 
 ### Others
-* [30](https://github.com/influxdata/nifi-influxdb-bundle/pull/30): Update to Apache NiFi 1.11.0
+1. [30](https://github.com/influxdata/nifi-influxdb-bundle/pull/30): Update to Apache NiFi 1.11.0
 
 ## v1.3 [2020-01-29]
 
 ### Others
-* [27](https://github.com/influxdata/nifi-influxdb-bundle/pull/27): Update to Apache NiFi 1.10.0
+1. [27](https://github.com/influxdata/nifi-influxdb-bundle/pull/27): Update to Apache NiFi 1.10.0
 
 ## v1.2 [2019-12-06]
 
 ### Features
 
-* [23](https://github.com/influxdata/nifi-influxdb-bundle/issues/23): Add support for InfluxDB v2.0
+1. [23](https://github.com/influxdata/nifi-influxdb-bundle/issues/23): Add support for InfluxDB v2.0
 
 ## v1.1 [2019-06-06]
 
 ### Features
 
-* [19](https://github.com/influxdata/nifi-influxdb-bundle#influxlineprotocolrecordsetwriter): Allows writes the contents of a Record as Line Protocol
-* [20](https://github.com/influxdata/nifi-influxdb-bundle#putinfluxdatabase): PutInfluxDatabase supports the custom timestamp precision
+1. [19](https://github.com/influxdata/nifi-influxdb-bundle#influxlineprotocolrecordsetwriter): Allows writes the contents of a Record as Line Protocol
+1. [20](https://github.com/influxdata/nifi-influxdb-bundle#putinfluxdatabase): PutInfluxDatabase supports the custom timestamp precision
 
 ### Others
-* [11](https://github.com/influxdata/nifi-influxdb-bundle/issues/11): Update to Apache NiFi 1.9.2
-* [12](https://github.com/influxdata/nifi-influxdb-bundle/issues/13): Update to influxdb-java 2.15
+1. [11](https://github.com/influxdata/nifi-influxdb-bundle/issues/11): Update to Apache NiFi 1.9.2
+1. [12](https://github.com/influxdata/nifi-influxdb-bundle/issues/13): Update to influxdb-java 2.15
 
 ## v1.0 [2019-02-21]
 
 ### Features
-* [PutInfluxDatabaseRecord](https://github.com/influxdata/nifi-influxdb-bundle#putinfluxdatabaserecord): Uses a specified RecordReader to write the content of a FlowFile into InfluxDB database.
-* [InfluxLineProtocolReader](https://github.com/influxdata/nifi-influxdb-bundle#influxlineprotocolreader): Parses the InfluxDB Line Protocol into NiFi Record
-* [InfluxDatabaseService](https://github.com/influxdata/nifi-influxdb-bundle#influxdatabaseservice): Allows sharing connection configuration among more NiFi processors
+1. [PutInfluxDatabaseRecord](https://github.com/influxdata/nifi-influxdb-bundle#putinfluxdatabaserecord): Uses a specified RecordReader to write the content of a FlowFile into InfluxDB database.
+1. [InfluxLineProtocolReader](https://github.com/influxdata/nifi-influxdb-bundle#influxlineprotocolreader): Parses the InfluxDB Line Protocol into NiFi Record
+1. [InfluxDatabaseService](https://github.com/influxdata/nifi-influxdb-bundle#influxdatabaseservice): Allows sharing connection configuration among more NiFi processors
 
 ### Bug Fixes
 
