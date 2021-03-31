@@ -1,13 +1,16 @@
 ## v1.10.0 [unreleased]
 
+### Others
+* [48](https://github.com/influxdata/nifi-influxdb-bundle/pull/48): Update to Apache NiFi 1.13.2
+
 ## v1.9.0 [2021-03-05]
 
 ### Others
-* [46](https://github.com/influxdata/nifi-influxdb-bundle/pull/46): Updated to Apache NiFi 1.13.0
+* [46](https://github.com/influxdata/nifi-influxdb-bundle/pull/46): Update to Apache NiFi 1.13.0
 
 ### CI
-* [#44](https://github.com/influxdata/nifi-influxdb-bundle/pull/44): Updated stable image to `influxdb:latest`
-* [#45](https://github.com/influxdata/nifi-influxdb-bundle/pull/45): changed CI service from travis-ci.org to CircleCI
+* [#44](https://github.com/influxdata/nifi-influxdb-bundle/pull/44): Update stable image to `influxdb:latest`
+* [#45](https://github.com/influxdata/nifi-influxdb-bundle/pull/45): Change CI service from travis-ci.org to CircleCI
 
 ## v1.8.0 [2020-10-02]
 
@@ -15,38 +18,38 @@
 * [#36](https://github.com/influxdata/nifi-influxdb-bundle/pull/36): Default port changed from 9999 -> 8086
 
 ### Others
-* [38](https://github.com/influxdata/nifi-influxdb-bundle/pull/38): Updated NiFi to 1.12.1, InfluxDB v1 to 1.8, Chronograf to 1.7, influxdb-client-java to 1.11.0 and influxdb-java to 2.20
+* [38](https://github.com/influxdata/nifi-influxdb-bundle/pull/38): Update NiFi to 1.12.1, InfluxDB v1 to 1.8, Chronograf to 1.7, influxdb-client-java to 1.11.0 and influxdb-java to 2.20
 
 ## v1.7.0 [2020-04-17]
 
 ### Others
-* [32](https://github.com/influxdata/nifi-influxdb-bundle/pull/33): Updated to Apache NiFi 1.11.4
+* [32](https://github.com/influxdata/nifi-influxdb-bundle/pull/33): Update to Apache NiFi 1.11.4
 
 ## v1.6.0 [2020-03-13]
 
 ### Others
-* [32](https://github.com/influxdata/nifi-influxdb-bundle/pull/32): Updated to Apache NiFi 1.11.3
+* [32](https://github.com/influxdata/nifi-influxdb-bundle/pull/32): Update to Apache NiFi 1.11.3
 
 ## v1.5.0 [2020-02-17]    
 
 ### Others
-* [31](https://github.com/influxdata/nifi-influxdb-bundle/pull/31): Updated to Apache NiFi 1.11.1
+* [31](https://github.com/influxdata/nifi-influxdb-bundle/pull/31): Update to Apache NiFi 1.11.1
 
 ## v1.4 [2020-01-30]    
 
 ### Others
-* [30](https://github.com/influxdata/nifi-influxdb-bundle/pull/30): Updated to Apache NiFi 1.11.0
+* [30](https://github.com/influxdata/nifi-influxdb-bundle/pull/30): Update to Apache NiFi 1.11.0
 
 ## v1.3 [2020-01-29]
 
 ### Others
-* [27](https://github.com/influxdata/nifi-influxdb-bundle/pull/27): Updated to Apache NiFi 1.10.0
+* [27](https://github.com/influxdata/nifi-influxdb-bundle/pull/27): Update to Apache NiFi 1.10.0
 
 ## v1.2 [2019-12-06]
 
 ### Features
 
-* [23](https://github.com/influxdata/nifi-influxdb-bundle/issues/23): Added support for InfluxDB v2.0
+* [23](https://github.com/influxdata/nifi-influxdb-bundle/issues/23): Add support for InfluxDB v2.0
 
 ## v1.1 [2019-06-06]
 
@@ -56,8 +59,8 @@
 * [20](https://github.com/influxdata/nifi-influxdb-bundle#putinfluxdatabase): PutInfluxDatabase supports the custom timestamp precision
 
 ### Others
-* [11](https://github.com/influxdata/nifi-influxdb-bundle/issues/11): Updated to Apache NiFi 1.9.2
-* [12](https://github.com/influxdata/nifi-influxdb-bundle/issues/13): Updated to influxdb-java 2.15
+* [11](https://github.com/influxdata/nifi-influxdb-bundle/issues/11): Update to Apache NiFi 1.9.2
+* [12](https://github.com/influxdata/nifi-influxdb-bundle/issues/13): Update to influxdb-java 2.15
 
 ## v1.0 [2019-02-21]
 
