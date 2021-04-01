@@ -61,6 +61,7 @@ The Nar compatibility matrix:
 
 Nar Version                                                                                                                             | NiFi Version
 ----------------------------------------------------------------------------------------------------------------------------------------| ------------
+[nifi-influx-database-nar-1.11.0-SNAPSHOT.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.11.0-SNAPSHOT/nifi-influx-database-nar-1.11.0-SNAPSHOT.nar)  | 1.13.2
 [nifi-influx-database-nar-1.10.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.10.0/nifi-influx-database-nar-1.10.0.nar) | 1.13.2
 [nifi-influx-database-nar-1.9.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.9.0/nifi-influx-database-nar-1.9.0.nar) | 1.13.0
 [nifi-influx-database-nar-1.8.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.8.0/nifi-influx-database-nar-1.8.0.nar) | 1.12.1
