@@ -1,6 +1,6 @@
 # InfluxDB Processors For Apache NiFi
 
-[![Build Status](https://travis-ci.org/influxdata/nifi-influxdb-bundle.svg?branch=master)](https://travis-ci.org/influxdata/nifi-influxdb-bundle)
+[![CircleCI](https://circleci.com/gh/influxdata/nifi-influxdb-bundle.svg?style=svg)](https://circleci.com/gh/influxdata/nifi-influxdb-bundle)
 [![codecov](https://codecov.io/gh/influxdata/nifi-influxdb-bundle/branch/master/graph/badge.svg)](https://codecov.io/gh/influxdata/nifi-influxdb-bundle)
 [![License](https://img.shields.io/github/license/influxdata/nifi-influxdb-bundle.svg)](https://github.com/influxdata/nifi-influxdb-bundle/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues-raw/influxdata/nifi-influxdb-bundle.svg)](https://github.com/influxdata/nifi-influxdb-bundle/issues)
