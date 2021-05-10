@@ -1,5 +1,8 @@
 ## v1.11.0 [unreleased]
 
+### Others
+1. [#54](https://github.com/influxdata/nifi-influxdb-bundle/pull/54): Update `influxdb-client-java` to 2.2.0
+
 ## v1.10.0 [2021-04-01]
 
 ### Others
