@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.influxdb.client.domain.WritePrecision;
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.generic.GenericData;
@@ -43,8 +45,6 @@ import org.assertj.core.api.Assertions;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -197,18 +197,18 @@ public class ITGetInfluxDatabaseRecord_2 extends AbstractITInfluxDB_2 {
         MockFlowFile flowFile = runner.getFlowFilesForRelationship(GetInfluxDatabaseRecord_2.REL_SUCCESS).get(0);
 
         String json = new String(runner.getContentAsByteArray(flowFile));
-		JSONObject parsedJson = (new JSONArray(json)).getJSONObject(0);
+		JsonObject parsedJson = (new JsonParser().parse(json).getAsJsonArray()).get(0).getAsJsonObject();
 
         Assert.assertNotNull(parsedJson);
-        Assert.assertEquals("_result", parsedJson.get("result"));
-        Assert.assertEquals(0, parsedJson.get("table"));
-        Assert.assertEquals(0, parsedJson.get("_start"));
-        Assert.assertEquals(0, parsedJson.get("_time"));
-        Assert.assertTrue((long) parsedJson.get("_stop") > from.getTime());
-        Assert.assertEquals("humidity", parsedJson.get("_field"));
-        Assert.assertEquals("newark", parsedJson.get("city"));
-        Assert.assertEquals("US", parsedJson.get("country"));
-        Assert.assertEquals(0.6D, parsedJson.get("_value"));
+        Assert.assertEquals("_result", parsedJson.get("result").getAsString());
+        Assert.assertEquals(0, parsedJson.get("table").getAsInt());
+        Assert.assertEquals(0, parsedJson.get("_start").getAsInt());
+        Assert.assertEquals(0, parsedJson.get("_time").getAsInt());
+        Assert.assertTrue(parsedJson.get("_stop").getAsLong() > from.getTime());
+        Assert.assertEquals("humidity", parsedJson.get("_field").getAsString());
+        Assert.assertEquals("newark", parsedJson.get("city").getAsString());
+        Assert.assertEquals("US", parsedJson.get("country").getAsString());
+        Assert.assertEquals((Object) 0.6D, parsedJson.get("_value").getAsDouble());
     }
 
     @Test
