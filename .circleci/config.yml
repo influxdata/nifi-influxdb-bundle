@@ -63,11 +63,17 @@ commands:
           name: "Running tests"
           command: |
             mvn -B -U clean verify failsafe:integration-test failsafe:verify -Dmaven.buildNumber.skip=true
+      - run:
+          name: "Package Bundle"
+          command: |
+            mvn -B -U package -DskipTests
       - save_cache:
           name: Saving Maven Cache
           key: *cache-key
           paths:
             - ~/.m2
+      - store_artifacts:
+          path: nifi-influx-database-nar/target/*.nar
   storing-test-results:
     steps:
       - run:

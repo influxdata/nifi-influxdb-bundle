@@ -106,7 +106,7 @@
 		<!--
 			TODO after update NiFi:
 				- remote nifi.groovy.version property
-				- remove bintray pluginRepository
+				- remove pluginRepositories
 		 -->
         <nifi.version>1.13.2</nifi.version>
 
