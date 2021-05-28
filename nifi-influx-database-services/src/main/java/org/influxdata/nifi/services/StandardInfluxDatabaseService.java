@@ -34,8 +34,6 @@ import org.apache.nifi.ssl.SSLContextService;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
-import static org.influxdata.nifi.util.PropertyValueUtils.getEnumValue;
-
 @Tags({"influxdb", "client"})
 @CapabilityDescription("The controller service that provides connection to InfluxDB.")
 public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService implements InfluxDatabaseService {
@@ -70,7 +68,6 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
 
         // SSL
         SSLContextService sslService = context.getProperty(SSL_CONTEXT_SERVICE).asControllerService(SSLContextService.class);
-        SSLContextService.ClientAuth clientAuth = getEnumValue(CLIENT_AUTH, context, SSLContextService.ClientAuth.class, DEFAULT_CLIENT_AUTH);
 
         // Connection
         String influxDbUrl = getDatabaseURL();
@@ -81,7 +78,7 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
         String password = context.getProperty(PASSWORD).evaluateAttributeExpressions().getValue();
 
         try {
-            InfluxDB influxDB = connect(username, password, sslService, clientAuth, influxDbUrl, connectionTimeout);
+            InfluxDB influxDB = connect(username, password, sslService, influxDbUrl, connectionTimeout);
 
             getLogger().info("InfluxDB connection created for host {}", new Object[]{influxDbUrl});
 
@@ -106,16 +103,15 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
 
     @NonNull
     protected InfluxDB connect(final String username,
-                               final String password,
-                               final SSLContextService sslService,
-                               final SSLContextService.ClientAuth clientAuth,
-                               final String influxDbUrl,
-                               final long connectionTimeout) throws IOException, GeneralSecurityException {
+							   final String password,
+							   final SSLContextService sslService,
+							   final String influxDbUrl,
+							   final long connectionTimeout) throws IOException, GeneralSecurityException {
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
         if (sslService != null) {
-            configureSSL(builder, clientAuth, sslService);
+            configureSSL(builder, sslService);
         }
 
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {

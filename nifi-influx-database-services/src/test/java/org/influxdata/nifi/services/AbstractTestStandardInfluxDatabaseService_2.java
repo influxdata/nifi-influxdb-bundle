@@ -24,7 +24,6 @@ import java.util.function.Supplier;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.domain.HealthCheck;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.processor.AbstractProcessor;
@@ -56,8 +55,7 @@ public abstract class AbstractTestStandardInfluxDatabaseService_2 {
                 .when(service)
                 .connect(Mockito.anyString(),
                         Mockito.any(),
-                        Mockito.any(),
-                        Mockito.any(),
+						Mockito.any(),
                         Mockito.anyLong());
 
         testRunner = TestRunners.newTestRunner(ServiceProcessor.class);
