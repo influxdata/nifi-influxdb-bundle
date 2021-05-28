@@ -21,6 +21,7 @@ import java.security.GeneralSecurityException;
 
 import com.influxdb.client.InfluxDBClient;
 import org.apache.nifi.reporting.InitializationException;
+import org.apache.nifi.security.util.ClientAuth;
 import org.apache.nifi.ssl.SSLContextService;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,7 +82,7 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
     @Test
     public void clientAuth() throws IOException, GeneralSecurityException {
 
-        testRunner.setProperty(service, InfluxDatabaseService_2.CLIENT_AUTH, SSLContextService.ClientAuth.NONE.name());
+        testRunner.setProperty(service, InfluxDatabaseService_2.CLIENT_AUTH, ClientAuth.NONE.name());
         testRunner.assertValid(service);
         testRunner.enableControllerService(service);
 
