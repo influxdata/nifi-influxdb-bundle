@@ -67,13 +67,15 @@ commands:
           name: "Package Bundle"
           command: |
             mvn -B -U package -DskipTests
+            mkdir artifacts
+            cp -r nifi-influx-database-nar/target/*.nar artifacts/
+      - store_artifacts:
+          path: artifacts
       - save_cache:
           name: Saving Maven Cache
           key: *cache-key
           paths:
             - ~/.m2
-      - store_artifacts:
-          path: nifi-influx-database-nar/target/*.nar
   storing-test-results:
     steps:
       - run:
