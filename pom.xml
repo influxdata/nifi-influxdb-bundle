@@ -103,10 +103,16 @@
 		<!-- skip until remove org.json from Java client -->
         <enforcer.skip>true</enforcer.skip>
 
+		<!--
+			TODO after update NiFi:
+				- remote nifi.groovy.version property
+				- remove bintray pluginRepository
+		 -->
         <nifi.version>1.13.2</nifi.version>
 
         <plugin.surefire.version>2.22.0</plugin.surefire.version>
         <plugin.jacoco.version>0.8.2</plugin.jacoco.version>
+		<nifi.groovy.version>2.5.6</nifi.groovy.version>
     </properties>
 
     <dependencyManagement>
@@ -399,5 +405,31 @@
         </repository>
 
     </repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>bintray</id>
+			<name>Groovy Bintray</name>
+			<url>https://dl.bintray.com/groovy/maven</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>maven2</id>
+			<name>maven2</name>
+			<url>https://repo1.maven.org/maven2/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+
+	</pluginRepositories>
 
 </project>
