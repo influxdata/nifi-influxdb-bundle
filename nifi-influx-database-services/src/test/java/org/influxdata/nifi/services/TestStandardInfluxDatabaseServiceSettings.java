@@ -55,7 +55,8 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
                 Mockito.eq(null),
                 Mockito.eq(null),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(InfluxDatabaseService.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }
 
@@ -89,14 +90,15 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
                 Mockito.eq(null),
                 Mockito.eq(null),
                 Mockito.eq(sslContextService),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(InfluxDatabaseService.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }
 
     @Test
     public void clientAuth() throws IOException, GeneralSecurityException {
 
-        testRunner.setProperty(service, InfluxDatabaseService.CLIENT_AUTH, ClientAuth.NONE.name());
+        testRunner.setProperty(service, InfluxDatabaseService.CLIENT_AUTH, SSLContextService.ClientAuth.NONE.name());
         testRunner.assertValid(service);
         testRunner.enableControllerService(service);
 
@@ -106,7 +108,8 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
                 Mockito.eq(null),
                 Mockito.eq(null),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(ClientAuth.NONE),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }
 
@@ -123,7 +126,8 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
                 Mockito.eq(null),
                 Mockito.eq(null),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8886"),
+                Mockito.eq(InfluxDatabaseService.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8886"),
                 Mockito.eq(0L));
     }
 
@@ -150,7 +154,8 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
                 Mockito.eq(null),
                 Mockito.eq(null),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(InfluxDatabaseService.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(6000L));
     }
 
@@ -179,7 +184,8 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
                 Mockito.eq("user-name"),
                 Mockito.eq(null),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(InfluxDatabaseService.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }
 
@@ -206,7 +212,8 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
                 Mockito.eq(null),
                 Mockito.eq("pass-word"),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(InfluxDatabaseService.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }
 

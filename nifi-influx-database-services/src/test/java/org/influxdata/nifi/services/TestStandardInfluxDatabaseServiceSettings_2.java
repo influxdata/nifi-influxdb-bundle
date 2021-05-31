@@ -53,7 +53,8 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
         Mockito.verify(service, Mockito.times(1)).connect(
                 Mockito.eq("my-token"),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(InfluxDatabaseService_2.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }
 
@@ -75,7 +76,8 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
         Mockito.verify(service, Mockito.times(1)).connect(
                 Mockito.eq("my-token"),
                 Mockito.eq(sslContextService),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(InfluxDatabaseService_2.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }
 
@@ -91,7 +93,8 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
         Mockito.verify(service, Mockito.times(1)).connect(
                 Mockito.eq("my-token"),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(ClientAuth.NONE),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }
 
@@ -107,7 +110,8 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
         Mockito.verify(service, Mockito.times(1)).connect(
                 Mockito.eq("my-token"),
                 Mockito.eq(null),
-				Mockito.eq("http://influxdb:8886"),
+                Mockito.eq(InfluxDatabaseService_2.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://influxdb:8886"),
                 Mockito.eq(0L));
     }
 
@@ -133,7 +137,8 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
         Mockito.verify(service, Mockito.times(1)).connect(
                 Mockito.eq("my-token"),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(InfluxDatabaseService_2.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(6000L));
     }
 
@@ -161,7 +166,8 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
         Mockito.verify(service, Mockito.times(1)).connect(
                 Mockito.eq("my-token-2"),
                 Mockito.eq(null),
-				Mockito.eq("http://localhost:8086"),
+                Mockito.eq(InfluxDatabaseService_2.DEFAULT_CLIENT_AUTH),
+                Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }
 

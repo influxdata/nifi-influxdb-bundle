@@ -57,6 +57,7 @@ public abstract class AbstractTestStandardInfluxDatabaseService {
                 .connect(Mockito.any(),
                         Mockito.any(),
                         Mockito.any(),
+                        Mockito.any(),
 						Mockito.any(),
                         Mockito.anyLong());
 
