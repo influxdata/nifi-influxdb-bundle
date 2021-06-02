@@ -54,12 +54,12 @@ public abstract class AbstractTestStandardInfluxDatabaseService {
         // Mock response
         Mockito.doAnswer(invocation -> answerConnect.get().answer(invocation))
                 .when(service)
-                .connect(Mockito.any(),
-                        Mockito.any(),
-                        Mockito.any(),
-                        Mockito.any(),
+				.connect(Mockito.any(),
 						Mockito.any(),
-                        Mockito.anyLong());
+						Mockito.any(),
+						Mockito.any(),
+						Mockito.any(),
+						Mockito.anyLong());
 
         testRunner = TestRunners.newTestRunner(ServiceProcessor.class);
         testRunner.addControllerService("influxdb-service", service);
