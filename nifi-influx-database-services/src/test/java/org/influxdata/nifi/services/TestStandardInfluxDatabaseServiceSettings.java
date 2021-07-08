@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import org.apache.nifi.reporting.InitializationException;
+import org.apache.nifi.security.util.ClientAuth;
 import org.apache.nifi.ssl.SSLContextService;
 import org.apache.nifi.ssl.StandardSSLContextService;
 import org.influxdb.InfluxDB;
@@ -107,7 +108,7 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
                 Mockito.eq(null),
                 Mockito.eq(null),
                 Mockito.eq(null),
-                Mockito.eq(SSLContextService.ClientAuth.NONE),
+                Mockito.eq(ClientAuth.NONE),
                 Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }

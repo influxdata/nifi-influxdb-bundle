@@ -30,6 +30,7 @@ import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.controller.ConfigurationContext;
+import org.apache.nifi.security.util.ClientAuth;
 import org.apache.nifi.ssl.SSLContextService;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -70,7 +71,7 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
 
         // SSL
         SSLContextService sslService = context.getProperty(SSL_CONTEXT_SERVICE).asControllerService(SSLContextService.class);
-        SSLContextService.ClientAuth clientAuth = getEnumValue(CLIENT_AUTH, context, SSLContextService.ClientAuth.class, DEFAULT_CLIENT_AUTH);
+        ClientAuth clientAuth = getEnumValue(CLIENT_AUTH, context, ClientAuth.class, DEFAULT_CLIENT_AUTH);
 
         // Connection
         String influxDbUrl = getDatabaseURL();
@@ -108,7 +109,7 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
     protected InfluxDB connect(final String username,
                                final String password,
                                final SSLContextService sslService,
-                               final SSLContextService.ClientAuth clientAuth,
+                               final ClientAuth clientAuth,
                                final String influxDbUrl,
                                final long connectionTimeout) throws IOException, GeneralSecurityException {
 

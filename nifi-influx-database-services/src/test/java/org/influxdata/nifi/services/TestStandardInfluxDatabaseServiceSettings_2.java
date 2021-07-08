@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import com.influxdb.client.InfluxDBClient;
-
 import org.apache.nifi.reporting.InitializationException;
+import org.apache.nifi.security.util.ClientAuth;
 import org.apache.nifi.ssl.SSLContextService;
 import org.junit.Before;
 import org.junit.Test;
@@ -84,7 +84,7 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
     @Test
     public void clientAuth() throws IOException, GeneralSecurityException {
 
-        testRunner.setProperty(service, InfluxDatabaseService_2.CLIENT_AUTH, SSLContextService.ClientAuth.NONE.name());
+        testRunner.setProperty(service, InfluxDatabaseService_2.CLIENT_AUTH, ClientAuth.NONE.name());
         testRunner.assertValid(service);
         testRunner.enableControllerService(service);
 
@@ -93,7 +93,7 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
         Mockito.verify(service, Mockito.times(1)).connect(
                 Mockito.eq("my-token"),
                 Mockito.eq(null),
-                Mockito.eq(SSLContextService.ClientAuth.NONE),
+                Mockito.eq(ClientAuth.NONE),
                 Mockito.eq("http://localhost:8086"),
                 Mockito.eq(0L));
     }

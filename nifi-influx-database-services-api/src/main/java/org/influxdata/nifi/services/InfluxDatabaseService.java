@@ -24,6 +24,7 @@ import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.controller.ControllerService;
 import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.processor.util.StandardValidators;
+import org.apache.nifi.security.util.ClientAuth;
 import org.apache.nifi.ssl.SSLContextService;
 import org.influxdb.InfluxDB;
 
@@ -32,7 +33,7 @@ import org.influxdb.InfluxDB;
  */
 public interface InfluxDatabaseService extends ControllerService {
 
-    SSLContextService.ClientAuth DEFAULT_CLIENT_AUTH = SSLContextService.ClientAuth.REQUIRED;
+    ClientAuth DEFAULT_CLIENT_AUTH = ClientAuth.REQUIRED;
 
     PropertyDescriptor SSL_CONTEXT_SERVICE = new PropertyDescriptor.Builder()
             .name("inluxdb-ssl")
@@ -49,7 +50,7 @@ public interface InfluxDatabaseService extends ControllerService {
             .description("The client authentication policy to use for the SSL Context. "
                     + "Only used if an SSL Context Service is provided.")
             .required(false)
-            .allowableValues(SSLContextService.ClientAuth.values())
+            .allowableValues(ClientAuth.values())
             .defaultValue(DEFAULT_CLIENT_AUTH.name())
             .build();
 

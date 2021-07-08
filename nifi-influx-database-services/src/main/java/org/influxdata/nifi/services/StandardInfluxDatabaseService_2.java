@@ -25,13 +25,13 @@ import java.util.concurrent.TimeUnit;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import okhttp3.OkHttpClient;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.controller.ConfigurationContext;
+import org.apache.nifi.security.util.ClientAuth;
 import org.apache.nifi.ssl.SSLContextService;
 
 import static org.influxdata.nifi.util.PropertyValueUtils.getEnumValue;
@@ -69,7 +69,7 @@ public class StandardInfluxDatabaseService_2 extends AbstractInfluxDatabaseServi
 
         // SSL
         SSLContextService sslService = context.getProperty(SSL_CONTEXT_SERVICE).asControllerService(SSLContextService.class);
-        SSLContextService.ClientAuth clientAuth = getEnumValue(CLIENT_AUTH, context, SSLContextService.ClientAuth.class, DEFAULT_CLIENT_AUTH);
+        ClientAuth clientAuth = getEnumValue(CLIENT_AUTH, context, ClientAuth.class, DEFAULT_CLIENT_AUTH);
 
         // Connection
         String influxDbUrl = getDatabaseURL();
@@ -105,7 +105,7 @@ public class StandardInfluxDatabaseService_2 extends AbstractInfluxDatabaseServi
     @NonNull
     protected InfluxDBClient connect(final String token,
                                      final SSLContextService sslService,
-                                     final SSLContextService.ClientAuth clientAuth,
+                                     final ClientAuth clientAuth,
                                      final String influxDbUrl,
                                      final long connectionTimeout) throws IOException, GeneralSecurityException {
 
