@@ -1,9 +1,11 @@
-## v1.12.0 [2021-07-09]
+## v1.13.0 [unreleased]
 
-## v1.11.0 [2021-06-04]
+## v1.12.0 [2021-07-09]
 
 ### Bug Fixes
 1. [#58](https://github.com/influxdata/nifi-influxdb-bundle/pull/58): Initialization SSL Context
+
+## v1.11.0 [2021-06-04]
 
 ### Others
 1. [#54](https://github.com/influxdata/nifi-influxdb-bundle/pull/54): Update `influxdb-client-java` to 2.2.0
