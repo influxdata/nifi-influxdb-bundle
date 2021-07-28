@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.influxdata.nifi.processors.MapperOptions;
-
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.flowfile.FlowFile;
@@ -36,6 +34,7 @@ import org.apache.nifi.util.MockConfigurationContext;
 import org.apache.nifi.util.MockVariableRegistry;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
+import org.influxdata.nifi.processors.MapperOptions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +45,7 @@ public class TestPropertyValueUtils {
             .displayName("Enum value")
             .defaultValue(PropertyEnum.ONE.name())
             .required(true)
-            .expressionLanguageSupported(ExpressionLanguageScope.VARIABLE_REGISTRY)
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .allowableValues(Arrays.stream(PropertyEnum.values()).map(Enum::name).toArray(String[]::new))
             .sensitive(false)
             .build();
@@ -56,7 +55,7 @@ public class TestPropertyValueUtils {
             .displayName("List value")
             .defaultValue("")
             .required(true)
-            .expressionLanguageSupported(ExpressionLanguageScope.VARIABLE_REGISTRY)
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .sensitive(false)
             .build();
 

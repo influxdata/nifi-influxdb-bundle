@@ -19,15 +19,12 @@ package org.influxdata.nifi.services;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
-import java.security.GeneralSecurityException;
 import java.util.Objects;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import okhttp3.OkHttpClient;
 import org.apache.nifi.controller.AbstractControllerService;
 import org.apache.nifi.security.util.ClientAuth;
-import org.apache.nifi.security.util.SslContextFactory;
-import org.apache.nifi.security.util.TlsConfiguration;
 import org.apache.nifi.ssl.SSLContextService;
 
 /**
@@ -43,7 +40,7 @@ abstract class AbstractInfluxDatabaseService extends AbstractControllerService {
      */
 	void configureSSL(@NonNull final OkHttpClient.Builder okHttpClient,
 					  @NonNull final ClientAuth clientAuth,
-					  @NonNull final SSLContextService sslService) throws GeneralSecurityException
+					  @NonNull final SSLContextService sslService)
 	{
 
 		Objects.requireNonNull(okHttpClient, "OkHttpClient.Builder is required");
@@ -59,8 +56,7 @@ abstract class AbstractInfluxDatabaseService extends AbstractControllerService {
 			sslContext.getDefaultSSLParameters().setWantClientAuth(false);
 		}
 		final SSLSocketFactory socketFactory = sslContext.getSocketFactory();
-		final TlsConfiguration tlsConfiguration = sslService.createTlsConfiguration();
-		final X509TrustManager trustManager = SslContextFactory.getX509TrustManager(tlsConfiguration);
+		final X509TrustManager trustManager = sslService.createTrustManager();
 		okHttpClient.sslSocketFactory(socketFactory, trustManager);
 	}
 }

@@ -55,6 +55,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-security-utils</artifactId>
+            <version>${nifi.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.influxdb</groupId>
             <artifactId>influxdb-java</artifactId>
         </dependency>

@@ -21,75 +21,17 @@
   <maxTimerDrivenThreadCount>10</maxTimerDrivenThreadCount>
   <maxEventDrivenThreadCount>5</maxEventDrivenThreadCount>
   <registries/>
+  <parameterContexts/>
   <rootGroup>
     <id>d347f265-0162-1000-bd0e-fbf9109cf0b1</id>
     <name>InfluxDB Demo</name>
     <position x="0.0" y="0.0"/>
     <comment/>
-    <label>
-      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
-      <position x="1145.4612992598124" y="-407.1201983696658"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 2 User Story:
-  
-
-As NiFi user I want to reliably monitor multiple environments
-and be able to write data selectively.
-  
-* AC1: Partition and route metrics data using NiFi "Record Path language"
-   by type of measurement (name of container)
-</value>
-    </label>
-    <label>
-      <id>280850da-016c-1000-bb1f-063422ae1933</id>
-      <position x="1149.274867625133" y="-17.059789260861407"/>
-      <size height="172.25083923339844" width="415.77381896972656"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 4 User Story:
-   
-
-As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
-HTTP endpoint.
-  
-* AC1: Exposing a result of static Flux Query as data for HTML widget
-* AC2: Transforming Flux Result to XML or JSON - remote API
- for server application</value>
-    </label>
-    <label>
-      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
-      <position x="1149.66674359575" y="-208.8424884087283"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 3 User Story:
-   
-
-As NiFi user I want to store LineProtocol date into multiple environments
- - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
-    </label>
-    <label>
-      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
-      <position x="1145.261012394578" y="-596.720167086168"/>
-      <size height="163.47393798828125" width="414.004150390625"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 1 User Story:
-
-
-As NiFi user I want to put my data (complex json structure) to
-InfluxDB in order to work with time series.
-  
-* AC1: Count twitter messages, grouping by keywords and languages
-
-</value>
-    </label>
+    <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+    <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
+    <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+    <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+    <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
     <label>
       <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
       <position x="268.0609696699687" y="-600.9202250695664"/>
@@ -126,11 +68,80 @@ NiFi flow produced by Telegraf.
 * InfluxLineProtocolRecordSetWriter – Writes the contents of a Record
 Set as Line Protocol.</value>
     </label>
+    <label>
+      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
+      <position x="1149.66674359575" y="-208.8424884087283"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 3 User Story:
+   
+
+As NiFi user I want to store LineProtocol date into multiple environments
+ - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
+    </label>
+    <label>
+      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
+      <position x="1145.261012394578" y="-596.720167086168"/>
+      <size height="163.47393798828125" width="414.004150390625"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 1 User Story:
+
+
+As NiFi user I want to put my data (complex json structure) to
+InfluxDB in order to work with time series.
+  
+* AC1: Count twitter messages, grouping by keywords and languages
+
+</value>
+    </label>
+    <label>
+      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
+      <position x="1145.4612992598124" y="-407.1201983696658"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 2 User Story:
+  
+
+As NiFi user I want to reliably monitor multiple environments
+and be able to write data selectively.
+  
+* AC1: Partition and route metrics data using NiFi "Record Path language"
+   by type of measurement (name of container)
+</value>
+    </label>
+    <label>
+      <id>280850da-016c-1000-bb1f-063422ae1933</id>
+      <position x="1149.274867625133" y="-17.059789260861407"/>
+      <size height="172.25083923339844" width="415.77381896972656"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 4 User Story:
+   
+
+As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
+HTTP endpoint.
+  
+* AC1: Exposing a result of static Flux Query as data for HTML widget
+* AC2: Transforming Flux Result to XML or JSON - remote API
+ for server application</value>
+    </label>
     <processGroup>
       <id>2807fffd-016c-1000-ff4c-eb46f296840c</id>
       <name>Exposing InfluxDB 2.0</name>
       <position x="751.3459817261955" y="-15.869125218553108"/>
       <comment/>
+      <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+      <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
+      <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+      <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+      <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
       <processor>
         <id>2cc8621f-016c-1000-e58f-c709476d6c4b</id>
         <name>GetInfluxDatabase_2</name>
@@ -212,7 +223,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -232,6 +243,9 @@ Set as Line Protocol.</value>
           <name>HTTP Context Map</name>
           <value>2dda9865-016c-1000-0bcd-057d362e91d9</value>
         </property>
+        <property>
+          <name>Attributes to add to the HTTP Response (Regex)</name>
+        </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
         <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
@@ -245,7 +259,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -281,7 +295,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -382,7 +396,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -429,7 +443,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -468,7 +482,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -488,6 +502,9 @@ Set as Line Protocol.</value>
           <name>HTTP Context Map</name>
           <value>2ccadaf3-016c-1000-3585-f572bed12b5f</value>
         </property>
+        <property>
+          <name>Attributes to add to the HTTP Response (Regex)</name>
+        </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
         <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
@@ -501,7 +518,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -537,7 +554,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -557,6 +574,9 @@ Set as Line Protocol.</value>
           <name>HTTP Context Map</name>
           <value>2ccadaf3-016c-1000-3585-f572bed12b5f</value>
         </property>
+        <property>
+          <name>Attributes to add to the HTTP Response (Regex)</name>
+        </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
         <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
@@ -570,7 +590,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -646,6 +666,9 @@ Set as Line Protocol.</value>
           <name>multipart-read-buffer-size</name>
           <value>512 KB</value>
         </property>
+        <property>
+          <name>parameters-to-attributes</name>
+        </property>
       </processor>
       <processor>
         <id>2dd9b57d-016c-1000-3d06-8f2a86b14885</id>
@@ -657,7 +680,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -733,6 +756,9 @@ Set as Line Protocol.</value>
           <name>multipart-read-buffer-size</name>
           <value>512 KB</value>
         </property>
+        <property>
+          <name>parameters-to-attributes</name>
+        </property>
       </processor>
       <processor>
         <id>2ddd7c72-016c-1000-adeb-839e5235afc1</id>
@@ -744,7 +770,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -780,7 +806,7 @@ Set as Line Protocol.</value>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -800,21 +826,12 @@ Set as Line Protocol.</value>
           <name>HTTP Context Map</name>
           <value>2dda9865-016c-1000-0bcd-057d362e91d9</value>
         </property>
+        <property>
+          <name>Attributes to add to the HTTP Response (Regex)</name>
+        </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
         <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
-      <label>
-        <id>2d482d5d-016c-1000-847d-197f5090d957</id>
-        <position x="944.885437786372" y="73.15165956912938"/>
-        <size height="99.0" width="390.0"/>
-        <styles>
-          <style name="font-size">14px</style>
-        </styles>
-        <value>Display last Tweet about Bitcoin or Ethereum:
-  
-- curl -i -X GET http://localhost:8123
-- browser http://localhost:8123</value>
-      </label>
       <label>
         <id>2e0425e5-016c-1000-396e-9ec849acbcc8</id>
         <position x="2367.9879863725673" y="-105.71933163870858"/>
@@ -848,6 +865,18 @@ curl -i -X GET -G http://localhost:8234 \
  |&gt; range(start: 0) |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
  |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
  |&gt; limit(n:10, offset: 0)'</value>
+      </label>
+      <label>
+        <id>2d482d5d-016c-1000-847d-197f5090d957</id>
+        <position x="944.885437786372" y="73.15165956912938"/>
+        <size height="99.0" width="390.0"/>
+        <styles>
+          <style name="font-size">14px</style>
+        </styles>
+        <value>Display last Tweet about Bitcoin or Ethereum:
+  
+- curl -i -X GET http://localhost:8123
+- browser http://localhost:8123</value>
       </label>
       <connection>
         <id>2e162b8d-016c-1000-ea24-6a925329588d</id>
@@ -1190,7 +1219,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-http-context-map-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1210,7 +1239,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1219,6 +1248,10 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-protocol-version</name>
+          <value>1</value>
         </property>
         <property>
           <name>schema-access-strategy</name>
@@ -1259,6 +1292,10 @@ curl -i -X GET -G http://localhost:8234 \
           <value>true</value>
         </property>
         <property>
+          <name>omit_xml_declaration</name>
+          <value>false</value>
+        </property>
+        <property>
           <name>root_tag_name</name>
           <value>records</value>
         </property>
@@ -1286,7 +1323,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-http-context-map-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1306,7 +1343,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1343,7 +1380,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1352,6 +1389,10 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-protocol-version</name>
+          <value>1</value>
         </property>
         <property>
           <name>schema-access-strategy</name>
@@ -1438,7 +1479,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1447,6 +1488,10 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-protocol-version</name>
+          <value>1</value>
         </property>
         <property>
           <name>schema-access-strategy</name>
@@ -1507,7 +1552,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1516,6 +1561,10 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-protocol-version</name>
+          <value>1</value>
         </property>
         <property>
           <name>schema-access-strategy</name>
@@ -1557,6 +1606,11 @@ curl -i -X GET -G http://localhost:8234 \
       <name>TwitterInfluxDBDemo</name>
       <position x="750.2611569191332" y="-602.1202333945846"/>
       <comment/>
+      <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+      <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
+      <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+      <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+      <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
       <processor>
         <id>fe6407fc-016b-1000-9d2e-d21b9a02785a</id>
         <name>PutInfluxDatabaseRecord_2</name>
@@ -1655,7 +1709,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1707,7 +1761,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-social-media-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1724,20 +1778,24 @@ curl -i -X GET -G http://localhost:8234 \
           <value>Filter Endpoint</value>
         </property>
         <property>
+          <name>max-client-error-retries</name>
+          <value>5</value>
+        </property>
+        <property>
           <name>Consumer Key</name>
-          <value>enc{934a10f0c6c2cde7891c023473d0eff7c5b54a7f9b60a6571a1c106a5d5a671da9e2ea8b3c2e23abd79dd2821dc49a67}</value>
+          <value>enc{c4a1a6c59b83e5fccc9e15a458a34e92c6ba5134ef377d9bbf817c68a2779611bc6a187b1ee7d0c4c706fc63f76ba9318d65485b15ec7b7840}</value>
         </property>
         <property>
           <name>Consumer Secret</name>
-          <value>enc{cbbc9cf596e8e3081c7a01d5b14a18408a0397486f1f48ee778d536cbcfd68984f54d33a087746d004f747d78dc4bb0d3ae7107194e32185b1fac86d06d3c048bf1be5d9d5ef89ab30e7bab696d1bf0e}</value>
+          <value>enc{37d1c03e90e79f95788061edd37335cdbe745bcc85b3069346ef4e48a71375b7ca303ef24aefb409821d34309339ae9c04ab7883ae578378977c06ac2a7958a442a0eb5a06b69cb86d48756cbc8dc6895e7c}</value>
         </property>
         <property>
           <name>Access Token</name>
-          <value>enc{0acd71aa0121a10b60a853f26643b94c52e43aef08b235fe739ef098065b61b867ff49c8523e5dc22f62e011305dcaad11f8bf2728345d3e8deb08726aa0ab6855ff4a03fe9db70ba959103024968c61}</value>
+          <value>enc{91cbac827d9222ae244c0d0fc43a3001bc5974d2c688bc3df90951b9eb4046292783af79ff608300008e4f92e741a052eaa9a1ef422b3ab5fefef0b675fb300cc0aee7f5f90badbf0fcba94ee77e060f7249}</value>
         </property>
         <property>
           <name>Access Token Secret</name>
-          <value>enc{bb4bcb7a5225cee9ef41861400fe7204da4947f3757109b567b16a9f4af297639b8ed87faf52f55f657ae87ec70ece8d9f88ba00bb8610bea98c52c91ae8ee7e}</value>
+          <value>enc{093e9ad5a04e837633ae0cb9d888fc753b9d991eacac4c2a5ddf17528c64e2cfc1306e11d5e85dde5a0783824aeb1018190fde144f7ef560d680fd061f18745e75f009e557bacc6dd64d82f4d1}</value>
         </property>
         <property>
           <name>Languages</name>
@@ -2032,6 +2090,11 @@ curl -i -X GET -G http://localhost:8234 \
       <name>KafkaDemo</name>
       <position x="751.6052856445312" y="-211.1091766357422"/>
       <comment/>
+      <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+      <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
+      <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+      <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+      <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
       <processor>
         <id>bd0efd4c-3086-3c99-dc9e-5811b2c3ca87</id>
         <name>TailFile</name>
@@ -2042,7 +2105,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>5 sec</schedulingPeriod>
@@ -2064,6 +2127,10 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>Rolling Filename Pattern</name>
+        </property>
+        <property>
+          <name>Post-Rollover Tail Period</name>
+          <value>0 sec</value>
         </property>
         <property>
           <name>tail-base-directory</name>
@@ -2088,6 +2155,10 @@ curl -i -X GET -G http://localhost:8234 \
           <name>tailfile-maximum-age</name>
           <value>24 hours</value>
         </property>
+        <property>
+          <name>reread-on-nul</name>
+          <value>false</value>
+        </property>
       </processor>
       <processor>
         <id>0d7ad789-016b-1000-952f-d20e18a0390b</id>
@@ -2099,7 +2170,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2151,7 +2222,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-kafka-1-0-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2199,6 +2270,16 @@ curl -i -X GET -G http://localhost:8234 \
           <value>false</value>
         </property>
         <property>
+          <name>transactional-id-prefix</name>
+        </property>
+        <property>
+          <name>attribute-name-regex</name>
+        </property>
+        <property>
+          <name>message-header-encoding</name>
+          <value>UTF-8</value>
+        </property>
+        <property>
           <name>kafka-key</name>
         </property>
         <property>
@@ -2225,6 +2306,9 @@ curl -i -X GET -G http://localhost:8234 \
           <value>org.apache.kafka.clients.producer.internals.DefaultPartitioner</value>
         </property>
         <property>
+          <name>partition</name>
+        </property>
+        <property>
           <name>compression.type</name>
           <value>none</value>
         </property>
@@ -2240,7 +2324,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-update-attribute-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2398,7 +2482,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2663,7 +2747,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2672,6 +2756,10 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-protocol-version</name>
+          <value>1</value>
         </property>
         <property>
           <name>schema-access-strategy</name>
@@ -2785,7 +2873,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2830,7 +2918,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-registry-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2862,6 +2950,11 @@ curl -i -X GET -G http://localhost:8234 \
       <name>TelegrafDemo</name>
       <position x="751.4609832763672" y="-406.7202682495117"/>
       <comment/>
+      <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+      <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
+      <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+      <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+      <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
       <processor>
         <id>5ea1e9b1-0163-1000-d88e-eecbd44bb920</id>
         <name>LogAttribute</name>
@@ -2872,7 +2965,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2925,7 +3018,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3073,7 +3166,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3196,7 +3289,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.13.2</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3248,7 +3341,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.11.4</version>
+          <version>1.14.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3537,7 +3630,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.11.4</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>false</enabled>
         <property>
@@ -3546,6 +3639,10 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-protocol-version</name>
+          <value>1</value>
         </property>
         <property>
           <name>schema-access-strategy</name>
@@ -3606,7 +3703,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.11.4</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3615,6 +3712,10 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>schema-cache</name>
+        </property>
+        <property>
+          <name>schema-protocol-version</name>
+          <value>1</value>
         </property>
         <property>
           <name>schema-access-strategy</name>
@@ -3658,7 +3759,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.11.4</version>
+          <version>1.14.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3749,7 +3850,7 @@ curl -i -X GET -G http://localhost:8234 \
       </property>
       <property>
         <name>influxdb-token</name>
-        <value>enc{b014836056e668bd988c8eeff7d219c00bfb7546131d1cb27aa87d7b634e384d}</value>
+        <value>enc{18ba513d4bb10e04ddd058c507e57ed100bfeb5dce47844eecae980d5771265a6c1df18fd6c19424}</value>
       </property>
     </controllerService>
     <controllerService>
@@ -3760,7 +3861,7 @@ curl -i -X GET -G http://localhost:8234 \
       <bundle>
         <group>org.apache.nifi</group>
         <artifact>nifi-record-serialization-services-nar</artifact>
-        <version>1.11.4</version>
+        <version>1.14.0</version>
       </bundle>
       <enabled>true</enabled>
       <property>
@@ -4075,12 +4176,6 @@ curl -i -X GET -G http://localhost:8234 \
                         </value>
                     </entry>
                     <entry>
-                        <key>Access Token</key>
-                        <value>
-                            <name>Access Token</name>
-                        </value>
-                    </entry>
-                    <entry>
                         <key>Languages</key>
                         <value>
                             <name>Languages</name>
@@ -4110,28 +4205,11 @@ curl -i -X GET -G http://localhost:8234 \
                             <name>Terms to Filter On</name>
                         </value>
                     </entry>
-                    <entry>
-                        <key>Access Token Secret</key>
-                        <value>
-                            <name>Access Token Secret</name>
-                        </value>
-                    </entry>
                 </descriptors>
                 <executionNode>ALL</executionNode>
                 <lossTolerant>false</lossTolerant>
                 <penaltyDuration>30 sec</penaltyDuration>
                 <properties>
-                    <entry>
-                        <key>Consumer Key</key>
-                        <value>KVhlDosQLy1tsNivcSKFSgKgW</value>
-                    </entry>
-                    <entry>
-                        <key>Consumer Secret</key>
-                    </entry>
-                    <entry>
-                        <key>Access Token</key>
-                        <value>98869084-C45s9NSDcQcSQ5vC9nKDfdaNw2Pt55GG1GrrJ9yCL</value>
-                    </entry>
                     <entry>
                         <key>Languages</key>
                     </entry>
@@ -4148,9 +4226,6 @@ curl -i -X GET -G http://localhost:8234 \
                     <entry>
                         <key>Terms to Filter On</key>
                         <value>nifi,hadoop,hortonworks,elasticsearch</value>
-                    </entry>
-                    <entry>
-                        <key>Access Token Secret</key>
                     </entry>
                 </properties>
                 <runDurationMillis>0</runDurationMillis>

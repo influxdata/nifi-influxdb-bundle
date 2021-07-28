@@ -23,7 +23,7 @@ DEFAULT_INFLUXDB_VERSION="1.8"
 INFLUXDB_VERSION="${INFLUXDB_VERSION:-$DEFAULT_INFLUXDB_VERSION}"
 INFLUXDB_IMAGE=influxdb:${INFLUXDB_VERSION}-alpine
 
-DEFAULT_NIFI_VERSION="1.13.2"
+DEFAULT_NIFI_VERSION="1.14.0"
 NIFI_VERSION="${NIFI_VERSION:-$DEFAULT_NIFI_VERSION}"
 NIFI_IMAGE=apache/nifi:${NIFI_VERSION}
 
@@ -167,14 +167,16 @@ docker run \
     --detach \
     --name nifi \
     --publish 8080:8080 \
-	--publish 8007:8000 \
-	--publish 6666:6666 \
-	--publish 8123:8123 \
-	--publish 8234:8234 \
-	--link=influxdb \
-	--link=influxdb_v2 \
-	--link=kafka \
-	nifi
+    --env NIFI_WEB_HTTP_PORT=8080 \
+    --env NIFI_SENSITIVE_PROPS_KEY=nifi-influxdb-bundle \
+    --publish 8007:8000 \
+    --publish 6666:6666 \
+    --publish 8123:8123 \
+    --publish 8234:8234 \
+    --link=influxdb \
+    --link=influxdb_v2 \
+    --link=kafka \
+    nifi
 
 wget -S --spider --tries=20 --retry-connrefused --waitretry=5 http://localhost:8080/nifi/
 

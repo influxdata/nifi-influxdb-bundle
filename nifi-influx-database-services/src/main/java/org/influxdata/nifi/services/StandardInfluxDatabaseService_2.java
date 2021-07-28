@@ -17,7 +17,6 @@
 package org.influxdata.nifi.services;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -107,7 +106,7 @@ public class StandardInfluxDatabaseService_2 extends AbstractInfluxDatabaseServi
                                      final SSLContextService sslService,
                                      final ClientAuth clientAuth,
                                      final String influxDbUrl,
-                                     final long connectionTimeout) throws IOException, GeneralSecurityException {
+                                     final long connectionTimeout) throws IOException {
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
