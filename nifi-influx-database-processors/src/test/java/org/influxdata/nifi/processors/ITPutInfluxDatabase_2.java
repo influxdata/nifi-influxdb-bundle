@@ -49,7 +49,7 @@ public class ITPutInfluxDatabase_2 extends AbstractITInfluxDB_2 {
 
         PutInfluxDatabase_2 putInfluxDatabase_2 = new PutInfluxDatabase_2();
         runner = TestRunners.newTestRunner(putInfluxDatabase_2);
-		runner.setValidateExpressionUsage(false);
+        runner.setValidateExpressionUsage(false);
         runner.setProperty(PutInfluxDatabase_2.INFLUX_DB_SERVICE, "influxdb-service");
         runner.setProperty(PutInfluxDatabase_2.BUCKET, bucketName);
         runner.setProperty(PutInfluxDatabase_2.ORG, "my-org");

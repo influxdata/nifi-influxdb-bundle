@@ -69,7 +69,7 @@ public class ITGetInfluxDatabaseRecord_2 extends AbstractITInfluxDB_2 {
 
         GetInfluxDatabaseRecord_2 putInfluxDatabase_2 = new GetInfluxDatabaseRecord_2();
         runner = TestRunners.newTestRunner(putInfluxDatabase_2);
-		runner.setValidateExpressionUsage(false);
+        runner.setValidateExpressionUsage(false);
         runner.setProperty(GetInfluxDatabaseRecord_2.INFLUX_DB_SERVICE, "influxdb-service");
         runner.setProperty(GetInfluxDatabaseRecord_2.ORG, organization.getId());
         runner.setProperty(GetInfluxDatabaseRecord_2.QUERY, "from(bucket:\"" + bucketName + "\") |> range(start: 0)");

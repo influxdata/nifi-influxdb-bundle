@@ -57,7 +57,7 @@ public class ITPutInfluxDatabaseRecord_2 extends AbstractITInfluxDB_2 {
 
         PutInfluxDatabaseRecord_2 processor = new PutInfluxDatabaseRecord_2();
         runner = TestRunners.newTestRunner(processor);
-		runner.setValidateExpressionUsage(false);
+        runner.setValidateExpressionUsage(false);
         runner.setProperty(PutInfluxDatabaseRecord_2.INFLUX_DB_SERVICE, "influxdb-service");
         runner.setProperty(AbstractInfluxDatabaseProcessor.RECORD_READER_FACTORY, "recordReader");
         runner.setProperty(InfluxDBUtils.MEASUREMENT, "testRecordMeasurement");
