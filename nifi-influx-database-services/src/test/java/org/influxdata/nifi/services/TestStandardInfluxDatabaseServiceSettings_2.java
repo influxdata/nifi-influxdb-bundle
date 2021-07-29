@@ -44,7 +44,7 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
     }
 
     @Test
-    public void defaultSettings() throws IOException, GeneralSecurityException {
+    public void defaultSettings() throws IOException {
 
         testRunner.enableControllerService(service);
 
@@ -59,7 +59,7 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
     }
 
     @Test
-    public void sslContextService() throws InitializationException, IOException, GeneralSecurityException {
+    public void sslContextService() throws InitializationException, IOException {
 
         SSLContextService sslContextService = Mockito.mock(SSLContextService.class);
         when(sslContextService.getIdentifier()).thenReturn("inluxdb-ssl");
@@ -82,7 +82,7 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
     }
 
     @Test
-    public void clientAuth() throws IOException, GeneralSecurityException {
+    public void clientAuth() throws IOException {
 
         testRunner.setProperty(service, InfluxDatabaseService_2.CLIENT_AUTH, ClientAuth.NONE.name());
         testRunner.assertValid(service);
@@ -99,7 +99,7 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
     }
 
     @Test
-    public void url() throws IOException, GeneralSecurityException {
+    public void url() throws IOException {
 
         testRunner.setProperty(service, InfluxDatabaseService_2.INFLUX_DB_URL, "http://influxdb:8886");
         testRunner.assertValid(service);
@@ -126,7 +126,7 @@ public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestSta
     }
 
     @Test
-    public void dbConnectionTimeout() throws IOException, GeneralSecurityException {
+    public void dbConnectionTimeout() throws IOException {
 
         testRunner.setProperty(service, InfluxDatabaseService_2.INFLUX_DB_CONNECTION_TIMEOUT, "100 mins");
         testRunner.assertValid(service);

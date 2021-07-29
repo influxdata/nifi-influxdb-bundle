@@ -111,7 +111,7 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
                                final SSLContextService sslService,
                                final ClientAuth clientAuth,
                                final String influxDbUrl,
-                               final long connectionTimeout) throws IOException, GeneralSecurityException {
+                               final long connectionTimeout) throws IOException {
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);

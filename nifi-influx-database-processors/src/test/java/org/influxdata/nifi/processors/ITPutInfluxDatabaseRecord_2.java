@@ -24,18 +24,17 @@ import java.util.concurrent.TimeUnit;
 
 import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
-import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
-import org.influxdata.nifi.serialization.InfluxLineProtocolReader;
-import org.influxdata.nifi.services.InfluxDatabaseService_2;
-import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
-import org.influxdata.nifi.util.InfluxDBUtils;
-
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.serialization.record.MockRecordParser;
 import org.apache.nifi.serialization.record.RecordFieldType;
 import org.apache.nifi.util.MockProcessContext;
 import org.apache.nifi.util.MockProcessorInitializationContext;
 import org.apache.nifi.util.TestRunners;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
+import org.influxdata.nifi.serialization.InfluxLineProtocolReader;
+import org.influxdata.nifi.services.InfluxDatabaseService_2;
+import org.influxdata.nifi.services.StandardInfluxDatabaseService_2;
+import org.influxdata.nifi.util.InfluxDBUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,6 +57,7 @@ public class ITPutInfluxDatabaseRecord_2 extends AbstractITInfluxDB_2 {
 
         PutInfluxDatabaseRecord_2 processor = new PutInfluxDatabaseRecord_2();
         runner = TestRunners.newTestRunner(processor);
+        runner.setValidateExpressionUsage(false);
         runner.setProperty(PutInfluxDatabaseRecord_2.INFLUX_DB_SERVICE, "influxdb-service");
         runner.setProperty(AbstractInfluxDatabaseProcessor.RECORD_READER_FACTORY, "recordReader");
         runner.setProperty(InfluxDBUtils.MEASUREMENT, "testRecordMeasurement");

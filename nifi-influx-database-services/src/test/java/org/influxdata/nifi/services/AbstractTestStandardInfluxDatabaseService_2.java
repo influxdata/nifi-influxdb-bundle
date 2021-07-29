@@ -16,15 +16,12 @@
  */
 package org.influxdata.nifi.services;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.domain.HealthCheck;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.processor.AbstractProcessor;
@@ -63,9 +60,10 @@ public abstract class AbstractTestStandardInfluxDatabaseService_2 {
         testRunner = TestRunners.newTestRunner(ServiceProcessor.class);
         testRunner.addControllerService("influxdb-service", service);
         testRunner.setProperty(service, InfluxDatabaseService_2.INFLUX_DB_ACCESS_TOKEN, "my-token");
+        testRunner.setValidateExpressionUsage(false);
     }
 
-    protected void assertConnectToDatabase() throws IOException, GeneralSecurityException {
+    protected void assertConnectToDatabase() {
 
         InfluxDBClient client = service.create();
 

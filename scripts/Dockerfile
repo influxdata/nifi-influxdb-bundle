@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-ARG NIFI_IMAGE=apache/nifi:1.13.2
+ARG NIFI_IMAGE=apache/nifi:1.14.0
 
 FROM $NIFI_IMAGE
 
