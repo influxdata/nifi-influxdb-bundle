@@ -168,14 +168,10 @@ workflows:
       - tests-java:
           name: jdk-11
           jdk-version: "11"
-      - tests-java:
-          name: jdk-17
-          jdk-version: "17"
       - end-to-end:
           requires:
             - jdk-8
             - jdk-11
-            - jdk-17
       - deploy:
           requires:
             - end-to-end
