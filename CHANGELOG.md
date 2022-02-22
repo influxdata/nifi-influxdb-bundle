@@ -3,6 +3,9 @@
 ### Others
 1. [#65](https://github.com/influxdata/nifi-influxdb-bundle/pull/65): Update to Apache NiFi 1.15.3
 
+### CI
+1. [#66](https://github.com/influxdata/nifi-influxdb-bundle/pull/66): Use new Codecov uploader for reporting code coverage
+
 ## v1.15.0 [2022-01-20]
 
 ### Others
