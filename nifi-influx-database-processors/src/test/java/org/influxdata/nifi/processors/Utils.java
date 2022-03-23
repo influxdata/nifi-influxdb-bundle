@@ -42,7 +42,7 @@ class Utils {
 
         headers.forEach(builder::addHeader);
 
-        return Response.error(ResponseBody.create(MediaType.parse("application/json"), ""), builder.build());
+        return Response.error(ResponseBody.create("", MediaType.parse("application/json")), builder.build());
     }
 
 }
