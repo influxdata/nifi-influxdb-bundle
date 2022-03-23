@@ -204,7 +204,9 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
 	protected String getRetryAfterHeader(InfluxException ie) {
 		try
 		{
-			// this is temporally solution we have made "response" public
+            //
+			// Temporally solution before release https://github.com/influxdata/influxdb-client-java/pull/317
+            //
 			Field responseField = InfluxException.class.getDeclaredField("response");
 			responseField.setAccessible(true);
 			Response response = (Response) responseField.get(ie);
