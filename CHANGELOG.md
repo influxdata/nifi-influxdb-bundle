@@ -1,5 +1,8 @@
 ## v1.16.0 [unreleased]
 
+### Features
+1. [#67](https://github.com/influxdata/nifi-influxdb-bundle/pull/67): Add `Retry-After` header value when a FlowFile is transferred to `Retry` output
+
 ### Others
 1. [#65](https://github.com/influxdata/nifi-influxdb-bundle/pull/65): Update to Apache NiFi 1.15.3
 
