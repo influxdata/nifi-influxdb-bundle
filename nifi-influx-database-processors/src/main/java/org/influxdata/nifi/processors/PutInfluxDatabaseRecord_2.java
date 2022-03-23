@@ -181,10 +181,10 @@ public class PutInfluxDatabaseRecord_2 extends AbstractInfluxDatabaseProcessor_2
             if (Arrays.asList(429, 503).contains(ie.status()) || ie.getCause() instanceof SocketTimeoutException) {
                 getLogger().error("Failed to insert into influxDB due {} to {} and retrying",
                         new Object[]{ie.status(), ie.getLocalizedMessage()}, ie);
-				String retryAfterHeader = getRetryAfterHeader(ie);
-				if (StringUtils.isNoneBlank(retryAfterHeader)) {
-					flowFile = session.putAttribute(flowFile, INFLUX_DB_RETRY_AFTER, retryAfterHeader);
-				}
+                String retryAfterHeader = getRetryAfterHeader(ie);
+                if (StringUtils.isNoneBlank(retryAfterHeader)) {
+                    flowFile = session.putAttribute(flowFile, INFLUX_DB_RETRY_AFTER, retryAfterHeader);
+                }
                 session.penalize(flowFile);
                 session.transfer(flowFile, REL_RETRY);
             } else {

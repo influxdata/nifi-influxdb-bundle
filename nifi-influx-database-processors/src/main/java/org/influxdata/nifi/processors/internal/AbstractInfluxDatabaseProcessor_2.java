@@ -200,29 +200,26 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
         return influxDBClient.get();
     }
 
-	@Nullable
-	protected String getRetryAfterHeader(InfluxException ie) {
-		try
-		{
+    @Nullable
+    protected String getRetryAfterHeader(InfluxException ie) {
+        try {
             //
-			// Temporally solution before release https://github.com/influxdata/influxdb-client-java/pull/317
+            // Temporally solution before release https://github.com/influxdata/influxdb-client-java/pull/317
             //
-			Field responseField = InfluxException.class.getDeclaredField("response");
-			responseField.setAccessible(true);
-			Response response = (Response) responseField.get(ie);
-			if (response != null) {
-				return response.headers().get("Retry-After");
-			}
-		}
-		catch (Exception e)
-		{
-			return null;
-		}
+            Field responseField = InfluxException.class.getDeclaredField("response");
+            responseField.setAccessible(true);
+            Response response = (Response) responseField.get(ie);
+            if (response != null) {
+                return response.headers().get("Retry-After");
+            }
+        } catch (Exception e) {
+            return null;
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
+    /**
      * Configure LogLevel and GZIP.
      */
     private void configure(@NonNull final InfluxDBClient influxDBClient, @NonNull final ProcessContext context) {
