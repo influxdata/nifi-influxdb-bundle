@@ -129,6 +129,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
 
 
     public static final String INFLUX_DB_ERROR_MESSAGE = "influxdb.error.message";
+    public static final String INFLUX_DB_RETRY_AFTER = "influxdb.retry-after";
     public static final String INFLUX_DB_ERROR_MESSAGE_LOG = "Failed procession flow file {} due to {}";
     public static final String INFLUX_DB_FAIL_TO_INSERT = "Failed to insert into influxDB due to {}";
     public static final String INFLUX_DB_FAIL_TO_QUERY = "Failed to execute Flux query due {} to {}";

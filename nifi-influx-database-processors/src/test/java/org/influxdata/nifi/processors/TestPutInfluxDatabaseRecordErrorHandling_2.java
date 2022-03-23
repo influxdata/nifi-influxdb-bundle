@@ -17,6 +17,7 @@
 package org.influxdata.nifi.processors;
 
 import java.net.SocketTimeoutException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -34,12 +35,16 @@ import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2
 import org.influxdata.nifi.util.InfluxDBUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.influxdata.nifi.processors.Utils.createErrorResponse;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_RETRY_AFTER;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.REL_RETRY;
 import static org.influxdata.nifi.util.InfluxDBUtils.AT_LEAST_ONE_FIELD_DEFINED_MESSAGE;
 import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour.FAIL;
 import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour.IGNORE;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Jakub Bednar (bednar@github) (18/07/2019 07:24)
@@ -125,6 +130,19 @@ public class TestPutInfluxDatabaseRecordErrorHandling_2 extends AbstractTestPutI
 
         errorToRetryRelationship(
                 new InfluxException(createErrorResponse(429)), "Simulate error: 429");
+    }
+
+    @Test
+    public void tooManyRequestsExceptionRetryAfterHeader() {
+
+        Map<String, String> headers = Collections.singletonMap("Retry-After", "145");
+
+        errorToRetryRelationship(
+                new InfluxException(createErrorResponse(429, headers)), "Simulate error: 429");
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_RETRY);
+
+        assertEquals("145", flowFiles.get(0).getAttribute(INFLUX_DB_RETRY_AFTER));
     }
 
     @Test
