@@ -16,13 +16,16 @@
  */
 package org.influxdata.nifi.processors.internal;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.annotation.Nullable;
 
 import com.influxdb.LogLevel;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.domain.WritePrecision;
+import com.influxdb.exceptions.InfluxException;
 import org.influxdata.nifi.services.InfluxDatabaseService_2;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -36,6 +39,7 @@ import org.apache.nifi.processor.AbstractProcessor;
 import org.apache.nifi.processor.DataUnit;
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.util.StandardValidators;
+import retrofit2.Response;
 
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
 import static org.influxdata.nifi.util.PropertyValueUtils.getEnumValue;
@@ -194,6 +198,25 @@ public abstract class AbstractInfluxDatabaseProcessor_2 extends AbstractProcesso
         }
 
         return influxDBClient.get();
+    }
+
+    @Nullable
+    protected String getRetryAfterHeader(InfluxException ie) {
+        try {
+            //
+            // Temporally solution before release https://github.com/influxdata/influxdb-client-java/pull/317
+            //
+            Field responseField = InfluxException.class.getDeclaredField("response");
+            responseField.setAccessible(true);
+            Response response = (Response) responseField.get(ie);
+            if (response != null) {
+                return response.headers().get("Retry-After");
+            }
+        } catch (Exception e) {
+            return null;
+        }
+
+        return null;
     }
 
     /**

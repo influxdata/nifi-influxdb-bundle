@@ -31,6 +31,7 @@ import com.influxdb.exceptions.InfluxException;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2;
 import org.influxdata.nifi.util.PropertyValueUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.nifi.annotation.behavior.EventDriven;
 import org.apache.nifi.annotation.behavior.InputRequirement;
 import org.apache.nifi.annotation.behavior.SupportsBatching;
@@ -54,6 +55,7 @@ import static org.influxdata.nifi.processors.PutInfluxDatabase.REL_SUCCESS;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.CHARSET;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_FAIL_TO_INSERT;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_RETRY_AFTER;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
 
 /**
@@ -168,6 +170,10 @@ public class PutInfluxDatabase_2 extends AbstractInfluxDatabaseProcessor_2 {
             if (Arrays.asList(429, 503).contains(ie.status()) || ie.getCause() instanceof SocketTimeoutException) {
                 getLogger().error("Failed to insert into influxDB due {} to {} and retrying",
                         new Object[]{ie.status(), ie.getLocalizedMessage()}, ie);
+                String retryAfterHeader = getRetryAfterHeader(ie);
+                if (StringUtils.isNoneBlank(retryAfterHeader)) {
+                    flowFile = session.putAttribute(flowFile, INFLUX_DB_RETRY_AFTER, retryAfterHeader);
+                }
                 session.transfer(flowFile, REL_RETRY);
             } else {
                 getLogger().error(INFLUX_DB_FAIL_TO_INSERT, new Object[]{ie.getLocalizedMessage()}, ie);

@@ -19,7 +19,9 @@ package org.influxdata.nifi.processors;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.security.GeneralSecurityException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.WriteApiBlocking;
@@ -41,6 +43,7 @@ import org.mockito.Mockito;
 import static org.influxdata.nifi.processors.Utils.createErrorResponse;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.CHARSET;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
+import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_RETRY_AFTER;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.MAX_RECORDS_SIZE;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.REL_FAILURE;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.REL_MAX_SIZE_EXCEEDED;
@@ -251,6 +254,25 @@ public class TestPutInfluxDatabase_2 {
         List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_RETRY);
 
         assertEquals("Simulate error: 429", flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
+    }
+
+    @Test
+    public void testWriteTooManyRequestsExceptionRetryAfterHeader() {
+
+        byte[] bytes = "h2o_feet,location=coyote_creek level\\ water_level=1.0 1".getBytes();
+
+        Map<String, String> headers = Collections.singletonMap("Retry-After", "149");
+        
+        Mockito.doThrow(new InfluxException(createErrorResponse(429, headers))).when(mockWriteApi)
+                .writeRecord(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        runner.enqueue(bytes);
+        runner.run(1,true,true);
+        runner.assertAllFlowFilesTransferred(REL_RETRY, 1);
+
+        List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_RETRY);
+
+        assertEquals("149", flowFiles.get(0).getAttribute(INFLUX_DB_RETRY_AFTER));
     }
 
     @Test
