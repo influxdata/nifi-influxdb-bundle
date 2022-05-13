@@ -249,7 +249,7 @@
                     <excludes>**/target/**, **/*.jar, **/.git/**, **/.*, **/*.png, **/*.iml, .idea/**,
                         **/*nightly*/**, **/.m2/**, **/LICENSE, **/NOTICE, **/*.md, **/*.json, **/*.xml.gz, **/PLACEHOLDER,
                         **/test/resources/ssl/*, **/pom.xml.tag, **/pom.xml.releaseBackup, **/pom.xml.next, release.properties,
-                        **/PULL_REQUEST_TEMPLATE, **/*.xml.backup, **/.circleci/config.yml
+                        **/.github/**, **/*.xml.backup, **/.circleci/config.yml
                     </excludes>
                     <properties>
                         <organizationName>${project.organization.name}</organizationName>
