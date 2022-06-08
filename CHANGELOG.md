@@ -1,5 +1,8 @@
 ## v1.19.0 [unreleased]
 
+### Others
+1. [#72](https://github.com/influxdata/nifi-influxdb-bundle/pull/72): Update to Apache NiFi 1.16.2
+
 ## v1.18.0 [2022-05-20]
 
 ### Others
