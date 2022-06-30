@@ -19,9 +19,9 @@ package org.influxdata.nifi.processors.internal;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import okhttp3.OkHttpClient;
-import okhttp3.OkHttpClient.Builder;
-import org.apache.commons.lang3.StringUtils;
+import org.influxdata.nifi.util.InfluxDBUtils;
+import org.influxdb.InfluxDB;
+
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.annotation.lifecycle.OnStopped;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -31,8 +31,6 @@ import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.serialization.RecordReaderFactory;
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 
 /**
  * Abstract base class for InfluxDB processors
@@ -164,12 +162,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
     }
 
     protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
-        Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
-        if ( StringUtils.isBlank(username) || StringUtils.isBlank(password) ) {
-            return InfluxDBFactory.connect(influxDbUrl, builder);
-        } else {
-            return InfluxDBFactory.connect(influxDbUrl, username, password, builder);
-        }
+        return InfluxDBUtils.makeConnection(username, password, influxDbUrl, connectionTimeout, null);
     }
 
     @OnStopped

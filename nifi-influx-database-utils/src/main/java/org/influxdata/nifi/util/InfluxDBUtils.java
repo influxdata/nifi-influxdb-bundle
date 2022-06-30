@@ -18,7 +18,14 @@ package org.influxdata.nifi.util;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+
+import okhttp3.OkHttpClient;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.expression.ExpressionLanguageScope;
@@ -244,4 +251,31 @@ public final class InfluxDBUtils {
             .allowableValues(NULL_VALUE_BEHAVIOUR_IGNORE, NULL_VALUE_BEHAVIOUR_FAIL)
             .defaultValue(NULL_FIELD_VALUE_BEHAVIOUR_DEFAULT.name())
             .build();
+
+    /**
+     * Create a connection to a InfluxDB.
+     *
+     * @param username          the username which is used to authorize against the influxDB instance
+     * @param password          the password for the username which is used to authorize against the influxDB instance
+     * @param influxDbUrl       the url to connect to
+     * @param connectionTimeout the default connect timeout
+     * @param configurer        to configure OkHttpClient.Builder with SSL
+     * @return InfluxDB client
+     */
+    @Nonnull
+    public static InfluxDB makeConnection(String username,
+                                          String password,
+                                          String influxDbUrl,
+                                          long connectionTimeout,
+                                          Consumer<OkHttpClient.Builder> configurer) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
+        if (configurer != null) {
+            configurer.accept(builder);
+        }
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            return InfluxDBFactory.connect(influxDbUrl, builder);
+        } else {
+            return InfluxDBFactory.connect(influxDbUrl, username, password, builder);
+        }
+    }
 }
