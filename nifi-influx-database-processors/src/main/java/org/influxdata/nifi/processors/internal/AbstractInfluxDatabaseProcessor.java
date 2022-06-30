@@ -162,7 +162,7 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
     }
 
     protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
-        return InfluxDBUtils.makeConnection(username, password, influxDbUrl, connectionTimeout, null);
+        return InfluxDBUtils.makeConnectionV1(influxDbUrl, username, password, connectionTimeout, null);
     }
 
     @OnStopped

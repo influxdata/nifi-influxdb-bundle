@@ -27,6 +27,7 @@ import com.influxdb.client.domain.Bucket;
 import com.influxdb.client.domain.Organization;
 import com.influxdb.client.domain.Permission;
 import com.influxdb.client.domain.PermissionResource;
+import org.influxdata.nifi.util.InfluxDBUtils;
 
 import org.apache.nifi.util.TestRunner;
 import org.junit.After;
@@ -44,9 +45,9 @@ abstract class AbstractITInfluxDB_2 {
     protected InfluxDBClient influxDBClient;
     protected Organization organization;
 
-    protected void init() throws Exception {
+    protected void init() {
 
-        influxDBClient = InfluxDBClientFactory.create(INFLUX_DB_2, "my-token".toCharArray());
+        influxDBClient = InfluxDBUtils.makeConnectionV2(INFLUX_DB_2, "my-token", 10, null);
 
         organization = influxDBClient.getOrganizationsApi().findOrganizations().stream()
                 .filter(it -> it.getName().equals("my-org"))

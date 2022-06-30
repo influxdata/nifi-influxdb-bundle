@@ -21,6 +21,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.InfluxDBClientFactory;
+import com.influxdb.client.InfluxDBClientOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
@@ -255,19 +258,19 @@ public final class InfluxDBUtils {
     /**
      * Create a connection to a InfluxDB.
      *
+     * @param influxDbUrl       the url to connect to
      * @param username          the username which is used to authorize against the influxDB instance
      * @param password          the password for the username which is used to authorize against the influxDB instance
-     * @param influxDbUrl       the url to connect to
      * @param connectionTimeout the default connect timeout
      * @param configurer        to configure OkHttpClient.Builder with SSL
      * @return InfluxDB client
      */
     @Nonnull
-    public static InfluxDB makeConnection(String username,
-                                          String password,
-                                          String influxDbUrl,
-                                          long connectionTimeout,
-                                          Consumer<OkHttpClient.Builder> configurer) {
+    public static InfluxDB makeConnectionV1(String influxDbUrl,
+                                            String username,
+                                            String password,
+                                            long connectionTimeout,
+                                            Consumer<OkHttpClient.Builder> configurer) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
         if (configurer != null) {
             configurer.accept(builder);
@@ -277,5 +280,34 @@ public final class InfluxDBUtils {
         } else {
             return InfluxDBFactory.connect(influxDbUrl, username, password, builder);
         }
+    }
+
+    /**
+     * Create a connection to a InfluxDB.
+     *
+     * @param influxDbUrl       the url to connect to
+     * @param token             the token to use for the authorization
+     * @param connectionTimeout the default connect timeout
+     * @param configurer        to configure OkHttpClient.Builder with SSL
+     * @return InfluxDB client
+     */
+    @Nonnull
+    public static InfluxDBClient makeConnectionV2(String influxDbUrl,
+                                                  String token,
+                                                  long connectionTimeout,
+                                                  Consumer<OkHttpClient.Builder> configurer) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
+        if (configurer != null) {
+            configurer.accept(builder);
+        }
+
+        InfluxDBClientOptions options = InfluxDBClientOptions
+                .builder()
+                .url(influxDbUrl)
+                .authenticateToken(token.toCharArray())
+                .okHttpClient(builder)
+                .build();
+
+        return InfluxDBClientFactory.create(options);
     }
 }

@@ -112,7 +112,7 @@ public class StandardInfluxDatabaseService extends AbstractInfluxDatabaseService
                                final String influxDbUrl,
                                final long connectionTimeout) throws IOException {
 
-        return InfluxDBUtils.makeConnection(username, password, influxDbUrl, connectionTimeout, builder -> {
+        return InfluxDBUtils.makeConnectionV1(influxDbUrl, username, password, connectionTimeout, builder -> {
             if (sslService != null) {
                 configureSSL(builder, clientAuth, sslService);
             }

@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.InfluxDBClientFactory;
+import org.influxdata.nifi.util.InfluxDBUtils;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
-import okhttp3.OkHttpClient;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -108,14 +108,11 @@ public class StandardInfluxDatabaseService_2 extends AbstractInfluxDatabaseServi
                                      final String influxDbUrl,
                                      final long connectionTimeout) throws IOException {
 
-
-        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
-        if (sslService != null) {
-            configureSSL(builder, clientAuth, sslService);
-        }
-
-        return InfluxDBClientFactory.create(influxDbUrl, token.toCharArray());
+        return InfluxDBUtils.makeConnectionV2(influxDbUrl, token, connectionTimeout, builder -> {
+            if (sslService != null) {
+                configureSSL(builder, clientAuth, sslService);
+            }
+        });
     }
-
 }
 
