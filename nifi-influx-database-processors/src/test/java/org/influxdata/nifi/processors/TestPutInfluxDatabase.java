@@ -44,7 +44,7 @@ public class TestPutInfluxDatabase {
         precision = null;
         mockPutInfluxDatabase = new PutInfluxDatabase() {
             @Override
-            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
+            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout, final String clientType) {
                 return null;
             }
 

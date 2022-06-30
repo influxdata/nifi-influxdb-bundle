@@ -120,6 +120,7 @@ public class PutInfluxDatabase extends AbstractInfluxDatabaseProcessor {
         tempDescriptors.add(RETENTION_POLICY);
         tempDescriptors.add(TIMESTAMP_PRECISION);
         tempDescriptors.add(MAX_RECORDS_SIZE);
+        tempDescriptors.add(INFLUX_DB_CLIENT_TYPE);
         propertyDescriptors = Collections.unmodifiableList(tempDescriptors);
     }
 

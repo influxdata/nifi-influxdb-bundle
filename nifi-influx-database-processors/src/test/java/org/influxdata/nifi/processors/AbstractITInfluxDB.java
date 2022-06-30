@@ -43,7 +43,7 @@ public abstract class AbstractITInfluxDB {
     protected Type QueryResultListType = new TypeToken<List<QueryResult>>(){}.getType();
 
     protected void initInfluxDB() throws Exception {
-        influxDB = InfluxDBUtils.makeConnectionV1(dbUrl, user, password, 10, null);
+        influxDB = InfluxDBUtils.makeConnectionV1(dbUrl, user, password, 10, null, null);
         influxDB.query(new Query("CREATE database " + dbName, dbName));
         int max = 10;
         while (!databaseExists(dbName) && (max-- < 0)) {

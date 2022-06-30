@@ -47,7 +47,7 @@ abstract class AbstractITInfluxDB_2 {
 
     protected void init() {
 
-        influxDBClient = InfluxDBUtils.makeConnectionV2(INFLUX_DB_2, "my-token", 10, null);
+        influxDBClient = InfluxDBUtils.makeConnectionV2(INFLUX_DB_2, "my-token", 10, null, null);
 
         organization = influxDBClient.getOrganizationsApi().findOrganizations().stream()
                 .filter(it -> it.getName().equals("my-org"))

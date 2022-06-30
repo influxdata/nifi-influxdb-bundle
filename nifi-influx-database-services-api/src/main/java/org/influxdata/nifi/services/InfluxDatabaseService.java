@@ -94,6 +94,16 @@ public interface InfluxDatabaseService extends ControllerService {
             .sensitive(true)
             .build();
 
+    PropertyDescriptor INFLUX_DB_CLIENT_TYPE = new PropertyDescriptor.Builder()
+            .name("influxdb-client-type")
+            .displayName("InfluxDB Client type")
+            .description("Customize the User-Agent HTTP header. If the value is set to \"awesome-service\" "
+                    + "the User-Agent header will be: \"influxdb-client-awesome-service/6.2.0\".")
+            .required(false)
+            .addValidator(StandardValidators.NON_BLANK_VALIDATOR)
+            .sensitive(false)
+            .build();
+
     /**
      * Create a connection to a InfluxDB.
      *

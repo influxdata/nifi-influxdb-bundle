@@ -28,6 +28,7 @@ import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -263,6 +264,7 @@ public final class InfluxDBUtils {
      * @param password          the password for the username which is used to authorize against the influxDB instance
      * @param connectionTimeout the default connect timeout
      * @param configurer        to configure OkHttpClient.Builder with SSL
+     * @param clientType        to customize the User-Agent HTTP header
      * @return InfluxDB client
      */
     @Nonnull
@@ -270,8 +272,31 @@ public final class InfluxDBUtils {
                                             String username,
                                             String password,
                                             long connectionTimeout,
-                                            Consumer<OkHttpClient.Builder> configurer) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
+                                            Consumer<OkHttpClient.Builder> configurer,
+                                            final String clientType) {
+
+        // get version of influxdb-java
+        Package mainPackage = InfluxDBFactory.class.getPackage();
+        String version = mainPackage != null ? mainPackage.getImplementationVersion() : null;
+
+        // create User-Agent header content
+        String userAgent = String.format("influxdb-client-%s/%s",
+                clientType != null ? clientType : "java",
+                version != null ? version : "unknown");
+
+        OkHttpClient.Builder builder = new OkHttpClient
+                .Builder()
+                .connectTimeout(connectionTimeout, TimeUnit.SECONDS)
+                // add interceptor with "User-Agent" header
+                .addInterceptor(chain -> {
+                    Request request = chain
+                            .request()
+                            .newBuilder()
+                            .header("User-Agent", userAgent)
+                            .build();
+
+                    return chain.proceed(request);
+                });
         if (configurer != null) {
             configurer.accept(builder);
         }
@@ -289,25 +314,30 @@ public final class InfluxDBUtils {
      * @param token             the token to use for the authorization
      * @param connectionTimeout the default connect timeout
      * @param configurer        to configure OkHttpClient.Builder with SSL
+     * @param clientType        to customize the User-Agent HTTP header
      * @return InfluxDB client
      */
     @Nonnull
     public static InfluxDBClient makeConnectionV2(String influxDbUrl,
                                                   String token,
                                                   long connectionTimeout,
-                                                  Consumer<OkHttpClient.Builder> configurer) {
+                                                  Consumer<OkHttpClient.Builder> configurer,
+                                                  final String clientType) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
         if (configurer != null) {
             configurer.accept(builder);
         }
 
-        InfluxDBClientOptions options = InfluxDBClientOptions
+        InfluxDBClientOptions.Builder options = InfluxDBClientOptions
                 .builder()
                 .url(influxDbUrl)
                 .authenticateToken(token.toCharArray())
-                .okHttpClient(builder)
-                .build();
+                .okHttpClient(builder);
 
-        return InfluxDBClientFactory.create(options);
+        if (StringUtils.isNoneBlank(clientType)) {
+            options.clientType(clientType);
+        }
+
+        return InfluxDBClientFactory.create(options.build());
     }
 }

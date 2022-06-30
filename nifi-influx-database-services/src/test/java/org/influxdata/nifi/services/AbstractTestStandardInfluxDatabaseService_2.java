@@ -55,7 +55,8 @@ public abstract class AbstractTestStandardInfluxDatabaseService_2 {
                         Mockito.any(),
                         Mockito.any(),
                         Mockito.any(),
-                        Mockito.anyLong());
+                        Mockito.anyLong(),
+                        null);
 
         testRunner = TestRunners.newTestRunner(ServiceProcessor.class);
         testRunner.addControllerService("influxdb-service", service);

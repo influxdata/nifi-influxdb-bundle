@@ -75,6 +75,16 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .sensitive(false)
             .build();
 
+    public static final PropertyDescriptor INFLUX_DB_CLIENT_TYPE = new PropertyDescriptor.Builder()
+            .name("influxdb-client-type")
+            .displayName("InfluxDB Client type")
+            .description("Customize the User-Agent HTTP header. If the value is set to \"awesome-service\" "
+                    + "the User-Agent header will be: \"influxdb-client-awesome-service/6.2.0\".")
+            .required(false)
+            .addValidator(StandardValidators.NON_BLANK_VALIDATOR)
+            .sensitive(false)
+            .build();
+
     public static final PropertyDescriptor DB_NAME = new PropertyDescriptor.Builder()
             .name("influxdb-dbname")
             .displayName("Database Name")
@@ -145,8 +155,9 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             String password = context.getProperty(PASSWORD).evaluateAttributeExpressions().getValue();
             long connectionTimeout = context.getProperty(INFLUX_DB_CONNECTION_TIMEOUT).asTimePeriod(TimeUnit.SECONDS);
             String influxDbUrl = context.getProperty(INFLUX_DB_URL).evaluateAttributeExpressions().getValue();
+            String clientType = context.getProperty(INFLUX_DB_CLIENT_TYPE).getValue();
             try {
-                influxDB.set(makeConnection(username, password, influxDbUrl, connectionTimeout));
+                influxDB.set(makeConnection(username, password, influxDbUrl, connectionTimeout, clientType));
             } catch(Exception e) {
                 getLogger().error("Error while getting connection {}", new Object[] { e.getLocalizedMessage() },e);
                 throw new RuntimeException("Error while getting connection " + e.getLocalizedMessage(),e);
@@ -161,8 +172,8 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
     public void onScheduled(final ProcessContext context) {
     }
 
-    protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
-        return InfluxDBUtils.makeConnectionV1(influxDbUrl, username, password, connectionTimeout, null);
+    protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout, final String clientType) {
+        return InfluxDBUtils.makeConnectionV1(influxDbUrl, username, password, connectionTimeout, null, clientType);
     }
 
     @OnStopped
