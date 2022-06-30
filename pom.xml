@@ -100,6 +100,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- skip until remove org.json from Java client -->
+        <enforcer.skip>true</enforcer.skip>
 
         <nifi.version>1.14.0</nifi.version>
 
