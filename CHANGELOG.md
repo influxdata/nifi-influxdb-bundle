@@ -1,5 +1,8 @@
 ## v1.20.0 [unreleased]
 
+### Features
+1. [#74](https://github.com/influxdata/nifi-influxdb-bundle/pull/74): Add possibility to customize the `User-Agent` HTTP header
+
 ### Others
 1. [#73](https://github.com/influxdata/nifi-influxdb-bundle/pull/73): Update to Apache NiFi 1.16.3
 
