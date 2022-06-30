@@ -92,7 +92,7 @@ public class ITPutInfluxDatabase_2 extends AbstractITInfluxDB_2 {
 
         assertEquals(1, flowFiles.size());
 		Assertions.assertThat(flowFiles.get(0).getAttribute(AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE))
-				.isEqualTo("unable to parse 'water,country=US,city=newark': missing fields");
+				.isEqualTo("HTTP status code: 400; Message: unable to parse 'water,country=US,city=newark': missing fields");
     }
 
     @Test

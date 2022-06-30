@@ -33,6 +33,8 @@ import org.apache.nifi.util.MockFlowFile;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
 import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2;
 import org.influxdata.nifi.util.InfluxDBUtils;
+
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -252,7 +254,8 @@ public class TestPutInfluxDatabaseRecordErrorHandling_2 extends AbstractTestPutI
         Assert.assertEquals(1, errors.size());
 
         Assert.assertTrue(errors.get(0).getMsg().contains("Failed to insert into influxDB due "));
-		Assert.assertEquals("com.influxdb.exceptions.InfluxException: Simulate error: 503", errors.get(0).getArgs()[3]);
+        Assertions.assertThat(errors.get(0).getArgs()[3].toString()).startsWith("com.influxdb.exceptions.InfluxException");
+        Assertions.assertThat(errors.get(0).getArgs()[3].toString()).endsWith("Simulate error: 503");
     }
 
     private void errorToRetryRelationship(@NonNull final InfluxException exception,
@@ -288,7 +291,7 @@ public class TestPutInfluxDatabaseRecordErrorHandling_2 extends AbstractTestPutI
         runner.assertAllFlowFilesTransferred(relationship, 1);
 
         MockFlowFile flowFile = runner.getFlowFilesForRelationship(relationship).get(0);
-        Assert.assertEquals(exceptionMessage, flowFile.getAttribute(INFLUX_DB_ERROR_MESSAGE));
+        Assertions.assertThat(flowFile.getAttribute(INFLUX_DB_ERROR_MESSAGE)).endsWith(exceptionMessage);
 
         // Is Penalized
         Assert.assertEquals(isPenalized, runner.getPenalizedFlowFiles().contains(flowFile));
