@@ -45,7 +45,7 @@ public class TestExecutetInfluxDBQuery {
     public void setUp() throws Exception {
         mockExecuteInfluxDBQuery = new ExecuteInfluxDatabaseQuery() {
             @Override
-            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
+            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout, final String clientType) {
                 return null;
             }
 
@@ -78,7 +78,7 @@ public class TestExecutetInfluxDBQuery {
     public void testQueryThrowsRuntimeException() {
         mockExecuteInfluxDBQuery = new ExecuteInfluxDatabaseQuery() {
             @Override
-            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
+            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout, final String clientType) {
                 return null;
             }
 
@@ -110,7 +110,7 @@ public class TestExecutetInfluxDBQuery {
     public void testQueryThrowsRuntimeExceptionWithSocketTimeoutException() {
         mockExecuteInfluxDBQuery = new ExecuteInfluxDatabaseQuery() {
             @Override
-            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
+            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout, final String clientType) {
                 return null;
             }
 
@@ -142,7 +142,7 @@ public class TestExecutetInfluxDBQuery {
     public void testMakingQueryThrowsIOException() throws Throwable {
         mockExecuteInfluxDBQuery = new ExecuteInfluxDatabaseQuery() {
             @Override
-            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
+            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout, final String clientType) {
                 return null;
             }
 
@@ -174,7 +174,7 @@ public class TestExecutetInfluxDBQuery {
     public void testMakeConnectionThrowsRuntimeException() {
         mockExecuteInfluxDBQuery = new ExecuteInfluxDatabaseQuery() {
             @Override
-            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
+            protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout, final String clientType) {
                 throw new RuntimeException("testException");
             }
 

@@ -19,9 +19,9 @@ package org.influxdata.nifi.processors.internal;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import okhttp3.OkHttpClient;
-import okhttp3.OkHttpClient.Builder;
-import org.apache.commons.lang3.StringUtils;
+import org.influxdata.nifi.util.InfluxDBUtils;
+import org.influxdb.InfluxDB;
+
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.annotation.lifecycle.OnStopped;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -31,8 +31,6 @@ import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.serialization.RecordReaderFactory;
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 
 /**
  * Abstract base class for InfluxDB processors
@@ -74,6 +72,16 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             .defaultValue("0 seconds")
             .required(true)
             .addValidator(StandardValidators.TIME_PERIOD_VALIDATOR)
+            .sensitive(false)
+            .build();
+
+    public static final PropertyDescriptor INFLUX_DB_CLIENT_TYPE = new PropertyDescriptor.Builder()
+            .name("influxdb-client-type")
+            .displayName("InfluxDB Client type")
+            .description("Customize the User-Agent HTTP header. If the value is set to \"awesome-service\" "
+                    + "the User-Agent header will be: \"influxdb-client-awesome-service/6.2.0\".")
+            .required(false)
+            .addValidator(StandardValidators.NON_BLANK_VALIDATOR)
             .sensitive(false)
             .build();
 
@@ -147,8 +155,9 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
             String password = context.getProperty(PASSWORD).evaluateAttributeExpressions().getValue();
             long connectionTimeout = context.getProperty(INFLUX_DB_CONNECTION_TIMEOUT).asTimePeriod(TimeUnit.SECONDS);
             String influxDbUrl = context.getProperty(INFLUX_DB_URL).evaluateAttributeExpressions().getValue();
+            String clientType = context.getProperty(INFLUX_DB_CLIENT_TYPE).getValue();
             try {
-                influxDB.set(makeConnection(username, password, influxDbUrl, connectionTimeout));
+                influxDB.set(makeConnection(username, password, influxDbUrl, connectionTimeout, clientType));
             } catch(Exception e) {
                 getLogger().error("Error while getting connection {}", new Object[] { e.getLocalizedMessage() },e);
                 throw new RuntimeException("Error while getting connection " + e.getLocalizedMessage(),e);
@@ -163,13 +172,8 @@ public abstract class AbstractInfluxDatabaseProcessor extends AbstractProcessor 
     public void onScheduled(final ProcessContext context) {
     }
 
-    protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout) {
-        Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
-        if ( StringUtils.isBlank(username) || StringUtils.isBlank(password) ) {
-            return InfluxDBFactory.connect(influxDbUrl, builder);
-        } else {
-            return InfluxDBFactory.connect(influxDbUrl, username, password, builder);
-        }
+    protected InfluxDB makeConnection(String username, String password, String influxDbUrl, long connectionTimeout, final String clientType) {
+        return InfluxDBUtils.makeConnectionV1(influxDbUrl, username, password, connectionTimeout, null, clientType);
     }
 
     @OnStopped

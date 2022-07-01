@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.InfluxDBClientFactory;
+import org.influxdata.nifi.util.InfluxDBUtils;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
-import okhttp3.OkHttpClient;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -50,6 +50,7 @@ public class StandardInfluxDatabaseService_2 extends AbstractInfluxDatabaseServi
         propertyDescriptors.add(INFLUX_DB_URL);
         propertyDescriptors.add(INFLUX_DB_CONNECTION_TIMEOUT);
         propertyDescriptors.add(INFLUX_DB_ACCESS_TOKEN);
+        propertyDescriptors.add(INFLUX_DB_CLIENT_TYPE);
 
         PROPERTY_DESCRIPTORS = Collections.unmodifiableList(propertyDescriptors);
     }
@@ -77,8 +78,10 @@ public class StandardInfluxDatabaseService_2 extends AbstractInfluxDatabaseServi
         // Credentials
         String token = context.getProperty(INFLUX_DB_ACCESS_TOKEN).evaluateAttributeExpressions().getValue();
 
+        String clientType = context.getProperty(INFLUX_DB_CLIENT_TYPE).getValue();
+
         try {
-            InfluxDBClient client = connect(token, sslService, clientAuth, influxDbUrl, connectionTimeout);
+            InfluxDBClient client = connect(token, sslService, clientAuth, influxDbUrl, connectionTimeout, clientType);
 
             getLogger().info("InfluxDB 2.0 connection created for host {}", new Object[]{influxDbUrl});
 
@@ -106,16 +109,14 @@ public class StandardInfluxDatabaseService_2 extends AbstractInfluxDatabaseServi
                                      final SSLContextService sslService,
                                      final ClientAuth clientAuth,
                                      final String influxDbUrl,
-                                     final long connectionTimeout) throws IOException {
+                                     final long connectionTimeout,
+                                     final String clientType) throws IOException {
 
-
-        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
-        if (sslService != null) {
-            configureSSL(builder, clientAuth, sslService);
-        }
-
-        return InfluxDBClientFactory.create(influxDbUrl, token.toCharArray());
+        return InfluxDBUtils.makeConnectionV2(influxDbUrl, token, connectionTimeout, builder -> {
+            if (sslService != null) {
+                configureSSL(builder, clientAuth, sslService);
+            }
+        }, clientType);
     }
-
 }
 

@@ -26,6 +26,8 @@ import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.util.LogMessage;
 import org.apache.nifi.util.MockFlowFile;
 import org.influxdata.nifi.processors.internal.AbstractGetInfluxDatabase_2;
+
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -121,7 +123,7 @@ public class TestGetInfluxDatabaseErrorHandling_2 extends AbstractTestGetInfluxD
         List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(relationship);
         Assert.assertEquals(1, flowFiles.size());
 
-        Assert.assertEquals(message, flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
+        Assertions.assertThat(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE)).endsWith(message);
 
         List<LogMessage> errors = logger.getErrorMessages();
 

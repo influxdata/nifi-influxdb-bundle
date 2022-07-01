@@ -35,6 +35,7 @@ import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -236,7 +237,7 @@ public class TestPutInfluxDatabase_2 {
 
         List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_RETRY);
 
-        assertEquals("Simulate error: 503", flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
+        Assertions.assertThat(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE)).endsWith("Simulate error: 503");
     }
 
     @Test
@@ -253,7 +254,7 @@ public class TestPutInfluxDatabase_2 {
 
         List<MockFlowFile> flowFiles = runner.getFlowFilesForRelationship(REL_RETRY);
 
-        assertEquals("Simulate error: 429", flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE));
+        Assertions.assertThat(flowFiles.get(0).getAttribute(INFLUX_DB_ERROR_MESSAGE)).endsWith("Simulate error: 429");
     }
 
     @Test

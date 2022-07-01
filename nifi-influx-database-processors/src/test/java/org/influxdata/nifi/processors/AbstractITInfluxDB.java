@@ -19,12 +19,13 @@ package org.influxdata.nifi.processors;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import com.google.gson.reflect.TypeToken;
-import org.apache.nifi.util.TestRunner;
+import org.influxdata.nifi.util.InfluxDBUtils;
 import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
+
+import com.google.gson.reflect.TypeToken;
+import org.apache.nifi.util.TestRunner;
 import org.junit.After;
 
 /**
@@ -41,8 +42,8 @@ public abstract class AbstractITInfluxDB {
 
     protected Type QueryResultListType = new TypeToken<List<QueryResult>>(){}.getType();
 
-    protected void initInfluxDB() throws InterruptedException, Exception {
-        influxDB = InfluxDBFactory.connect(dbUrl,user,password);
+    protected void initInfluxDB() throws Exception {
+        influxDB = InfluxDBUtils.makeConnectionV1(dbUrl, user, password, 10, null, null);
         influxDB.query(new Query("CREATE database " + dbName, dbName));
         int max = 10;
         while (!databaseExists(dbName) && (max-- < 0)) {
