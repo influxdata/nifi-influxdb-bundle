@@ -1,4 +1,4 @@
-## v1.20.0 [unreleased]
+## v1.20.0 [2022-07-04]
 
 ### Features
 1. [#74](https://github.com/influxdata/nifi-influxdb-bundle/pull/74): Add possibility to customize the `User-Agent` HTTP header
