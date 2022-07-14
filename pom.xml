@@ -103,7 +103,7 @@
 		<!-- skip until remove org.json from Java client -->
         <enforcer.skip>true</enforcer.skip>
 
-        <nifi.version>1.14.0</nifi.version>
+        <nifi.version>1.16.3</nifi.version>
 
         <plugin.surefire.version>2.22.0</plugin.surefire.version>
         <plugin.jacoco.version>0.8.2</plugin.jacoco.version>
@@ -182,12 +182,6 @@
             <dependency>
                 <groupId>org.apache.nifi</groupId>
                 <artifactId>nifi-schema-registry-service-api</artifactId>
-                <version>${nifi.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.nifi</groupId>
-                <artifactId>nifi-processor-utils</artifactId>
                 <version>${nifi.version}</version>
             </dependency>
 

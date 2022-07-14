@@ -117,13 +117,34 @@ jobs:
             chmod +x ./codecov
             ./codecov
 
+  check-dependencies:
+    machine:
+      image: *default-machine-executor
+    steps:
+      - checkout
+      - install-jdk:
+          jdk-version: *default-jdk-version
+      - restore_cache:
+          name: Restoring Maven Cache
+          keys:
+            - &cache-dependencies-key maven-dependencies_v1-{{ checksum "pom.xml" }}-{{ checksum "nifi-influx-database-nar/pom.xml" }}-{{ checksum "nifi-influx-database-serialization/pom.xml" }}-{{ checksum "nifi-influx-database-serialization-nar/pom.xml" }}-{{ checksum "nifi-influx-database-services/pom.xml" }}-{{ checksum "nifi-influx-database-services-api/pom.xml" }}-{{ checksum "nifi-influx-database-services-nar/pom.xml" }}-{{ checksum "nifi-influx-database-utils/pom.xml" }}
+            - maven-dependencies_v1-
+      - run:
+          name: "Check dependency rules"
+          command: mvn enforcer:enforce -Drules=banDuplicatePomDependencyVersions,dependencyConvergence
+      - save_cache:
+          name: Saving Maven Cache
+          key: *cache-dependencies-key
+          paths:
+            - ~/.m2
+
   end-to-end:
     machine:
       image: *default-machine-executor
     steps:
       - checkout
       - install-jdk:
-          jdk-version:  *default-jdk-version
+          jdk-version: *default-jdk-version
       - restore_cache:
           name: Restoring Maven Cache
           keys:
@@ -171,6 +192,7 @@ workflows:
   version: 2
   build:
     jobs:
+      - check-dependencies
       - tests-java:
           name: jdk-8
       - tests-java:
@@ -178,6 +200,7 @@ workflows:
           jdk-version: "11"
       - end-to-end:
           requires:
+            - check-dependencies
             - jdk-8
             - jdk-11
       - deploy:

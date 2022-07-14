@@ -1,5 +1,8 @@
 ## v1.21.0 [unreleased]
 
+### Bug Fixes
+1. [#75](https://github.com/influxdata/nifi-influxdb-bundle/pull/75): Use correct version for NiFi jars
+
 ## v1.20.0 [2022-07-04]
 
 ### Features
