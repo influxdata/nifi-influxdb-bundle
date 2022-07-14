@@ -33,6 +33,8 @@ import org.influxdata.nifi.util.InfluxDBUtils;
 import org.influxdb.InfluxDBException;
 import org.influxdb.InfluxDBIOException;
 import org.influxdb.dto.Point;
+
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -285,7 +287,11 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
         // First is formatted message, Second Stack Trace
         Assert.assertEquals(1, errors.size());
 
-        Assert.assertTrue(errors.get(0).getMsg().contains(INFLUX_DB_ERROR_MESSAGE_LOG));
+        Assertions
+                .assertThat(errors.get(0).getMsg())
+                .endsWith(String.format(
+                        "Failed procession flow file %s due to unable to parse: org.influxdb.InfluxDBException$UnableToParseException: unable to parse",
+                        errors.get(0).getArgs()[1]));
 		Assert.assertEquals("org.influxdb.InfluxDBException$UnableToParseException: unable to parse", errors.get(0).getArgs()[3]);
     }
 
@@ -299,7 +305,11 @@ public class TestPutInfluxDatabaseRecordErrorHandling extends AbstractTestPutInf
         // First is formatted message, Second Stack Trace
         Assert.assertEquals(1, errors.size());
 
-        Assert.assertTrue(errors.get(0).getMsg().contains(INFLUX_DB_ERROR_MESSAGE_LOG));
+        Assertions
+                .assertThat(errors.get(0).getMsg())
+                .endsWith(String.format(
+                        "Failed procession flow file %s due to authorization failed: org.influxdb.InfluxDBException$AuthorizationFailedException: authorization failed",
+                        errors.get(0).getArgs()[1]));
         Assert.assertEquals("org.influxdb.InfluxDBException$AuthorizationFailedException: authorization failed", errors.get(0).getArgs()[3]);
     }
 
