@@ -3,6 +3,22 @@
 ### Bug Fixes
 1. [#75](https://github.com/influxdata/nifi-influxdb-bundle/pull/75): Use correct version for NiFi jars
 
+### Dependencies
+
+#### Build:
+    - influxdb-java to 2.23
+    - commons-io to 2.11
+    - gson to 2.9.0
+
+#### Test:
+    - assertj-core to 3.23.1
+    - xmlunit-matchers to 2.9.0
+    - guava to 31.1-jre
+
+#### Maven:
+    - maven-surefire-plugin to 2.22.2
+    - jacoco-maven-plugin to 0.8.8
+
 ## v1.20.0 [2022-07-04]
 
 ### Features
