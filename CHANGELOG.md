@@ -8,6 +8,7 @@
 #### Build:
     - influxdb-java to 2.23
     - commons-io to 2.11
+    - commons-lang3 to 3.12.0
     - gson to 2.9.0
 
 #### Test:
