@@ -17,6 +17,7 @@
 package org.influxdata.nifi.serialization;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,11 @@ import org.slf4j.LoggerFactory;
 public final class InfluxLineProtocolParser {
 
     private static final Logger LOG = LoggerFactory.getLogger(InfluxLineProtocolParser.class);
+
+    /**
+     * <a href="https://docs.influxdata.com/influxdb/latest/reference/syntax/line-protocol/#boolean">Boolean accepted values</a>
+     */
+    private static final List<String> BOOLEAN_ACCEPTED = Arrays.asList("t", "true", "f", "false");
 
     // Internal
     private String lineProtocol;
@@ -394,9 +400,13 @@ public final class InfluxLineProtocolParser {
                     return Long.parseLong(value.substring(0, value.length() - 1));
                 }
 
-                Boolean bool = BooleanUtils.toBooleanObject(value);
-                if (bool != null) {
-                    return bool;
+                // We don't want parse the '0', '1' ... as a boolean. Accepted values:
+                // https://docs.influxdata.com/influxdb/latest/reference/syntax/line-protocol/#boolean
+                if (BOOLEAN_ACCEPTED.contains(value.toLowerCase())) {
+                    Boolean bool = BooleanUtils.toBooleanObject(value);
+                    if (bool != null) {
+                        return bool;
+                    }
                 }
 
                 //

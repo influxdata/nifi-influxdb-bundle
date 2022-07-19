@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The tests comes from https://github.com/influxdata/influxdb/blob/1.6/models/points_test.go.
+ * The tests comes from <a href="https://github.com/influxdata/influxdb/blob/1.6/models/points_test.go">points_test.go</a>.
  */
 public class TestInfluxLineProtocolParser {
 
@@ -1034,6 +1034,17 @@ public class TestInfluxLineProtocolParser {
 		Assert.assertNotNull(parser.getTags());
 		Assert.assertTrue(parser.getTags().isEmpty());
 	}
+
+    @Test
+    public void onlyValidBooleans() {
+
+        ExpectedResult.success()
+                .measurement("b")
+                .field("float1", 1F)
+                .field("float2", 0F)
+                .field("float3", 1.0F)
+                .validate("b float1=1,float2=0,float3=1.0");
+    }
 
     private static final class ExpectedResult {
 
