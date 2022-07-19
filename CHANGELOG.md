@@ -18,6 +18,7 @@
 #### Maven:
     - maven-surefire-plugin to 2.22.2
     - jacoco-maven-plugin to 0.8.8
+    - license-maven-plugin to 4.1
 
 ## v1.20.0 [2022-07-04]
 
