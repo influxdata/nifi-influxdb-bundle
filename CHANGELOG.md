@@ -4,6 +4,7 @@
 Update dependencies:
 
 #### Build:
+  - [#89](https://github.com/influxdata/nifi-influxdb-bundle/pull/89): `influxdb-client-java` to `6.4.0`
   - [#90](https://github.com/influxdata/nifi-influxdb-bundle/pull/90): `gson` to `2.9.1`
 
 ## v1.21.0 [2022-07-29]
