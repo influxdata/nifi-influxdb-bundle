@@ -1,5 +1,11 @@
 ## v1.22.0 [unreleased]
 
+### Dependencies
+Update dependencies:
+
+#### Build:
+  - [#90](https://github.com/influxdata/nifi-influxdb-bundle/pull/90): `gson` to `2.9.1`
+
 ## v1.21.0 [2022-07-29]
 
 ### Bug Fixes
