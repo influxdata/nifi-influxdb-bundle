@@ -19,8 +19,8 @@ package org.influxdata.nifi.serialization;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import avro.shaded.com.google.common.collect.MapDifference;
-import avro.shaded.com.google.common.collect.Maps;
+import com.google.common.collect.MapDifference;
+import com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.junit.Assert;
@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The tests comes from <a href="https://github.com/influxdata/influxdb/blob/1.6/models/points_test.go">points_test.go</a>.
+ * The tests come from <a href="https://github.com/influxdata/influxdb/blob/1.6/models/points_test.go">points_test.go</a>.
  */
 public class TestInfluxLineProtocolParser {
 

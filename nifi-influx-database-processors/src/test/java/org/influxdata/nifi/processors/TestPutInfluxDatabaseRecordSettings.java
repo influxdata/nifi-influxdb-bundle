@@ -26,13 +26,13 @@ import org.influxdata.nifi.util.InfluxDBUtils.ComplexFieldBehaviour;
 import org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour;
 import org.influxdata.nifi.util.InfluxDBUtils.NullValueBehaviour;
 import org.influxdata.nifi.util.PropertyValueUtils;
+import org.influxdb.BatchOptions;
+import org.influxdb.InfluxDB;
 
-import avro.shaded.com.google.common.collect.Maps;
+import com.google.common.collect.Maps;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.serialization.record.RecordFieldType;
-import org.influxdb.BatchOptions;
-import org.influxdb.InfluxDB;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
