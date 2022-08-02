@@ -21,23 +21,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import avro.shaded.com.google.common.collect.Maps;
 import com.influxdb.client.write.Point;
 import com.influxdb.exceptions.InfluxException;
 import com.influxdb.exceptions.NotFoundException;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
+import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2;
+import org.influxdata.nifi.util.InfluxDBUtils;
+
+import com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.serialization.record.RecordFieldType;
 import org.apache.nifi.util.LogMessage;
 import org.apache.nifi.util.MockFlowFile;
-import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor;
-import org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor_2;
-import org.influxdata.nifi.util.InfluxDBUtils;
-
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.influxdata.nifi.processors.Utils.createErrorResponse;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;

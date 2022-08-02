@@ -22,25 +22,24 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 
-import avro.shaded.com.google.common.collect.Maps;
+import org.influxdata.nifi.util.InfluxDBUtils;
+import org.influxdb.InfluxDBException;
+import org.influxdb.InfluxDBIOException;
+import org.influxdb.dto.Point;
+
+import com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.serialization.record.RecordFieldType;
 import org.apache.nifi.util.LogMessage;
 import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.MockProcessContext;
-import org.influxdata.nifi.util.InfluxDBUtils;
-import org.influxdb.InfluxDBException;
-import org.influxdb.InfluxDBIOException;
-import org.influxdb.dto.Point;
-
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static org.influxdata.nifi.processors.PutInfluxDatabaseRecord.DATABASE_NAME_EMPTY_MESSAGE;
 import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE;
-import static org.influxdata.nifi.processors.internal.AbstractInfluxDatabaseProcessor.INFLUX_DB_ERROR_MESSAGE_LOG;
 import static org.influxdata.nifi.util.InfluxDBUtils.AT_LEAST_ONE_FIELD_DEFINED_MESSAGE;
 import static org.influxdata.nifi.util.InfluxDBUtils.MEASUREMENT_NAME_EMPTY_MESSAGE;
 import static org.influxdata.nifi.util.InfluxDBUtils.MissingItemsBehaviour.FAIL;
