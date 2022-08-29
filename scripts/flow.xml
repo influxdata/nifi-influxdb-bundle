@@ -152,7 +152,7 @@ HTTP endpoint.
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -342,7 +342,7 @@ HTTP endpoint.
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1621,7 +1621,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1821,7 +1821,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <maxConcurrentTasks>10</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2059,7 +2059,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2365,7 +2365,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2426,7 +2426,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2821,7 +2821,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3054,7 +3054,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3201,7 +3201,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3614,7 +3614,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3796,7 +3796,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.22-SNAPSHOT</version>
+          <version>1.22</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3830,7 +3830,7 @@ curl -i -X GET -G http://localhost:8234 \
       <bundle>
         <group>org.influxdata.nifi</group>
         <artifact>nifi-influx-database-nar</artifact>
-        <version>1.22-SNAPSHOT</version>
+        <version>1.22</version>
       </bundle>
       <enabled>true</enabled>
       <property>
