@@ -59,32 +59,32 @@ To install the InfluxDB Processors you will need to copy the appropriate nar fil
 
 The Nar compatibility matrix:
 
-| Nar Version                                                                                                                                                                    | NiFi Version |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
-| [nifi-influx-database-nar-1.23.0-SNAPSHOT.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.23-SNAPSHOT/nifi-influx-database-nar-1.23-SNAPSHOT.nar) | 1.17.0       |
-| [nifi-influx-database-nar-1.22.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.22.0/nifi-influx-database-nar-1.22.0.nar)                        | 1.17.0       |
-| [nifi-influx-database-nar-1.21.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.21.0/nifi-influx-database-nar-1.21.0.nar)                        | 1.16.3       |
-| [nifi-influx-database-nar-1.20.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.20.0/nifi-influx-database-nar-1.20.0.nar)                        | 1.16.3       |
-| [nifi-influx-database-nar-1.19.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.19.0/nifi-influx-database-nar-1.19.0.nar)                        | 1.16.2       |
-| [nifi-influx-database-nar-1.18.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.18.0/nifi-influx-database-nar-1.18.0.nar)                        | 1.16.1       |
-| [nifi-influx-database-nar-1.17.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.17.0/nifi-influx-database-nar-1.17.0.nar)                        | 1.16.0       |
-| [nifi-influx-database-nar-1.16.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.16.0/nifi-influx-database-nar-1.16.0.nar)                        | 1.15.3       |
-| [nifi-influx-database-nar-1.15.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.15.0/nifi-influx-database-nar-1.15.0.nar)                        | 1.15.2       |
-| [nifi-influx-database-nar-1.14.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.14.0/nifi-influx-database-nar-1.14.0.nar)                        | 1.15.0       |
-| [nifi-influx-database-nar-1.13.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.13.0/nifi-influx-database-nar-1.13.0.nar)                        | 1.14.0       |
-| [nifi-influx-database-nar-1.12.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.12.0/nifi-influx-database-nar-1.12.0.nar)                        | 1.13.2       |
-| [nifi-influx-database-nar-1.11.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.11.0/nifi-influx-database-nar-1.11.0.nar)                        | 1.13.2       |
-| [nifi-influx-database-nar-1.10.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.10.0/nifi-influx-database-nar-1.10.0.nar)                        | 1.13.2       |
-| [nifi-influx-database-nar-1.9.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.9.0/nifi-influx-database-nar-1.9.0.nar)                           | 1.13.0       |
-| [nifi-influx-database-nar-1.8.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.8.0/nifi-influx-database-nar-1.8.0.nar)                           | 1.12.1       |
-| [nifi-influx-database-nar-1.7.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.7.0/nifi-influx-database-nar-1.7.0.nar)                           | 1.11.4       |
-| [nifi-influx-database-nar-1.6.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.6.0/nifi-influx-database-nar-1.6.0.nar)                           | 1.11.3       |
-| [nifi-influx-database-nar-1.5.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.5.0/nifi-influx-database-nar-1.5.0.nar)                           | 1.11.1       |
-| [nifi-influx-database-nar-1.4.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.4/nifi-influx-database-nar-1.4.nar)                                 | 1.11         |
-| [nifi-influx-database-nar-1.3.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.3/nifi-influx-database-nar-1.3.nar)                                 | 1.10         |
-| [nifi-influx-database-nar-1.2.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.2/nifi-influx-database-nar-1.2.nar)                                 | 1.9          |
-| [nifi-influx-database-nar-1.1.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.1/nifi-influx-database-nar-1.1.nar)                                 | 1.9          |
-| [nifi-influx-database-nar-1.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.0/nifi-influx-database-nar-1.0.nar)                                 | 1.8          |
+| Nar Version                                                                                                                                                                        | NiFi Version |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| [nifi-influx-database-nar-1.23.0-SNAPSHOT.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.23.0-SNAPSHOT/nifi-influx-database-nar-1.23.0-SNAPSHOT.nar) | 1.17.0       |
+| [nifi-influx-database-nar-1.22.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.22/nifi-influx-database-nar-1.22.0.nar)                              | 1.17.0       |
+| [nifi-influx-database-nar-1.21.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.21.0/nifi-influx-database-nar-1.21.0.nar)                            | 1.16.3       |
+| [nifi-influx-database-nar-1.20.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.20.0/nifi-influx-database-nar-1.20.0.nar)                            | 1.16.3       |
+| [nifi-influx-database-nar-1.19.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.19.0/nifi-influx-database-nar-1.19.0.nar)                            | 1.16.2       |
+| [nifi-influx-database-nar-1.18.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.18.0/nifi-influx-database-nar-1.18.0.nar)                            | 1.16.1       |
+| [nifi-influx-database-nar-1.17.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.17.0/nifi-influx-database-nar-1.17.0.nar)                            | 1.16.0       |
+| [nifi-influx-database-nar-1.16.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.16.0/nifi-influx-database-nar-1.16.0.nar)                            | 1.15.3       |
+| [nifi-influx-database-nar-1.15.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.15.0/nifi-influx-database-nar-1.15.0.nar)                            | 1.15.2       |
+| [nifi-influx-database-nar-1.14.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.14.0/nifi-influx-database-nar-1.14.0.nar)                            | 1.15.0       |
+| [nifi-influx-database-nar-1.13.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.13.0/nifi-influx-database-nar-1.13.0.nar)                            | 1.14.0       |
+| [nifi-influx-database-nar-1.12.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.12.0/nifi-influx-database-nar-1.12.0.nar)                            | 1.13.2       |
+| [nifi-influx-database-nar-1.11.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.11.0/nifi-influx-database-nar-1.11.0.nar)                            | 1.13.2       |
+| [nifi-influx-database-nar-1.10.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.10.0/nifi-influx-database-nar-1.10.0.nar)                            | 1.13.2       |
+| [nifi-influx-database-nar-1.9.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.9.0/nifi-influx-database-nar-1.9.0.nar)                               | 1.13.0       |
+| [nifi-influx-database-nar-1.8.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.8.0/nifi-influx-database-nar-1.8.0.nar)                               | 1.12.1       |
+| [nifi-influx-database-nar-1.7.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.7.0/nifi-influx-database-nar-1.7.0.nar)                               | 1.11.4       |
+| [nifi-influx-database-nar-1.6.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.6.0/nifi-influx-database-nar-1.6.0.nar)                               | 1.11.3       |
+| [nifi-influx-database-nar-1.5.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.5.0/nifi-influx-database-nar-1.5.0.nar)                               | 1.11.1       |
+| [nifi-influx-database-nar-1.4.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.4/nifi-influx-database-nar-1.4.nar)                                     | 1.11         |
+| [nifi-influx-database-nar-1.3.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.3/nifi-influx-database-nar-1.3.nar)                                     | 1.10         |
+| [nifi-influx-database-nar-1.2.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.2/nifi-influx-database-nar-1.2.nar)                                     | 1.9          |
+| [nifi-influx-database-nar-1.1.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.1/nifi-influx-database-nar-1.1.nar)                                     | 1.9          |
+| [nifi-influx-database-nar-1.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.0/nifi-influx-database-nar-1.0.nar)                                     | 1.8          |
 
 For example, to install the nar after download it to `~/Downloads`:
 
