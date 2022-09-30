@@ -4,7 +4,7 @@
 Update dependencies:
 
 #### Build:
-  - [#94](https://github.com/influxdata/nifi-influxdb-bundle/pull/94): `influxdb-client-java` to `6.5.0`
+  - [#95](https://github.com/influxdata/nifi-influxdb-bundle/pull/95): `influxdb-client-java` to `6.6.0`
 
 ## v1.22.0 [2022-08-29]
 
