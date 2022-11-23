@@ -1,5 +1,11 @@
 ## v1.24.0 [unreleased]
 
+### Dependencies
+Update dependencies:
+
+#### Build:
+- [#101](https://github.com/influxdata/nifi-influxdb-bundle/pull/101): `influxdb-client-java` to `6.7.0`
+
 ## v1.23.0 [2022-10-27]
 
 ### Others
