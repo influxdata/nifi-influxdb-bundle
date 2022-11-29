@@ -1,5 +1,8 @@
 ## v1.24.0 [unreleased]
 
+### Others
+1. [#104](https://github.com/influxdata/nifi-influxdb-bundle/pull/104): Update to Apache NiFi 1.19.0
+
 ### Dependencies
 Update dependencies:
 
