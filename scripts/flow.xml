@@ -41,30 +41,30 @@
       </styles>
       <value>NiFi-InfluxDB  integration demo
 =========================
-  
+
 This demo shows how InfluxDB can be integrated with the
-NiFi data processing framework. To enable seamless 
+NiFi data processing framework. To enable seamless
 integration we implemented following NiFi extensions:
-  
-* InfluxDatabaseService, InfluxDatabaseService_2 – more NiFi 
-processors in flow can reuse one InfluxDB connection configuration 
+
+* InfluxDatabaseService, InfluxDatabaseService_2 – more NiFi
+processors in flow can reuse one InfluxDB connection configuration
 (url, credentials)
-  
+
 * PutInfluxDatabase, PutInfluxDatabase_2 – processors
 that puts InfluxDB Line Protocol data into InfluxDB
-  
+
 * PutInfluxDatabaseRecord, PutInfluxDatabaseRecord_2 – processors
-that puts structured data (json, csv, text, avro) into InfluxDB 
+that puts structured data (json, csv, text, avro) into InfluxDB
 using NiFi Record readers/writers.
- 
+
 * GetInfluxDatabase_2, GetInfluxDatabaseRecord_2  – processors that
 are able use Flux query to get records from InfluxDB 2.0
- 
 
-* InfluxLineProtocolReader – reader parses the InfluxDB Line Protocol 
-into NiFi Record. This allows filtering, partitioning line protocol data in 
+
+* InfluxLineProtocolReader – reader parses the InfluxDB Line Protocol
+into NiFi Record. This allows filtering, partitioning line protocol data in
 NiFi flow produced by Telegraf.
-  
+
 * InfluxLineProtocolRecordSetWriter – Writes the contents of a Record
 Set as Line Protocol.</value>
     </label>
@@ -76,7 +76,7 @@ Set as Line Protocol.</value>
         <style name="font-size">12px</style>
       </styles>
       <value>Demo 3 User Story:
-   
+
 
 As NiFi user I want to store LineProtocol date into multiple environments
  - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
@@ -93,7 +93,7 @@ As NiFi user I want to store LineProtocol date into multiple environments
 
 As NiFi user I want to put my data (complex json structure) to
 InfluxDB in order to work with time series.
-  
+
 * AC1: Count twitter messages, grouping by keywords and languages
 
 </value>
@@ -106,11 +106,11 @@ InfluxDB in order to work with time series.
         <style name="font-size">12px</style>
       </styles>
       <value>Demo 2 User Story:
-  
+
 
 As NiFi user I want to reliably monitor multiple environments
 and be able to write data selectively.
-  
+
 * AC1: Partition and route metrics data using NiFi "Record Path language"
    by type of measurement (name of container)
 </value>
@@ -123,11 +123,11 @@ and be able to write data selectively.
         <style name="font-size">12px</style>
       </styles>
       <value>Demo 4 User Story:
-   
 
-As NiFi user I want to expose data from InfluxDB 2.0 on the particular 
+
+As NiFi user I want to expose data from InfluxDB 2.0 on the particular
 HTTP endpoint.
-  
+
 * AC1: Exposing a result of static Flux Query as data for HTML widget
 * AC2: Transforming Flux Result to XML or JSON - remote API
  for server application</value>
@@ -223,7 +223,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -259,7 +259,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -295,7 +295,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -396,7 +396,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -443,7 +443,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -482,7 +482,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -518,7 +518,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -554,7 +554,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -590,7 +590,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -680,7 +680,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -770,7 +770,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -806,7 +806,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -840,25 +840,25 @@ HTTP endpoint.
           <style name="font-size">12px</style>
         </styles>
         <value>CSV:
-  
+
 curl -i -X GET -G http://localhost:8234 \
  --data-urlencode 'accept=csv'  \
  --data-urlencode 'query=from(bucket: "my-bucket")
  |&gt; range(start: 0) |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
  |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
  |&gt; limit(n:10, offset: 0)'
-  
+
 XML:
-  
+
 curl -i -X GET -G http://localhost:8234 \
  --data-urlencode 'accept=xml'  \
  --data-urlencode 'query=from(bucket: "my-bucket")
  |&gt; range(start: 0) |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
  |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
  |&gt; limit(n:10, offset: 0)'
-  
+
 JSON:
-  
+
 curl -i -X GET -G http://localhost:8234 \
  --data-urlencode 'accept=json'  \
  --data-urlencode 'query=from(bucket: "my-bucket")
@@ -874,7 +874,7 @@ curl -i -X GET -G http://localhost:8234 \
           <style name="font-size">14px</style>
         </styles>
         <value>Display last Tweet about Bitcoin or Ethereum:
-  
+
 - curl -i -X GET http://localhost:8123
 - browser http://localhost:8123</value>
       </label>
@@ -1219,7 +1219,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-http-context-map-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1239,7 +1239,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1323,7 +1323,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-http-context-map-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1343,7 +1343,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1380,7 +1380,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1479,7 +1479,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1552,7 +1552,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1709,7 +1709,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1761,7 +1761,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-social-media-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2105,7 +2105,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>5 sec</schedulingPeriod>
@@ -2170,7 +2170,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2222,7 +2222,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-kafka-1-0-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2324,7 +2324,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-update-attribute-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2482,7 +2482,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2747,7 +2747,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2873,7 +2873,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2918,7 +2918,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-registry-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2965,7 +2965,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3018,7 +3018,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3166,7 +3166,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3289,7 +3289,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3341,7 +3341,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3630,7 +3630,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>false</enabled>
         <property>
@@ -3703,7 +3703,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3759,7 +3759,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.0</version>
+          <version>1.19.1</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3861,7 +3861,7 @@ curl -i -X GET -G http://localhost:8234 \
       <bundle>
         <group>org.apache.nifi</group>
         <artifact>nifi-record-serialization-services-nar</artifact>
-        <version>1.19.0</version>
+        <version>1.19.1</version>
       </bundle>
       <enabled>true</enabled>
       <property>
