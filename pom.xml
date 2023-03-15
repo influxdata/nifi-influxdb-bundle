@@ -105,7 +105,7 @@
 
         <nifi.version>1.19.1</nifi.version>
 
-        <plugin.surefire.version>2.22.2</plugin.surefire.version>
+        <plugin.surefire.version>3.0.0</plugin.surefire.version>
         <plugin.jacoco.version>0.8.8</plugin.jacoco.version>
     </properties>
 
