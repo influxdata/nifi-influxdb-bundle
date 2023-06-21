@@ -140,8 +140,7 @@ jobs:
 
   end-to-end:
     machine:
-      image: *default-machine-executor
-    resource_class: large
+      image: ubuntu-2204:2023.04.2
     steps:
       - checkout
       - install-jdk:
