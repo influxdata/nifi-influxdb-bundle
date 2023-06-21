@@ -96,7 +96,7 @@ jobs:
 
   tests-java:
     machine:
-      image: &default-machine-executor ubuntu-2004:202101-01
+      image: &default-machine-executor ubuntu-2204:2023.04.2
     parameters:
       jdk-version:
         type: string
@@ -140,7 +140,7 @@ jobs:
 
   end-to-end:
     machine:
-      image: ubuntu-2204:2023.04.2
+      image: *default-machine-executor
     steps:
       - checkout
       - install-jdk:
