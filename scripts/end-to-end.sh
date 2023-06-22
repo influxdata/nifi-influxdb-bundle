@@ -18,22 +18,6 @@
 #!/usr/bin/env bash
 
 echo
-echo "Querying data by 'select count(tweet_id) from tweets'"
-echo
-
-twitter=`(curl -s 'http://localhost:8086/query' --data-urlencode "db=twitter_demo" --data-urlencode "q=select count(tweet_id) from tweets")`
-
-echo "> result:" ${twitter}
-
-echo ${twitter} | jq '.results[0].series[0].values[0][1] > 0' | grep -q 'true'
-if [[ $? -eq 0 ]]; then
-    echo "> check: success"
-else
-    echo "> check: fail..."  `(echo ${twitter} | jq '.results[0].series[0].values[0][1]')`
-    exit 1
-fi
-
-echo
 echo "Querying data by 'select count(pid) from docker_container_status'"
 echo
 
@@ -62,37 +46,6 @@ if [[ $? -eq 0 ]]; then
     echo "> check: success"
 else
     echo "> check: fail..."  `(echo ${nifi_logs} | jq '.results[0].series[0].values[0][1]')`
-    exit 1
-fi
-
-echo
-echo "Querying from InfluxDB 2.0 data by:"
-echo "  from(bucket: \"my-bucket\")"
-echo "      |> range(start: 0)"
-echo "      |> filter(fn: (r) => r._measurement == \"tweets\")"
-echo "      |> filter(fn: (r) => r._field == \"text\")"
-echo "      |> keep(columns: [\"_field\", \"_value\"])"
-echo "      |> count()"
-echo
-
-twitter_v2=`(curl -s POST \
-  http://localhost:9999/api/v2/query?org=my-org \
-  -H 'Authorization: Token my-token' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "query": "from(bucket:\"my-bucket\") |> range(start: 0) |> filter(fn: (r) => r._measurement == \"tweets\") |> filter(fn: (r) => r._field == \"text\") |> keep(columns: [\"_field\", \"_value\"]) |> count()",
-    "dialect" : {
-        "header": false,
-        "annotations": []
-    }
-}')`
-
-twitter_v2_count=`(echo ${twitter_v2} | head | cut -d ',' -f 5 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')`
-echo ${twitter_v2_count}
-if [[ ${twitter_v2_count} -gt 0 ]]; then
-    echo "> check: success"
-else
-    echo "> check: fail..."  ${twitter_v2_count}
     exit 1
 fi
 
@@ -155,19 +108,6 @@ if [[ ${nifi_logs_v2_count} -gt 0 ]]; then
     echo "> check: success"
 else
     echo "> check: fail..."  ${nifi_logs_v2}
-    exit 1
-fi
-
-echo
-echo "Get last Tweet about Bitcoin or Ethereum by:"
-echo "    curl -i -X GET http://localhost:8123"
-echo
-GetInfluxDatabase_2=$(curl -L http://localhost:8123 -o /dev/null -w '%{http_code}\n' -s)
-
-if [[ ${GetInfluxDatabase_2} == 200 ]]; then
-    echo "> check: success"
-else
-    echo "> check: fail..."  "${GetInfluxDatabase_2}"
     exit 1
 fi
 

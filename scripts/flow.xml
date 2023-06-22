@@ -17,7 +17,7 @@
     limitations under the License.
 
 -->
-<flowController encoding-version="1.3">
+<flowController encoding-version="1.4">
   <maxTimerDrivenThreadCount>10</maxTimerDrivenThreadCount>
   <maxEventDrivenThreadCount>5</maxEventDrivenThreadCount>
   <registries/>
@@ -33,9 +33,42 @@
     <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
     <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
     <label>
+      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
+      <zIndex>0</zIndex>
+      <position x="1152.0" y="-408.0"/>
+      <size height="170.00000762939453" width="416.8000030517578"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 2 User Story:
+
+
+As NiFi user I want to store LineProtocol date into multiple environments
+ - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
+    </label>
+    <label>
+      <id>280850da-016c-1000-bb1f-063422ae1933</id>
+      <zIndex>0</zIndex>
+      <position x="1152.0" y="-216.0"/>
+      <size height="172.25083923339844" width="415.77381896972656"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Demo 3 User Story:
+
+
+As NiFi user I want to expose data from InfluxDB 2.0 on the particular
+HTTP endpoint.
+
+* AC1: Exposing a result of static Flux Query as data for HTML widget
+* AC2: Transforming Flux Result to XML or JSON - remote API
+ for server application</value>
+    </label>
+    <label>
       <id>684e0d7d-0163-1000-c97e-dee22f4f649c</id>
+      <zIndex>0</zIndex>
       <position x="268.0609696699687" y="-600.9202250695664"/>
-      <size height="761.6532745361328" width="473.57989501953125"/>
+      <size height="560.0" width="472.0"/>
       <styles>
         <style name="font-size">14px</style>
       </styles>
@@ -69,43 +102,14 @@ NiFi flow produced by Telegraf.
 Set as Line Protocol.</value>
     </label>
     <label>
-      <id>01631000-efa4-184f-e581-a743d2fe812a</id>
-      <position x="1149.66674359575" y="-208.8424884087283"/>
+      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
+      <zIndex>0</zIndex>
+      <position x="1152.0" y="-600.0"/>
       <size height="170.00000762939453" width="416.8000030517578"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 3 User Story:
-
-
-As NiFi user I want to store LineProtocol date into multiple environments
- - InfluxDB, InfluxDB 2.0, Kafka, ...</value>
-    </label>
-    <label>
-      <id>684fe748-0163-1000-5da8-bd3ba0648cea</id>
-      <position x="1145.261012394578" y="-596.720167086168"/>
-      <size height="163.47393798828125" width="414.004150390625"/>
       <styles>
         <style name="font-size">12px</style>
       </styles>
       <value>Demo 1 User Story:
-
-
-As NiFi user I want to put my data (complex json structure) to
-InfluxDB in order to work with time series.
-
-* AC1: Count twitter messages, grouping by keywords and languages
-
-</value>
-    </label>
-    <label>
-      <id>684fefa4-0163-1000-542e-9343b5fa4f7f</id>
-      <position x="1145.4612992598124" y="-407.1201983696658"/>
-      <size height="170.00000762939453" width="416.8000030517578"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 2 User Story:
 
 
 As NiFi user I want to reliably monitor multiple environments
@@ -115,27 +119,10 @@ and be able to write data selectively.
    by type of measurement (name of container)
 </value>
     </label>
-    <label>
-      <id>280850da-016c-1000-bb1f-063422ae1933</id>
-      <position x="1149.274867625133" y="-17.059789260861407"/>
-      <size height="172.25083923339844" width="415.77381896972656"/>
-      <styles>
-        <style name="font-size">12px</style>
-      </styles>
-      <value>Demo 4 User Story:
-
-
-As NiFi user I want to expose data from InfluxDB 2.0 on the particular
-HTTP endpoint.
-
-* AC1: Exposing a result of static Flux Query as data for HTML widget
-* AC2: Transforming Flux Result to XML or JSON - remote API
- for server application</value>
-    </label>
     <processGroup>
       <id>2807fffd-016c-1000-ff4c-eb46f296840c</id>
       <name>Exposing InfluxDB 2.0</name>
-      <position x="751.3459817261955" y="-15.869125218553108"/>
+      <position x="752.0" y="-216.0"/>
       <comment/>
       <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
       <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
@@ -164,6 +151,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>influxdb-service</name>
           <value>fe4e410d-016b-1000-f0e5-c2e5647eb06b</value>
@@ -223,7 +213,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -235,6 +225,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>HTTP Status Code</name>
           <value>500</value>
@@ -259,7 +252,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -271,6 +264,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>record-reader</name>
           <value>016c1017-7c72-1ddd-67df-755e87a446bc</value>
@@ -295,7 +291,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -307,6 +303,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>attribute-list</name>
           <value>influxdb.error.message</value>
@@ -354,6 +353,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>influxdb-service</name>
           <value>fe4e410d-016b-1000-f0e5-c2e5647eb06b</value>
@@ -396,7 +398,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -408,6 +410,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>attribute-list</name>
           <value>influxdb.error.message</value>
@@ -443,7 +448,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -455,6 +460,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>Routing Strategy</name>
           <value>Route to Property name</value>
@@ -482,7 +490,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -494,6 +502,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>HTTP Status Code</name>
           <value>200</value>
@@ -518,7 +529,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -530,6 +541,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>record-reader</name>
           <value>016c1017-7c72-1ddd-67df-755e87a446bc</value>
@@ -554,7 +568,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -566,6 +580,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>HTTP Status Code</name>
           <value>500</value>
@@ -590,7 +607,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -602,6 +619,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>Listening Port</name>
           <value>8123</value>
@@ -611,6 +631,10 @@ HTTP endpoint.
         </property>
         <property>
           <name>SSL Context Service</name>
+        </property>
+        <property>
+          <name>HTTP Protocols</name>
+          <value>HTTP_1_1</value>
         </property>
         <property>
           <name>HTTP Context Map</name>
@@ -646,6 +670,10 @@ HTTP endpoint.
         <property>
           <name>Allow OPTIONS</name>
           <value>false</value>
+        </property>
+        <property>
+          <name>Maximum Threads</name>
+          <value>200</value>
         </property>
         <property>
           <name>Additional HTTP Methods</name>
@@ -680,7 +708,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -692,6 +720,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>Listening Port</name>
           <value>8234</value>
@@ -701,6 +732,10 @@ HTTP endpoint.
         </property>
         <property>
           <name>SSL Context Service</name>
+        </property>
+        <property>
+          <name>HTTP Protocols</name>
+          <value>HTTP_1_1</value>
         </property>
         <property>
           <name>HTTP Context Map</name>
@@ -738,6 +773,10 @@ HTTP endpoint.
           <value>false</value>
         </property>
         <property>
+          <name>Maximum Threads</name>
+          <value>200</value>
+        </property>
+        <property>
           <name>Additional HTTP Methods</name>
         </property>
         <property>
@@ -770,7 +809,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -782,6 +821,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>record-reader</name>
           <value>016c1017-7c72-1ddd-67df-755e87a446bc</value>
@@ -806,7 +848,7 @@ HTTP endpoint.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -818,6 +860,9 @@ HTTP endpoint.
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>HTTP Status Code</name>
           <value>200</value>
@@ -833,7 +878,21 @@ HTTP endpoint.
         <autoTerminatedRelationship>failure</autoTerminatedRelationship>
       </processor>
       <label>
+        <id>2d482d5d-016c-1000-847d-197f5090d957</id>
+        <zIndex>0</zIndex>
+        <position x="944.885437786372" y="73.15165956912938"/>
+        <size height="99.0" width="390.0"/>
+        <styles>
+          <style name="font-size">14px</style>
+        </styles>
+        <value>Display last Tweet about Bitcoin or Ethereum:
+
+- curl -i -X GET http://localhost:8123
+- browser http://localhost:8123</value>
+      </label>
+      <label>
         <id>2e0425e5-016c-1000-396e-9ec849acbcc8</id>
+        <zIndex>0</zIndex>
         <position x="2367.9879863725673" y="-105.71933163870858"/>
         <size height="392.00682067871094" width="465.29701232910156"/>
         <styles>
@@ -865,18 +924,6 @@ curl -i -X GET -G http://localhost:8234 \
  |&gt; range(start: 0) |&gt; filter(fn: (r) =&gt; r._measurement == "docker_container_status")
  |&gt; pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
  |&gt; limit(n:10, offset: 0)'</value>
-      </label>
-      <label>
-        <id>2d482d5d-016c-1000-847d-197f5090d957</id>
-        <position x="944.885437786372" y="73.15165956912938"/>
-        <size height="99.0" width="390.0"/>
-        <styles>
-          <style name="font-size">14px</style>
-        </styles>
-        <value>Display last Tweet about Bitcoin or Ethereum:
-
-- curl -i -X GET http://localhost:8123
-- browser http://localhost:8123</value>
       </label>
       <connection>
         <id>2e162b8d-016c-1000-ea24-6a925329588d</id>
@@ -1215,11 +1262,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>2dda9865-016c-1000-0bcd-057d362e91d9</id>
         <name>FluxQueryHttpContextMap</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.http.StandardHttpContextMap</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-http-context-map-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1235,11 +1283,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>2e22da0a-016c-1000-5173-6c8a70770bd9</id>
         <name>XMLRecordSetWriter</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.xml.XMLRecordSetWriter</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1319,11 +1368,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>2ccadaf3-016c-1000-3585-f572bed12b5f</id>
         <name>GetLastTweetHttpContextMap</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.http.StandardHttpContextMap</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-http-context-map-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1339,11 +1389,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>016c1017-7c72-1ddd-67df-755e87a446bc</id>
         <name>FluxQueryRecordReader</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.avro.AvroReader</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1376,11 +1427,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>2e23a967-016c-1000-f35f-9b5e5f528f69</id>
         <name>CSVRecordSetWriter</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.csv.CSVRecordSetWriter</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1475,11 +1527,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>016c1018-7c72-1ddd-4f59-fbfb102a85f8</id>
         <name>JsonRecordSetWriter</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.json.JsonRecordSetWriter</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1548,11 +1601,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>016c1005-7c72-1ddd-d1e6-2be2ded3ba26</id>
         <name>FluxQueryRecordSetWriter</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.avro.AvroRecordSetWriter</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1602,493 +1656,9 @@ curl -i -X GET -G http://localhost:8234 \
       </controllerService>
     </processGroup>
     <processGroup>
-      <id>f84fd79f-0162-1000-c9dc-9ef8abe709be</id>
-      <name>TwitterInfluxDBDemo</name>
-      <position x="750.2611569191332" y="-602.1202333945846"/>
-      <comment/>
-      <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
-      <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
-      <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
-      <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
-      <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
-      <processor>
-        <id>fe6407fc-016b-1000-9d2e-d21b9a02785a</id>
-        <name>PutInfluxDatabaseRecord_2</name>
-        <position x="485.59002685546875" y="-428.4388122558594"/>
-        <styles/>
-        <comment/>
-        <class>org.influxdata.nifi.processors.PutInfluxDatabaseRecord_2</class>
-        <bundle>
-          <group>org.influxdata.nifi</group>
-          <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0-SNAPSHOT</version>
-        </bundle>
-        <maxConcurrentTasks>1</maxConcurrentTasks>
-        <schedulingPeriod>0 sec</schedulingPeriod>
-        <penalizationPeriod>30 sec</penalizationPeriod>
-        <yieldPeriod>1 sec</yieldPeriod>
-        <bulletinLevel>WARN</bulletinLevel>
-        <lossTolerant>false</lossTolerant>
-        <scheduledState>RUNNING</scheduledState>
-        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-        <executionNode>ALL</executionNode>
-        <runDurationNanos>0</runDurationNanos>
-        <property>
-          <name>record-reader</name>
-          <value>d764d87d-0162-1000-f939-e92ae75435c5</value>
-        </property>
-        <property>
-          <name>influxdb-service</name>
-          <value>fe4e410d-016b-1000-f0e5-c2e5647eb06b</value>
-        </property>
-        <property>
-          <name>influxdb-bucket</name>
-          <value>my-bucket</value>
-        </property>
-        <property>
-          <name>influxdb-org</name>
-          <value>my-org</value>
-        </property>
-        <property>
-          <name>influxdb-enable-gzip</name>
-          <value>false</value>
-        </property>
-        <property>
-          <name>influxdb-log-level</name>
-          <value>NONE</value>
-        </property>
-        <property>
-          <name>influxdb-measurement</name>
-          <value>tweets</value>
-        </property>
-        <property>
-          <name>influxdb-tags</name>
-          <value>lang,keyword,user_verified</value>
-        </property>
-        <property>
-          <name>influxdb-tags-field-behavior</name>
-          <value>IGNORE</value>
-        </property>
-        <property>
-          <name>influxdb-fields</name>
-          <value>tweet_id,retweet_count,followers_count,friends_count,favourites_count,screen_name,text</value>
-        </property>
-        <property>
-          <name>influxdb-fields-field-behavior</name>
-          <value>IGNORE</value>
-        </property>
-        <property>
-          <name>influxdb-timestamp-field</name>
-          <value>timestamp</value>
-        </property>
-        <property>
-          <name>influxdb-write-precision</name>
-          <value>MS</value>
-        </property>
-        <property>
-          <name>influxdb-complex-field-behavior</name>
-          <value>TEXT</value>
-        </property>
-        <property>
-          <name>influxdb-null-behavior</name>
-          <value>IGNORE</value>
-        </property>
-        <property>
-          <name>influxdb-max-records-size</name>
-          <value>1 MB</value>
-        </property>
-        <autoTerminatedRelationship>success</autoTerminatedRelationship>
-      </processor>
-      <processor>
-        <id>e1be6989-0162-1000-597d-9480ca71dedb</id>
-        <name>ErrorLog</name>
-        <position x="241.98269856714364" y="-120.27340633495828"/>
-        <styles/>
-        <comment/>
-        <class>org.apache.nifi.processors.standard.PutFile</class>
-        <bundle>
-          <group>org.apache.nifi</group>
-          <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
-        </bundle>
-        <maxConcurrentTasks>1</maxConcurrentTasks>
-        <schedulingPeriod>0 sec</schedulingPeriod>
-        <penalizationPeriod>30 sec</penalizationPeriod>
-        <yieldPeriod>1 sec</yieldPeriod>
-        <bulletinLevel>WARN</bulletinLevel>
-        <lossTolerant>false</lossTolerant>
-        <scheduledState>RUNNING</scheduledState>
-        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-        <executionNode>ALL</executionNode>
-        <runDurationNanos>0</runDurationNanos>
-        <property>
-          <name>Directory</name>
-          <value>/opt/nifi/influx-err</value>
-        </property>
-        <property>
-          <name>Conflict Resolution Strategy</name>
-          <value>fail</value>
-        </property>
-        <property>
-          <name>Create Missing Directories</name>
-          <value>true</value>
-        </property>
-        <property>
-          <name>Maximum File Count</name>
-        </property>
-        <property>
-          <name>Last Modified Time</name>
-        </property>
-        <property>
-          <name>Permissions</name>
-        </property>
-        <property>
-          <name>Owner</name>
-        </property>
-        <property>
-          <name>Group</name>
-        </property>
-        <autoTerminatedRelationship>success</autoTerminatedRelationship>
-        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
-      </processor>
-      <processor>
-        <id>d36329b4-0162-1000-eaf4-d9600c44b359</id>
-        <name>GetTwitter</name>
-        <position x="238.38272369159415" y="-729.8122579621038"/>
-        <styles/>
-        <comment/>
-        <class>org.apache.nifi.processors.twitter.GetTwitter</class>
-        <bundle>
-          <group>org.apache.nifi</group>
-          <artifact>nifi-social-media-nar</artifact>
-          <version>1.19.1</version>
-        </bundle>
-        <maxConcurrentTasks>1</maxConcurrentTasks>
-        <schedulingPeriod>0 sec</schedulingPeriod>
-        <penalizationPeriod>30 sec</penalizationPeriod>
-        <yieldPeriod>1 sec</yieldPeriod>
-        <bulletinLevel>WARN</bulletinLevel>
-        <lossTolerant>false</lossTolerant>
-        <scheduledState>RUNNING</scheduledState>
-        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-        <executionNode>ALL</executionNode>
-        <runDurationNanos>0</runDurationNanos>
-        <property>
-          <name>Twitter Endpoint</name>
-          <value>Filter Endpoint</value>
-        </property>
-        <property>
-          <name>max-client-error-retries</name>
-          <value>5</value>
-        </property>
-        <property>
-          <name>Consumer Key</name>
-          <value>enc{c4a1a6c59b83e5fccc9e15a458a34e92c6ba5134ef377d9bbf817c68a2779611bc6a187b1ee7d0c4c706fc63f76ba9318d65485b15ec7b7840}</value>
-        </property>
-        <property>
-          <name>Consumer Secret</name>
-          <value>enc{37d1c03e90e79f95788061edd37335cdbe745bcc85b3069346ef4e48a71375b7ca303ef24aefb409821d34309339ae9c04ab7883ae578378977c06ac2a7958a442a0eb5a06b69cb86d48756cbc8dc6895e7c}</value>
-        </property>
-        <property>
-          <name>Access Token</name>
-          <value>enc{91cbac827d9222ae244c0d0fc43a3001bc5974d2c688bc3df90951b9eb4046292783af79ff608300008e4f92e741a052eaa9a1ef422b3ab5fefef0b675fb300cc0aee7f5f90badbf0fcba94ee77e060f7249}</value>
-        </property>
-        <property>
-          <name>Access Token Secret</name>
-          <value>enc{093e9ad5a04e837633ae0cb9d888fc753b9d991eacac4c2a5ddf17528c64e2cfc1306e11d5e85dde5a0783824aeb1018190fde144f7ef560d680fd061f18745e75f009e557bacc6dd64d82f4d1}</value>
-        </property>
-        <property>
-          <name>Languages</name>
-        </property>
-        <property>
-          <name>Terms to Filter On</name>
-          <value>bitcoin,$btc,ethereum,$eth</value>
-        </property>
-        <property>
-          <name>IDs to Follow</name>
-        </property>
-        <property>
-          <name>Locations to Filter On</name>
-        </property>
-      </processor>
-      <processor>
-        <id>e1bafe5a-0162-1000-c7cb-1ddcffb38604</id>
-        <name>PutInfluxDatabaseRecord</name>
-        <position x="-3.843908183344638" y="-427.39597780331155"/>
-        <styles/>
-        <comment/>
-        <class>org.influxdata.nifi.processors.PutInfluxDatabaseRecord</class>
-        <bundle>
-          <group>org.influxdata.nifi</group>
-          <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0-SNAPSHOT</version>
-        </bundle>
-        <maxConcurrentTasks>10</maxConcurrentTasks>
-        <schedulingPeriod>0 sec</schedulingPeriod>
-        <penalizationPeriod>30 sec</penalizationPeriod>
-        <yieldPeriod>1 sec</yieldPeriod>
-        <bulletinLevel>WARN</bulletinLevel>
-        <lossTolerant>false</lossTolerant>
-        <scheduledState>RUNNING</scheduledState>
-        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-        <executionNode>ALL</executionNode>
-        <runDurationNanos>0</runDurationNanos>
-        <property>
-          <name>record-reader</name>
-          <value>d764d87d-0162-1000-f939-e92ae75435c5</value>
-        </property>
-        <property>
-          <name>influxdb-service</name>
-          <value>392526d8-0163-1000-d02c-90f9ba5c41b0</value>
-        </property>
-        <property>
-          <name>influxdb-dbname</name>
-          <value>twitter_demo</value>
-        </property>
-        <property>
-          <name>influxdb-enable-gzip</name>
-          <value>false</value>
-        </property>
-        <property>
-          <name>influxdb-log-level</name>
-          <value>NONE</value>
-        </property>
-        <property>
-          <name>influxdb-consistency-level</name>
-          <value>ONE</value>
-        </property>
-        <property>
-          <name>influxdb-retention-policy</name>
-          <value>autogen</value>
-        </property>
-        <property>
-          <name>influxdb-enable-batch</name>
-          <value>false</value>
-        </property>
-        <property>
-          <name>influxdb-batch-flush-duration</name>
-          <value>1000 ms</value>
-        </property>
-        <property>
-          <name>influxdb-batch-actions</name>
-          <value>1000</value>
-        </property>
-        <property>
-          <name>influxdb-batch-jitter-duration</name>
-          <value>0 ms</value>
-        </property>
-        <property>
-          <name>influxdb-batch-buffer-limit</name>
-          <value>10000</value>
-        </property>
-        <property>
-          <name>influxdb-measurement</name>
-          <value>tweets</value>
-        </property>
-        <property>
-          <name>influxdb-tags</name>
-          <value>lang,keyword,user_verified</value>
-        </property>
-        <property>
-          <name>influxdb-tags-field-behavior</name>
-          <value>IGNORE</value>
-        </property>
-        <property>
-          <name>influxdb-fields</name>
-          <value>tweet_id,retweet_count,followers_count,friends_count,favourites_count,screen_name,text</value>
-        </property>
-        <property>
-          <name>influxdb-fields-field-behavior</name>
-          <value>IGNORE</value>
-        </property>
-        <property>
-          <name>influxdb-timestamp-field</name>
-          <value>timestamp</value>
-        </property>
-        <property>
-          <name>influxdb-timestamp-precision</name>
-          <value>MILLISECONDS</value>
-        </property>
-        <property>
-          <name>influxdb-complex-field-behavior</name>
-          <value>TEXT</value>
-        </property>
-        <property>
-          <name>influxdb-null-behavior</name>
-          <value>IGNORE</value>
-        </property>
-        <property>
-          <name>influxdb-max-records-size</name>
-          <value>1 MB</value>
-        </property>
-        <autoTerminatedRelationship>success</autoTerminatedRelationship>
-      </processor>
-      <connection>
-        <id>e1c02369-0162-1000-32d4-3703bdbf1397</id>
-        <name/>
-        <bendPoints>
-          <bendPoint x="272.826904296875" y="-497.4765625"/>
-        </bendPoints>
-        <labelIndex>0</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>d36329b4-0162-1000-eaf4-d9600c44b359</sourceId>
-        <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>e1bafe5a-0162-1000-c7cb-1ddcffb38604</destinationId>
-        <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>success</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>fe679375-016b-1000-28bd-f31894f138db</id>
-        <name/>
-        <bendPoints>
-          <bendPoint x="911.577880859375" y="-331.0699157714844"/>
-          <bendPoint x="843.1053466796875" y="-213.52272033691406"/>
-        </bendPoints>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>fe6407fc-016b-1000-9d2e-d21b9a02785a</sourceId>
-        <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>fe6407fc-016b-1000-9d2e-d21b9a02785a</destinationId>
-        <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>retry</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>0694d941-0163-1000-c99f-90d011ee5171</id>
-        <name/>
-        <bendPoints>
-          <bendPoint x="-45.18326365209464" y="-295.41502077206155"/>
-          <bendPoint x="-3.167753569849765" y="-210.5517242632725"/>
-        </bendPoints>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>e1bafe5a-0162-1000-c7cb-1ddcffb38604</sourceId>
-        <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>e1bafe5a-0162-1000-c7cb-1ddcffb38604</destinationId>
-        <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>retry</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>fe671c1f-016b-1000-7cb5-655988797497</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>d36329b4-0162-1000-eaf4-d9600c44b359</sourceId>
-        <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>fe6407fc-016b-1000-9d2e-d21b9a02785a</destinationId>
-        <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>success</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>fe66e125-016b-1000-293c-656cb891e02c</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>e1bafe5a-0162-1000-c7cb-1ddcffb38604</sourceId>
-        <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>e1be6989-0162-1000-597d-9480ca71dedb</destinationId>
-        <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <connection>
-        <id>fe670720-016b-1000-34e0-5248caa06ff5</id>
-        <name/>
-        <bendPoints/>
-        <labelIndex>1</labelIndex>
-        <zIndex>0</zIndex>
-        <sourceId>fe6407fc-016b-1000-9d2e-d21b9a02785a</sourceId>
-        <sourceGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</sourceGroupId>
-        <sourceType>PROCESSOR</sourceType>
-        <destinationId>e1be6989-0162-1000-597d-9480ca71dedb</destinationId>
-        <destinationGroupId>f84fd79f-0162-1000-c9dc-9ef8abe709be</destinationGroupId>
-        <destinationType>PROCESSOR</destinationType>
-        <relationship>failure</relationship>
-        <maxWorkQueueSize>10000</maxWorkQueueSize>
-        <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
-        <flowFileExpiration>0 sec</flowFileExpiration>
-        <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-        <partitioningAttribute/>
-        <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-      </connection>
-      <controllerService>
-        <id>392526d8-0163-1000-d02c-90f9ba5c41b0</id>
-        <name>TwitterInfluxDBService</name>
-        <comment/>
-        <class>org.influxdata.nifi.services.StandardInfluxDatabaseService</class>
-        <bundle>
-          <group>org.influxdata.nifi</group>
-          <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0-SNAPSHOT</version>
-        </bundle>
-        <enabled>true</enabled>
-        <property>
-          <name>inluxdb-ssl</name>
-        </property>
-        <property>
-          <name>inluxdb-ssl-auth</name>
-          <value>REQUIRED</value>
-        </property>
-        <property>
-          <name>influxdb-url</name>
-          <value>http://influxdb:8086</value>
-        </property>
-        <property>
-          <name>influxdb-connection-timeout</name>
-          <value>0 seconds</value>
-        </property>
-        <property>
-          <name>influxdb-username</name>
-        </property>
-        <property>
-          <name>influxdb-password</name>
-        </property>
-      </controllerService>
-    </processGroup>
-    <processGroup>
       <id>0d3a59b3-016b-1000-3219-73ec601dca9c</id>
       <name>KafkaDemo</name>
-      <position x="751.6052856445312" y="-211.1091766357422"/>
+      <position x="752.0" y="-408.0"/>
       <comment/>
       <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
       <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
@@ -2105,7 +1675,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>5 sec</schedulingPeriod>
@@ -2117,6 +1687,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>tail-mode</name>
           <value>Single file</value>
@@ -2159,6 +1732,17 @@ curl -i -X GET -G http://localhost:8234 \
           <name>reread-on-nul</name>
           <value>false</value>
         </property>
+        <property>
+          <name>Line Start Pattern</name>
+        </property>
+        <property>
+          <name>pre-allocated-buffer-size</name>
+          <value>65536 B</value>
+        </property>
+        <property>
+          <name>Max Buffer Size</name>
+          <value>64 KB</value>
+        </property>
       </processor>
       <processor>
         <id>0d7ad789-016b-1000-952f-d20e18a0390b</id>
@@ -2170,7 +1754,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2182,6 +1766,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>Directory</name>
           <value>/opt/nifi/influx-err</value>
@@ -2222,7 +1809,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-kafka-1-0-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2234,6 +1821,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>bootstrap.servers</name>
           <value>kafka:9092</value>
@@ -2244,9 +1834,6 @@ curl -i -X GET -G http://localhost:8234 \
         </property>
         <property>
           <name>sasl.kerberos.service.name</name>
-        </property>
-        <property>
-          <name>kerberos-credentials-service</name>
         </property>
         <property>
           <name>sasl.kerberos.principal</name>
@@ -2324,7 +1911,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-update-attribute-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2336,6 +1923,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>Delete Attributes Expression</name>
         </property>
@@ -2377,6 +1967,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>influxdb-dbname</name>
           <value>kafka_influxdb_demo</value>
@@ -2414,6 +2007,9 @@ curl -i -X GET -G http://localhost:8234 \
           <name>influxdb-max-records-size</name>
           <value>1 MB</value>
         </property>
+        <property>
+          <name>influxdb-client-type</name>
+        </property>
         <autoTerminatedRelationship>success</autoTerminatedRelationship>
       </processor>
       <processor>
@@ -2438,6 +2034,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>influxdb-service</name>
           <value>fe4e410d-016b-1000-f0e5-c2e5647eb06b</value>
@@ -2482,7 +2081,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2494,6 +2093,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>record-reader</name>
           <value>1bb1d190-8746-3f5b-c093-edce7fa003d3</value>
@@ -2743,11 +2345,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>e1d48f9f-ef95-3ac5-ada4-eaf3b250ff7c</id>
         <name>JsonRecordSetWriter</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.json.JsonRecordSetWriter</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2817,6 +2420,7 @@ curl -i -X GET -G http://localhost:8234 \
         <id>99933468-5fbd-1c2b-19a4-dd742b4530a2</id>
         <name>InfluxLineProtocolRecordSetWriter</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.influxdata.nifi.serialization.InfluxLineProtocolRecordSetWriter</class>
         <bundle>
           <group>org.influxdata.nifi</group>
@@ -2869,11 +2473,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>1bb1d190-8746-3f5b-c093-edce7fa003d3</id>
         <name>GrokReader</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.grok.GrokReader</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2914,11 +2519,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>01fe7c27-dec5-320d-fcb4-f913797de2f8</id>
         <name>AvroSchemaRegistry</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.schemaregistry.services.AvroSchemaRegistry</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-registry-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2948,7 +2554,7 @@ curl -i -X GET -G http://localhost:8234 \
     <processGroup>
       <id>4e5add98-0163-1000-37c6-a81f1b8d947e</id>
       <name>TelegrafDemo</name>
-      <position x="751.4609832763672" y="-406.7202682495117"/>
+      <position x="752.0" y="-600.0"/>
       <comment/>
       <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
       <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
@@ -2965,7 +2571,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2977,6 +2583,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>Log Level</name>
           <value>info</value>
@@ -3000,6 +2609,14 @@ curl -i -X GET -G http://localhost:8234 \
           <name>attributes-to-ignore-regex</name>
         </property>
         <property>
+          <name>Log FlowFile Properties</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>Output Format</name>
+          <value>Line per Attribute</value>
+        </property>
+        <property>
           <name>Log prefix</name>
         </property>
         <property>
@@ -3018,7 +2635,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3030,6 +2647,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>record-reader</name>
           <value>4e5e71b8-0163-1000-1b27-632f18180d23</value>
@@ -3066,6 +2686,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>record-reader</name>
           <value>4e5e71b8-0163-1000-1b27-632f18180d23</value>
@@ -3166,7 +2789,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3178,6 +2801,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>Routing Strategy</name>
           <value>Route to Property name</value>
@@ -3213,6 +2839,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>record-reader</name>
           <value>4e5e71b8-0163-1000-1b27-632f18180d23</value>
@@ -3289,7 +2918,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3301,6 +2930,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>Directory</name>
           <value>/opt/nifi/influx-err</value>
@@ -3341,7 +2973,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3353,6 +2985,9 @@ curl -i -X GET -G http://localhost:8234 \
         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
         <executionNode>ALL</executionNode>
         <runDurationNanos>0</runDurationNanos>
+        <retryCount>10</retryCount>
+        <backoffMechanism>PENALIZE_FLOWFILE</backoffMechanism>
+        <maxBackoffPeriod>10 mins</maxBackoffPeriod>
         <property>
           <name>Local Network Interface</name>
         </property>
@@ -3610,6 +3245,7 @@ curl -i -X GET -G http://localhost:8234 \
         <id>4e5d390f-0163-1000-cdc5-67622a91c9ab</id>
         <name>InfluxLineProtocolReader</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.influxdata.nifi.serialization.InfluxLineProtocolReader</class>
         <bundle>
           <group>org.influxdata.nifi</group>
@@ -3626,11 +3262,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>5e4bb7e4-0163-1000-c871-4f26729c7d2a</id>
         <name>JsonRecordSetWriter</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.json.JsonRecordSetWriter</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>false</enabled>
         <property>
@@ -3699,11 +3336,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>4e5c0c97-0163-1000-54a6-5c1fd2473b42</id>
         <name>AvroRecordSetWriter</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.avro.AvroRecordSetWriter</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3755,11 +3393,12 @@ curl -i -X GET -G http://localhost:8234 \
         <id>4e5e71b8-0163-1000-1b27-632f18180d23</id>
         <name>AvroReader</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.apache.nifi.avro.AvroReader</class>
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.19.1</version>
+          <version>1.22.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3792,6 +3431,7 @@ curl -i -X GET -G http://localhost:8234 \
         <id>4e5f049b-0163-1000-382d-fa0c6125d08d</id>
         <name>StandardInfluxDBService</name>
         <comment/>
+        <bulletinLevel>WARN</bulletinLevel>
         <class>org.influxdata.nifi.services.StandardInfluxDatabaseService</class>
         <bundle>
           <group>org.influxdata.nifi</group>
@@ -3820,12 +3460,16 @@ curl -i -X GET -G http://localhost:8234 \
         <property>
           <name>influxdb-password</name>
         </property>
+        <property>
+          <name>influxdb-client-type</name>
+        </property>
       </controllerService>
     </processGroup>
     <controllerService>
       <id>fe4e410d-016b-1000-f0e5-c2e5647eb06b</id>
       <name>StandardInfluxDatabaseService_2</name>
       <comment/>
+      <bulletinLevel>WARN</bulletinLevel>
       <class>org.influxdata.nifi.services.StandardInfluxDatabaseService_2</class>
       <bundle>
         <group>org.influxdata.nifi</group>
@@ -3850,18 +3494,22 @@ curl -i -X GET -G http://localhost:8234 \
       </property>
       <property>
         <name>influxdb-token</name>
-        <value>enc{18ba513d4bb10e04ddd058c507e57ed100bfeb5dce47844eecae980d5771265a6c1df18fd6c19424}</value>
+        <value>enc{70d94bcea3a6b782833e229824961758bac70f2eb8a9f134871d1f9489ac0814336e550b3e9b85d4}</value>
+      </property>
+      <property>
+        <name>influxdb-client-type</name>
       </property>
     </controllerService>
     <controllerService>
       <id>d764d87d-0162-1000-f939-e92ae75435c5</id>
       <name>TwitterJSONReader</name>
       <comment/>
+      <bulletinLevel>WARN</bulletinLevel>
       <class>org.apache.nifi.json.JsonPathReader</class>
       <bundle>
         <group>org.apache.nifi</group>
         <artifact>nifi-record-serialization-services-nar</artifact>
-        <version>1.19.1</version>
+        <version>1.22.0</version>
       </bundle>
       <enabled>true</enabled>
       <property>
@@ -4003,251 +3651,496 @@ curl -i -X GET -G http://localhost:8234 \
       </property>
     </controllerService>
     <template encoding-version="1.2">
-    <description/>
-    <id>1db98c35-40c6-4be8-82bb-695f1fc8fec6</id>
-    <name>Twitter</name>
-    <snippet>
+
+      <description/>
+
+      <id>1db98c35-40c6-4be8-82bb-695f1fc8fec6</id>
+
+      <name>Twitter</name>
+
+      <snippet>
+
         <connections>
-            <id>41467289-fb0e-3d07-0000-000000000000</id>
-            <parentGroupId>a002184c-7cce-3568-0000-000000000000</parentGroupId>
-            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
-            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
-            <destination>
-                <groupId>a002184c-7cce-3568-0000-000000000000</groupId>
-                <id>a8991a21-2983-3e20-0000-000000000000</id>
-                <type>PROCESSOR</type>
-            </destination>
-            <flowFileExpiration>0 sec</flowFileExpiration>
-            <labelIndex>1</labelIndex>
-            <name/>
-            <selectedRelationships>success</selectedRelationships>
-            <source>
-                <groupId>a002184c-7cce-3568-0000-000000000000</groupId>
-                <id>e0c6ebeb-b96c-33a4-0000-000000000000</id>
-                <type>PROCESSOR</type>
-            </source>
-            <zIndex>0</zIndex>
-        </connections>
-        <processors>
+
+          <id>41467289-fb0e-3d07-0000-000000000000</id>
+
+          <parentGroupId>a002184c-7cce-3568-0000-000000000000</parentGroupId>
+
+          <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+
+          <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+
+          <destination>
+
+            <groupId>a002184c-7cce-3568-0000-000000000000</groupId>
+
             <id>a8991a21-2983-3e20-0000-000000000000</id>
-            <parentGroupId>a002184c-7cce-3568-0000-000000000000</parentGroupId>
-            <position>
-                <x>691.6084365940947</x>
-                <y>0.0</y>
-            </position>
-            <bundle>
-                <artifact>nifi-standard-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.11.4</version>
-            </bundle>
-            <config>
-                <bulletinLevel>WARN</bulletinLevel>
-                <comments/>
-                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                <descriptors>
-                    <entry>
-                        <key>Group</key>
-                        <value>
-                            <name>Group</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Owner</key>
-                        <value>
-                            <name>Owner</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Create Missing Directories</key>
-                        <value>
-                            <name>Create Missing Directories</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Permissions</key>
-                        <value>
-                            <name>Permissions</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Maximum File Count</key>
-                        <value>
-                            <name>Maximum File Count</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Last Modified Time</key>
-                        <value>
-                            <name>Last Modified Time</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Directory</key>
-                        <value>
-                            <name>Directory</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Conflict Resolution Strategy</key>
-                        <value>
-                            <name>Conflict Resolution Strategy</name>
-                        </value>
-                    </entry>
-                </descriptors>
-                <executionNode>ALL</executionNode>
-                <lossTolerant>false</lossTolerant>
-                <penaltyDuration>30 sec</penaltyDuration>
-                <properties>
-                    <entry>
-                        <key>Group</key>
-                    </entry>
-                    <entry>
-                        <key>Owner</key>
-                    </entry>
-                    <entry>
-                        <key>Create Missing Directories</key>
-                        <value>true</value>
-                    </entry>
-                    <entry>
-                        <key>Permissions</key>
-                    </entry>
-                    <entry>
-                        <key>Maximum File Count</key>
-                    </entry>
-                    <entry>
-                        <key>Last Modified Time</key>
-                    </entry>
-                    <entry>
-                        <key>Directory</key>
-                        <value>/opt/nifi/put-err/</value>
-                    </entry>
-                    <entry>
-                        <key>Conflict Resolution Strategy</key>
-                        <value>replace</value>
-                    </entry>
-                </properties>
-                <runDurationMillis>0</runDurationMillis>
-                <schedulingPeriod>0 sec</schedulingPeriod>
-                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                <yieldDuration>1 sec</yieldDuration>
-            </config>
-            <deprecated>false</deprecated>
-            <name>PutFile</name>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>failure</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>success</name>
-            </relationships>
-            <restricted>true</restricted>
-            <state>RUNNING</state>
-            <style/>
-            <type>org.apache.nifi.processors.standard.PutFile</type>
-        </processors>
-        <processors>
+
+            <type>PROCESSOR</type>
+
+          </destination>
+
+          <flowFileExpiration>0 sec</flowFileExpiration>
+
+          <labelIndex>1</labelIndex>
+
+          <name/>
+
+          <selectedRelationships>success</selectedRelationships>
+
+          <source>
+
+            <groupId>a002184c-7cce-3568-0000-000000000000</groupId>
+
             <id>e0c6ebeb-b96c-33a4-0000-000000000000</id>
-            <parentGroupId>a002184c-7cce-3568-0000-000000000000</parentGroupId>
-            <position>
-                <x>0.0</x>
-                <y>0.9513284178629817</y>
-            </position>
-            <bundle>
-                <artifact>nifi-social-media-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.11.4</version>
-            </bundle>
-            <config>
-                <bulletinLevel>WARN</bulletinLevel>
-                <comments/>
-                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                <descriptors>
-                    <entry>
-                        <key>Consumer Key</key>
-                        <value>
-                            <name>Consumer Key</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Consumer Secret</key>
-                        <value>
-                            <name>Consumer Secret</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Languages</key>
-                        <value>
-                            <name>Languages</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>IDs to Follow</key>
-                        <value>
-                            <name>IDs to Follow</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Twitter Endpoint</key>
-                        <value>
-                            <name>Twitter Endpoint</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Locations to Filter On</key>
-                        <value>
-                            <name>Locations to Filter On</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Terms to Filter On</key>
-                        <value>
-                            <name>Terms to Filter On</name>
-                        </value>
-                    </entry>
-                </descriptors>
-                <executionNode>ALL</executionNode>
-                <lossTolerant>false</lossTolerant>
-                <penaltyDuration>30 sec</penaltyDuration>
-                <properties>
-                    <entry>
-                        <key>Languages</key>
-                    </entry>
-                    <entry>
-                        <key>IDs to Follow</key>
-                    </entry>
-                    <entry>
-                        <key>Twitter Endpoint</key>
-                        <value>Filter Endpoint</value>
-                    </entry>
-                    <entry>
-                        <key>Locations to Filter On</key>
-                    </entry>
-                    <entry>
-                        <key>Terms to Filter On</key>
-                        <value>nifi,hadoop,hortonworks,elasticsearch</value>
-                    </entry>
-                </properties>
-                <runDurationMillis>0</runDurationMillis>
-                <schedulingPeriod>0 sec</schedulingPeriod>
-                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                <yieldDuration>1 sec</yieldDuration>
-            </config>
-            <deprecated>false</deprecated>
-            <name>GetTwitter</name>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>success</name>
-            </relationships>
-            <restricted>false</restricted>
-            <state>RUNNING</state>
-            <style/>
-            <type>org.apache.nifi.processors.twitter.GetTwitter</type>
+
+            <type>PROCESSOR</type>
+
+          </source>
+
+          <zIndex>0</zIndex>
+
+        </connections>
+
+        <processors>
+
+          <id>a8991a21-2983-3e20-0000-000000000000</id>
+
+          <parentGroupId>a002184c-7cce-3568-0000-000000000000</parentGroupId>
+
+          <position>
+
+            <x>691.6084365940947</x>
+
+            <y>0.0</y>
+
+          </position>
+
+          <bundle>
+
+            <artifact>nifi-standard-nar</artifact>
+
+            <group>org.apache.nifi</group>
+
+            <version>1.11.4</version>
+
+          </bundle>
+
+          <config>
+
+            <bulletinLevel>WARN</bulletinLevel>
+
+            <comments/>
+
+            <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+
+            <descriptors>
+
+              <entry>
+
+                <key>Group</key>
+
+                <value>
+
+                  <name>Group</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Owner</key>
+
+                <value>
+
+                  <name>Owner</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Create Missing Directories</key>
+
+                <value>
+
+                  <name>Create Missing Directories</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Permissions</key>
+
+                <value>
+
+                  <name>Permissions</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Maximum File Count</key>
+
+                <value>
+
+                  <name>Maximum File Count</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Last Modified Time</key>
+
+                <value>
+
+                  <name>Last Modified Time</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Directory</key>
+
+                <value>
+
+                  <name>Directory</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Conflict Resolution Strategy</key>
+
+                <value>
+
+                  <name>Conflict Resolution Strategy</name>
+
+                </value>
+
+              </entry>
+
+            </descriptors>
+
+            <executionNode>ALL</executionNode>
+
+            <lossTolerant>false</lossTolerant>
+
+            <penaltyDuration>30 sec</penaltyDuration>
+
+            <properties>
+
+              <entry>
+
+                <key>Group</key>
+
+              </entry>
+
+              <entry>
+
+                <key>Owner</key>
+
+              </entry>
+
+              <entry>
+
+                <key>Create Missing Directories</key>
+
+                <value>true</value>
+
+              </entry>
+
+              <entry>
+
+                <key>Permissions</key>
+
+              </entry>
+
+              <entry>
+
+                <key>Maximum File Count</key>
+
+              </entry>
+
+              <entry>
+
+                <key>Last Modified Time</key>
+
+              </entry>
+
+              <entry>
+
+                <key>Directory</key>
+
+                <value>/opt/nifi/put-err/</value>
+
+              </entry>
+
+              <entry>
+
+                <key>Conflict Resolution Strategy</key>
+
+                <value>replace</value>
+
+              </entry>
+
+            </properties>
+
+            <runDurationMillis>0</runDurationMillis>
+
+            <schedulingPeriod>0 sec</schedulingPeriod>
+
+            <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+
+            <yieldDuration>1 sec</yieldDuration>
+
+          </config>
+
+          <deprecated>false</deprecated>
+
+          <name>PutFile</name>
+
+          <relationships>
+
+            <autoTerminate>true</autoTerminate>
+
+            <name>failure</name>
+
+          </relationships>
+
+          <relationships>
+
+            <autoTerminate>true</autoTerminate>
+
+            <name>success</name>
+
+          </relationships>
+
+          <restricted>true</restricted>
+
+          <state>RUNNING</state>
+
+          <style/>
+
+          <type>org.apache.nifi.processors.standard.PutFile</type>
+
         </processors>
-    </snippet>
-    <timestamp>04/17/2018 12:13:51 UTC</timestamp>
-</template>
+
+        <processors>
+
+          <id>e0c6ebeb-b96c-33a4-0000-000000000000</id>
+
+          <parentGroupId>a002184c-7cce-3568-0000-000000000000</parentGroupId>
+
+          <position>
+
+            <x>0.0</x>
+
+            <y>0.9513284178629817</y>
+
+          </position>
+
+          <bundle>
+
+            <artifact>nifi-social-media-nar</artifact>
+
+            <group>org.apache.nifi</group>
+
+            <version>1.11.4</version>
+
+          </bundle>
+
+          <config>
+
+            <bulletinLevel>WARN</bulletinLevel>
+
+            <comments/>
+
+            <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+
+            <descriptors>
+
+              <entry>
+
+                <key>Consumer Key</key>
+
+                <value>
+
+                  <name>Consumer Key</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Consumer Secret</key>
+
+                <value>
+
+                  <name>Consumer Secret</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Languages</key>
+
+                <value>
+
+                  <name>Languages</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>IDs to Follow</key>
+
+                <value>
+
+                  <name>IDs to Follow</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Twitter Endpoint</key>
+
+                <value>
+
+                  <name>Twitter Endpoint</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Locations to Filter On</key>
+
+                <value>
+
+                  <name>Locations to Filter On</name>
+
+                </value>
+
+              </entry>
+
+              <entry>
+
+                <key>Terms to Filter On</key>
+
+                <value>
+
+                  <name>Terms to Filter On</name>
+
+                </value>
+
+              </entry>
+
+            </descriptors>
+
+            <executionNode>ALL</executionNode>
+
+            <lossTolerant>false</lossTolerant>
+
+            <penaltyDuration>30 sec</penaltyDuration>
+
+            <properties>
+
+              <entry>
+
+                <key>Languages</key>
+
+              </entry>
+
+              <entry>
+
+                <key>IDs to Follow</key>
+
+              </entry>
+
+              <entry>
+
+                <key>Twitter Endpoint</key>
+
+                <value>Filter Endpoint</value>
+
+              </entry>
+
+              <entry>
+
+                <key>Locations to Filter On</key>
+
+              </entry>
+
+              <entry>
+
+                <key>Terms to Filter On</key>
+
+                <value>nifi,hadoop,hortonworks,elasticsearch</value>
+
+              </entry>
+
+            </properties>
+
+            <runDurationMillis>0</runDurationMillis>
+
+            <schedulingPeriod>0 sec</schedulingPeriod>
+
+            <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+
+            <yieldDuration>1 sec</yieldDuration>
+
+          </config>
+
+          <deprecated>false</deprecated>
+
+          <name>GetTwitter</name>
+
+          <relationships>
+
+            <autoTerminate>false</autoTerminate>
+
+            <name>success</name>
+
+          </relationships>
+
+          <restricted>false</restricted>
+
+          <state>RUNNING</state>
+
+          <style/>
+
+          <type>org.apache.nifi.processors.twitter.GetTwitter</type>
+
+        </processors>
+
+      </snippet>
+
+      <timestamp>04/17/2018 12:13:51 UTC</timestamp>
+
+    </template>
   </rootGroup>
   <controllerServices/>
   <reportingTasks/>
+  <parameterProviders/>
 </flowController>

@@ -61,7 +61,7 @@ The Nar compatibility matrix:
 
 | Nar Version                                                                                                                                                                        | NiFi Version |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
-| [nifi-influx-database-nar-1.25.0-SNAPSHOT.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.25.0-SNAPSHOT/nifi-influx-database-nar-1.25.0-SNAPSHOT.nar) | 1.19.1       |
+| [nifi-influx-database-nar-1.25.0-SNAPSHOT.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.25.0-SNAPSHOT/nifi-influx-database-nar-1.25.0-SNAPSHOT.nar) | 1.22.0       |
 | [nifi-influx-database-nar-1.24.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.24.0/nifi-influx-database-nar-1.24.0.nar)                            | 1.19.0       |
 | [nifi-influx-database-nar-1.23.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.23.0/nifi-influx-database-nar-1.23.0.nar)                            | 1.18.0       |
 | [nifi-influx-database-nar-1.22.0.nar](https://github.com/influxdata/nifi-influxdb-bundle/releases/download/v1.22/nifi-influx-database-nar-1.22.0.nar)                              | 1.17.0       |
@@ -382,126 +382,6 @@ The demo requires Docker Engine, GNU gzip and curl on classpath.
     ```
 3. Open Apache NiFi flow in browser: [http://localhost:8080/nifi/](http://localhost:8080/nifi/)
 4. Open Telegraf Dashboards in browser: [Twitter](http://localhost:8888/sources/0/dashboards/2), [NiFi Container](http://localhost:8888/sources/0/dashboards/1) or [NiFi Logs](http://localhost:8888/sources/0/dashboards/3)
-
-### Store complex JSON structure to InfluxDB
-
-As NiFi user we want to put data (complex json structure) to InfluxDB in order to work with time series.
-
-The demo reads data from Twitter in complex JSON format based on supplied keywords and writes them into InfluxDB.
-Data from Twitter are streamed into NiFi using built-in `org.apache.nifi.processors.twitter.GetTwitter` processor.
-
-#### NiFi flow
-
-<img src="assets/doc/demo1-flow.png" height="250px">
-
-#### GetTwitter processor configuration
-
-Select Twitter Filter Endpoint API, Auth keys and tokens, and fill keywords to be searched in Terms to Filter On
-field. To access the Twitter API you need authorization keys that can be obtained from
-[Twitter Apps](https://developer.twitter.com/en/apps).
-
->  Note, that the credentials embedded in demo may not work in shared environment, it is better to
-   generate new for testing.
-   
-<img src="assets/doc/demo1-gettwitter.png" height="250px"> 
-
-#### PutInfluxDatabaseRecord configuration  
-
-First we need to configure a new controller service called `TwitterJSONReader` that maps Tweets JSON
-into NiFi Records.
-
-##### TwitterJSONReader configuration
-
-<img src="assets/doc/demo1-twitter-reader.png" height="250px"> 
-
-Record schema is specified using Schema Text field. In this demo we use following Apache Avro scheme:
-
-```json
-{
-  "type": "record",
-  "name": "twitter_schema",
-  "namespace": "io.bonitoo.nifi",
-  "doc:" : "AVRO scheme for Tweets",
-  "fields": [
-    { "name": "id",   "type": "long" },
-    { "name": "text", "type": "string" },
-    { "name": "lang", "type": "string" },
-    { "name": "keyword", "type": "string" },
-    { "name": "retweet_count", "type": "int" },
-    { "name": "tweet_id", "type": "string" },
-    { "name": "followers_count", "type": "int" },
-    { "name": "screen_name", "type": "string" },
-    { "name": "friends_count", "type": "int" },
-    { "name": "favourites_count", "type": "int" },
-    { "name": "user_verified",  "type": "boolean" },
-    { "name": "timestamp", "type" : 
-        { "type" : "long", "logicalType" : "timestamp-millis" }
-    }
-  ]
-}
-```
-
-
-The mapping between NiFi Record fields and JSON is configured in dynamic properties.
-
-> `screen_name ->  $.user.screen_name`
-
-##### PutInfluxDatabaseRecord settings
-
-<img src="assets/doc/demo1-putinfuxdatabaserecord.png" height="250px"> 
-
-Next we set mapping between NiFi Record and InfluxDB measurement/tags/field/timestamp).
-
-- **Measurement** - `tweets`
-- **Fields** - record field values: `tweet_id`, `retweet_count`, `followers_count`, `friends_count`, `favourites_count`, `screen_name`, `text`
-- **Tags** - record field values: `lang,keyword`, `user_verified`
-- **Timestamp** - record field value: `timestamp`
-
-#### Result
-
-The InfluxDB has a database **twitter_demo** with measurement **tweets** and schema:
-
-##### Tags
-```bash
-SHOW TAG KEYS ON twitter_demo FROM tweets
-
-name: tweets
-tagKey
-------
-keyword
-lang
-user_verified
-```
-##### Fields
-```bash
-SHOW FIELD KEYS ON twitter_demo
-
-name: tweets
-fieldKey         fieldType
---------         ---------
-favourites_count integer
-followers_count  integer
-friends_count    integer
-retweet_count    integer
-screen_name      string
-text             string
-tweet_id         string
-```
-
-##### Content
-```bash
-select * from tweets
-
-name: tweets
-time                favourites_count followers_count friends_count keyword lang retweet_count screen_name     text
-----                ---------------- --------------- ------------- ------- ---- ------------- --------------- ----
-1550133996000000000 1651             304             699           truth   en   0             TheeSeanH       ... 
-1550133997000000000 10               12              66                    en   0             black_vadik     ...
-1550133998000000000 0                22              41            BITMEX  nl   0             100btcP         ...
-1550133998000000000 24078            1025            4894                  en   0             SolarCoinNews   ...
-1550133999000000000 12406            474             761                   en   0             Airdrop_BOMBER  ...
-...
-```
 
 ### Processing metrics in NiFI
 

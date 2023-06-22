@@ -27,6 +27,10 @@
 
 Replace all occurrence of `<version>1.17.0</version>` to `<version>1.18.0</version>`.
 
+#### 4. `scripts/nifi-restart.xml`
+
+Replace `DEFAULT_NIFI_VERSION="1.17.0"` to `DEFAULT_NIFI_VERSION="1.18.0"`.
+
 ### Update compatibility matrix to new version:
 
     | [nifi-influx-database-nar-1.24.0-SNAPSHOT.nar](...) | 1.18.0 |
