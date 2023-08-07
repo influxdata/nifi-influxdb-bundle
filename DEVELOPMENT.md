@@ -27,7 +27,7 @@
 
 Replace all occurrence of `<version>1.17.0</version>` to `<version>1.18.0</version>`.
 
-#### 4. `scripts/nifi-restart.xml`
+#### 4. `scripts/nifi-restart.sh`
 
 Replace `DEFAULT_NIFI_VERSION="1.17.0"` to `DEFAULT_NIFI_VERSION="1.18.0"`.
 

@@ -213,7 +213,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -252,7 +252,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -291,7 +291,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -398,7 +398,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -448,7 +448,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -490,7 +490,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -529,7 +529,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -568,7 +568,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -607,7 +607,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -708,7 +708,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -809,7 +809,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -848,7 +848,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1267,7 +1267,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-http-context-map-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1288,7 +1288,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1373,7 +1373,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-http-context-map-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1394,7 +1394,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1432,7 +1432,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1532,7 +1532,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1606,7 +1606,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -1675,7 +1675,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>5 sec</schedulingPeriod>
@@ -1754,7 +1754,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1809,7 +1809,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-kafka-1-0-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1911,7 +1911,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-update-attribute-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2081,7 +2081,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2350,7 +2350,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2478,7 +2478,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2524,7 +2524,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-registry-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2571,7 +2571,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2635,7 +2635,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2789,7 +2789,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2918,7 +2918,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2973,7 +2973,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-standard-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3267,7 +3267,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>false</enabled>
         <property>
@@ -3341,7 +3341,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3398,7 +3398,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.apache.nifi</group>
           <artifact>nifi-record-serialization-services-nar</artifact>
-          <version>1.22.0</version>
+          <version>1.23.0</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3509,7 +3509,7 @@ curl -i -X GET -G http://localhost:8234 \
       <bundle>
         <group>org.apache.nifi</group>
         <artifact>nifi-record-serialization-services-nar</artifact>
-        <version>1.22.0</version>
+        <version>1.23.0</version>
       </bundle>
       <enabled>true</enabled>
       <property>
