@@ -33,16 +33,11 @@ import org.apache.nifi.util.TestRunners;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 
 public abstract class AbstractTestStandardInfluxDatabaseService {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     protected StandardInfluxDatabaseService service;
     protected TestRunner testRunner;
@@ -73,8 +68,8 @@ public abstract class AbstractTestStandardInfluxDatabaseService {
         QueryResult result = influxDB.query(new Query("SHOW USERS", null));
         List<String> usersColumns = result.getResults().get(0).getSeries().get(0).getColumns();
 
-        Assert.assertTrue("Unexpected names of columns. Expected [user, admin] but current value is " + usersColumns,
-                usersColumns.get(0).equals("user") && usersColumns.get(1).equals("admin"));
+        Assertions.assertTrue(usersColumns.get(0).equals("user") && usersColumns.get(1).equals("admin"),
+                "Unexpected names of columns. Expected [user, admin] but current value is " + usersColumns);
     }
 
     public static class ServiceProcessor extends AbstractProcessor {

@@ -24,15 +24,15 @@ import org.apache.nifi.security.util.ClientAuth;
 import org.apache.nifi.ssl.SSLContextService;
 import org.apache.nifi.ssl.StandardSSLContextService;
 import org.influxdb.InfluxDB;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.when;
 
 public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStandardInfluxDatabaseService {
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
 
         setUp(() -> invocation -> Mockito.mock(InfluxDB.class));
@@ -76,7 +76,7 @@ public class TestStandardInfluxDatabaseServiceSettings extends AbstractTestStand
 		when(sslContextService.getKeyStorePassword()).thenReturn("changeme");
 		when(sslContextService.getKeyStoreType()).thenReturn(StandardSSLContextService.KEYSTORE_TYPE.getName());
 		when(sslContextService.isKeyStoreConfigured()).thenReturn(true);
-		
+
         testRunner.addControllerService("inluxdb-ssl", sslContextService);
         testRunner.enableControllerService(sslContextService);
 

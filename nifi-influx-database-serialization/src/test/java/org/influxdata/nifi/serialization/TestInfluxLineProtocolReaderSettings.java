@@ -17,8 +17,8 @@
 package org.influxdata.nifi.serialization;
 
 import org.apache.nifi.components.ValidationResult;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestInfluxLineProtocolReaderSettings extends AbstractTestInfluxLineProtocolReader {
 
@@ -35,7 +35,7 @@ public class TestInfluxLineProtocolReaderSettings extends AbstractTestInfluxLine
 
         ValidationResult result = testRunner.setProperty(readerFactory, InfluxLineProtocolReader.CHARSET, (String) null);
 
-        Assert.assertFalse(result.isValid());
+        Assertions.assertFalse(result.isValid());
     }
 
     @Test
@@ -45,6 +45,6 @@ public class TestInfluxLineProtocolReaderSettings extends AbstractTestInfluxLine
 
         ValidationResult result = testRunner.setProperty(readerFactory, InfluxLineProtocolReader.CHARSET, "not-valid");
 
-        Assert.assertFalse(result.isValid());
+        Assertions.assertFalse(result.isValid());
     }
 }

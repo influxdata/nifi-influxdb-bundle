@@ -23,8 +23,9 @@ import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1030,9 +1031,9 @@ public class TestInfluxLineProtocolParser {
 	{
 		InfluxLineProtocolParser parser = InfluxLineProtocolParser.parse("cpu value=1.0 1000000000");
 
-		Assert.assertNotNull(parser);
-		Assert.assertNotNull(parser.getTags());
-		Assert.assertTrue(parser.getTags().isEmpty());
+        Assertions.assertNotNull(parser);
+        Assertions.assertNotNull(parser.getTags());
+        Assertions.assertTrue(parser.getTags().isEmpty());
 	}
 
     @Test
@@ -1100,7 +1101,7 @@ public class TestInfluxLineProtocolParser {
 
         private void validate(@NonNull final String... lineProtocols) {
 
-            Assert.assertNotNull(lineProtocols);
+            Assertions.assertNotNull(lineProtocols);
 
             Stream.of(lineProtocols).forEach(lineProtocol -> {
 
@@ -1113,23 +1114,23 @@ public class TestInfluxLineProtocolParser {
                     if (!error) {
                         LOG.error("StackTrace: ", notParsableInlineProtocolData);
 
-                        Assert.fail("Not expected error: " + notParsableInlineProtocolData);
+                        Assertions.fail("Not expected error: " + notParsableInlineProtocolData);
                     }
 
                     return;
                 }
 
-                Assert.assertFalse("Expected fail for: " + lineProtocol, error);
+                Assertions.assertFalse(error, "Expected fail for: " + lineProtocol);
 
-                Assert.assertEquals(measurement, parse.getMeasurement());
+                Assertions.assertEquals(measurement, parse.getMeasurement());
 
                 MapDifference<String, Object> tagsDif = Maps.difference(tags, parse.getTags());
-                Assert.assertTrue("Tags has incorrect values: " + tagsDif.toString(), tagsDif.areEqual());
+                Assertions.assertTrue(tagsDif.areEqual(), "Tags has incorrect values: " + tagsDif);
 
                 MapDifference<String, Object> fieldsDif = Maps.difference(fields, parse.getFields());
-                Assert.assertTrue("Fields has incorrect values: " + fieldsDif.toString(), fieldsDif.areEqual());
+                Assertions.assertTrue(fieldsDif.areEqual(), "Fields has incorrect values: " + fieldsDif);
 
-                Assert.assertEquals(timestamp, parse.getTimestamp());
+                Assertions.assertEquals(timestamp, parse.getTimestamp());
             });
         }
     }

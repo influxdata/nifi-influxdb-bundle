@@ -24,16 +24,11 @@ import org.apache.nifi.logging.ComponentLog;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
 
 public abstract class AbstractTestInfluxLineProtocolReader {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     protected Map<String, String> variables;
     protected ComponentLog logger;
@@ -41,7 +36,7 @@ public abstract class AbstractTestInfluxLineProtocolReader {
     protected InfluxLineProtocolReader readerFactory;
     protected TestRunner testRunner;
 
-    @Before
+    @BeforeEach
     public void before() throws InitializationException {
 
         logger = Mockito.mock(ComponentLog.class);

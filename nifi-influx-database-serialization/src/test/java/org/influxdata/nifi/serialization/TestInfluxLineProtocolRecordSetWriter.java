@@ -16,15 +16,14 @@
  */
 package org.influxdata.nifi.serialization;
 
-import org.influxdata.nifi.util.InfluxDBUtils;
-
 import org.apache.nifi.csv.CSVReader;
 import org.apache.nifi.csv.CSVUtils;
 import org.apache.nifi.processors.standard.ConvertRecord;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
-import org.junit.Test;
+import org.influxdata.nifi.util.InfluxDBUtils;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Jakub Bednar (bednar@github) (30/05/2019 11:29)
