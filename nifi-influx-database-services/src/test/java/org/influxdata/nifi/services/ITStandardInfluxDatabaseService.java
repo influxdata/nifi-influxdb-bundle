@@ -19,13 +19,13 @@ package org.influxdata.nifi.services;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 
 public class ITStandardInfluxDatabaseService extends AbstractTestStandardInfluxDatabaseService {
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
 
         setUp(CallsRealMethods::new);

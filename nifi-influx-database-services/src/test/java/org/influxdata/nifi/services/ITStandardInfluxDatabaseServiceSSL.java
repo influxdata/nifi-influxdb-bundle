@@ -22,9 +22,12 @@ import java.security.GeneralSecurityException;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.ssl.SSLContextService;
 import org.apache.nifi.ssl.StandardSSLContextService;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.influxdb.InfluxDBIOException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 
 import static org.apache.nifi.ssl.StandardSSLContextService.KEYSTORE;
@@ -36,7 +39,7 @@ import static org.apache.nifi.ssl.StandardSSLContextService.TRUSTSTORE_TYPE;
 
 public class ITStandardInfluxDatabaseServiceSSL extends AbstractTestStandardInfluxDatabaseService {
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
 
         setUp(CallsRealMethods::new);
@@ -71,10 +74,9 @@ public class ITStandardInfluxDatabaseServiceSSL extends AbstractTestStandardInfl
 
         testRunner.enableControllerService(service);
 
-        expectedException.expect(InfluxDBIOException.class);
-        expectedException.expectMessage("SSLHandshakeException");
-
-        assertConnectToDatabase();
+        InfluxDBIOException influxDBIOException = Assertions
+                .assertThrows(InfluxDBIOException.class, this::assertConnectToDatabase);
+        MatcherAssert.assertThat(influxDBIOException.getMessage(), CoreMatchers.containsString("SSLHandshakeException"));
     }
 }
 

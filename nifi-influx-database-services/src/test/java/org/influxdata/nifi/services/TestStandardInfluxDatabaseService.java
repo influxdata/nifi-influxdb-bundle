@@ -21,9 +21,9 @@ import java.security.GeneralSecurityException;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBIOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.stubbing.Answer;
 
@@ -31,7 +31,7 @@ public class TestStandardInfluxDatabaseService extends AbstractTestStandardInflu
 
     private Answer answerConnect;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
 
         setUp(() -> answerConnect);
@@ -46,7 +46,7 @@ public class TestStandardInfluxDatabaseService extends AbstractTestStandardInflu
 
         InfluxDB influxDB = service.connect();
 
-        Assert.assertNotNull(influxDB);
+        Assertions.assertNotNull(influxDB);
     }
 
     @Test
@@ -59,9 +59,7 @@ public class TestStandardInfluxDatabaseService extends AbstractTestStandardInflu
 
         testRunner.enableControllerService(service);
 
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("Error while getting connection java.io.IOException: simulate exception");
-
-        service.connect();
+        RuntimeException runtimeException = Assertions.assertThrows(RuntimeException.class, () -> service.connect());
+        Assertions.assertEquals("Error while getting connection java.io.IOException: simulate exception", runtimeException.getMessage());
     }
 }

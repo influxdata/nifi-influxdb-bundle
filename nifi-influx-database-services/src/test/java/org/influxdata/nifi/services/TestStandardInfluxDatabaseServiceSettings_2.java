@@ -19,19 +19,20 @@ package org.influxdata.nifi.services;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-import com.influxdb.client.InfluxDBClient;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.security.util.ClientAuth;
 import org.apache.nifi.ssl.SSLContextService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import com.influxdb.client.InfluxDBClient;
 
 import static org.mockito.Mockito.when;
 
 public class TestStandardInfluxDatabaseServiceSettings_2 extends AbstractTestStandardInfluxDatabaseService_2 {
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
 
         setUp(() -> invocation -> Mockito.mock(InfluxDBClient.class));

@@ -34,9 +34,9 @@ import org.apache.nifi.serialization.record.RecordField;
 import org.apache.nifi.serialization.record.RecordFieldType;
 import org.influxdata.nifi.processors.MapperOptions;
 import org.influxdata.nifi.processors.RecordToPointMapper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 /**
@@ -47,7 +47,7 @@ public class TestRecordToPointMapperV2 {
     private RecordToPointMapper mapper;
     private SimpleRecordSchema schema;
 
-    @Before
+    @BeforeEach
     public void before()
     {
         final List<RecordField> fields = new ArrayList<>();
@@ -102,8 +102,8 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).toLineProtocol());
     }
 
     @Test
@@ -119,7 +119,7 @@ public class TestRecordToPointMapperV2 {
 
         List<Point> points = mapper.mapRecordV2(null);
 
-        Assert.assertEquals(0, points.size());
+        Assertions.assertEquals(0, points.size());
     }
 
     @Test
@@ -146,11 +146,11 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02 field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02 field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).toLineProtocol());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void missingFieldFail() {
 
         MapperOptions options = new MapperOptions()
@@ -173,10 +173,7 @@ public class TestRecordToPointMapperV2 {
         values.put("timestamp", 123456789);
 
         final Record record = new MapRecord(schema, values);
-        List<Point> points = mapper.mapRecordV2(record);
-
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).toLineProtocol());
+        Assertions.assertThrows(IllegalStateException.class, () -> mapper.mapRecordV2(record));
     }
 
     @Test
@@ -201,11 +198,11 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field9=\"[25, 55]\" 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field9=\"[25, 55]\" 123456789", points.get(0).toLineProtocol());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void complexFieldFail() {
 
         MapperOptions options = new MapperOptions()
@@ -226,7 +223,7 @@ public class TestRecordToPointMapperV2 {
         values.put("timestamp", 123456789);
 
         final Record record = new MapRecord(schema, values);
-        mapper.mapRecordV2(record);
+        Assertions.assertThrows(IllegalStateException.class, () -> mapper.mapRecordV2(record));
     }
 
     @Test
@@ -252,8 +249,8 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true 123456789", points.get(0).toLineProtocol());
     }
 
     @Test
@@ -279,8 +276,8 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true 123456789", points.get(0).toLineProtocol());
     }
 
     @Test
@@ -311,8 +308,8 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 boolean=true,field1=25.0,field2=true,float=55.5,long=150i,string=\"string value\" 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 boolean=true,field1=25.0,field2=true,float=55.5,long=150i,string=\"string value\" 123456789", points.get(0).toLineProtocol());
     }
 
     @Test
@@ -340,8 +337,8 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i", points.get(0).toLineProtocol());
     }
 
     @Test
@@ -370,8 +367,8 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i", points.get(0).toLineProtocol());
     }
 
 
@@ -400,9 +397,9 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).toLineProtocol());
-        Assert.assertEquals(WritePrecision.MS, points.get(0).getPrecision());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02,tag2=555 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(WritePrecision.MS, points.get(0).getPrecision());
     }
 
     @Test
@@ -431,8 +428,8 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02 field1=25.0,field2=true,field3=10000i,field4=50.54999923706055,field5=963258741i,field6=\"description\",field7=8i 123456789", points.get(0).toLineProtocol());
     }
 
     @Test
@@ -464,8 +461,8 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,boolean=true,float=55.5,long=150,string=string\\ value,tag1=1970-01-02,tag2=555,tag3=[sub-value1\\,\\ sub-value2],tag4=1324567899 field1=25.0,field2=true 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,boolean=true,float=55.5,long=150,string=string\\ value,tag1=1970-01-02,tag2=555,tag3=[sub-value1\\,\\ sub-value2],tag4=1324567899 field1=25.0,field2=true 123456789", points.get(0).toLineProtocol());
     }
 
     @Test
@@ -491,7 +488,7 @@ public class TestRecordToPointMapperV2 {
         final Record record = new MapRecord(schema, values);
         List<Point> points = mapper.mapRecordV2(record);
 
-        Assert.assertEquals(1, points.size());
-        Assert.assertEquals("measurement-test,tag1=1970-01-02 field1=25.0,field11=888888i,field2=true,field3=10000i 123456789", points.get(0).toLineProtocol());
+        Assertions.assertEquals(1, points.size());
+        Assertions.assertEquals("measurement-test,tag1=1970-01-02 field1=25.0,field11=888888i,field2=true,field3=10000i 123456789", points.get(0).toLineProtocol());
     }
 }

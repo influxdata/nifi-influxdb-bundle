@@ -36,9 +36,12 @@ import org.apache.nifi.serialization.RecordReader;
 import org.apache.nifi.serialization.RecordReaderFactory;
 import org.apache.nifi.serialization.record.Record;
 import org.apache.nifi.serialization.record.RecordSchema;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.influxdb.impl.TimeUtil;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.apache.nifi.serialization.record.RecordFieldType.LONG;
@@ -53,7 +56,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertNotNull(schema);
+        Assertions.assertNotNull(schema);
     }
 
     @Test
@@ -62,11 +65,11 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         Record record = recordReader.nextRecord();
-        Assert.assertNotNull(record);
+        Assertions.assertNotNull(record);
 
         // next record null
         record = recordReader.nextRecord();
-        Assert.assertNull(record);
+        Assertions.assertNull(record);
     }
 
     @Test
@@ -77,10 +80,10 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
-        Assert.assertNotNull(record);
+        Assertions.assertNotNull(record);
 
         record = recordReader.nextRecord();
-        Assert.assertNotNull(record);
+        Assertions.assertNotNull(record);
     }
 
     @Test
@@ -99,7 +102,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(" "), -1, logger);
 
-        Assert.assertNull(recordReader.nextRecord());
+        Assertions.assertNull(recordReader.nextRecord());
     }
 
     @Test
@@ -108,10 +111,10 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(STRING, schema.getDataType(InfluxLineProtocolRecordReader.MEASUREMENT).get().getFieldType());
+        Assertions.assertEquals(STRING, schema.getDataType(InfluxLineProtocolRecordReader.MEASUREMENT).get().getFieldType());
 
         Record record = recordReader.nextRecord();
-        Assert.assertEquals("weather", record.getValue(InfluxLineProtocolRecordReader.MEASUREMENT));
+        Assertions.assertEquals("weather", record.getValue(InfluxLineProtocolRecordReader.MEASUREMENT));
     }
 
     @Test
@@ -122,7 +125,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
-        Assert.assertEquals("wea ther", record.getValue(InfluxLineProtocolRecordReader.MEASUREMENT));
+        Assertions.assertEquals("wea ther", record.getValue(InfluxLineProtocolRecordReader.MEASUREMENT));
     }
 
     @Test
@@ -133,7 +136,7 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         Record record = recordReader.nextRecord();
-        Assert.assertEquals("wea,ther", record.getValue(InfluxLineProtocolRecordReader.MEASUREMENT));
+        Assertions.assertEquals("wea,ther", record.getValue(InfluxLineProtocolRecordReader.MEASUREMENT));
     }
 
     @Test
@@ -142,13 +145,13 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.TAG_SET).get().getFieldType());
+        Assertions.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.TAG_SET).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
 
-        Assert.assertEquals(1, tags.size());
-        Assert.assertEquals("us-midwest", tags.get("location"));
+        Assertions.assertEquals(1, tags.size());
+        Assertions.assertEquals("us-midwest", tags.get("location"));
     }
 
     @Test
@@ -159,12 +162,12 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.TAG_SET).get().getFieldType());
+        Assertions.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.TAG_SET).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
 
-        Assert.assertTrue(tags.isEmpty());
+        Assertions.assertTrue(tags.isEmpty());
     }
 
     @Test
@@ -175,14 +178,14 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.TAG_SET).get().getFieldType());
+        Assertions.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.TAG_SET).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
 
-        Assert.assertEquals(2, tags.size());
-        Assert.assertEquals("us-midwest", tags.get("location"));
-        Assert.assertEquals("summer", tags.get("season"));
+        Assertions.assertEquals(2, tags.size());
+        Assertions.assertEquals("us-midwest", tags.get("location"));
+        Assertions.assertEquals("summer", tags.get("season"));
     }
 
     @Test
@@ -195,8 +198,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         Record record = recordReader.nextRecord();
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
 
-        Assert.assertEquals(1, tags.size());
-        Assert.assertEquals("us,midwest", tags.get("location"));
+        Assertions.assertEquals(1, tags.size());
+        Assertions.assertEquals("us,midwest", tags.get("location"));
     }
 
     @Test
@@ -209,8 +212,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         Record record = recordReader.nextRecord();
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
 
-        Assert.assertEquals(1, tags.size());
-        Assert.assertEquals("us-midwest", tags.get("loca=tion"));
+        Assertions.assertEquals(1, tags.size());
+        Assertions.assertEquals("us-midwest", tags.get("loca=tion"));
     }
 
     @Test
@@ -223,8 +226,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         Record record = recordReader.nextRecord();
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
 
-        Assert.assertEquals(1, tags.size());
-        Assert.assertEquals("us midwest", tags.get("location"));
+        Assertions.assertEquals(1, tags.size());
+        Assertions.assertEquals("us midwest", tags.get("location"));
     }
 
     @Test
@@ -233,13 +236,13 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
+        Assertions.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(1, fields.size());
-        Assert.assertEquals(82f, fields.get("temperature"));
+        Assertions.assertEquals(1, fields.size());
+        Assertions.assertEquals(82f, fields.get("temperature"));
     }
 
     @Test
@@ -249,10 +252,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
-        expectedException.expect(MalformedRecordException.class);
-        expectedException.expectMessage("Not parsable data: 'weather 1465839830100400200'");
-
-        recordReader.nextRecord();
+        MalformedRecordException malformedRecordException = Assertions.assertThrows(MalformedRecordException.class, recordReader::nextRecord);
+        MatcherAssert.assertThat(malformedRecordException.getMessage(), Matchers.startsWith("Not parsable data: 'weather 1465839830100400200'."));
     }
 
     @Test
@@ -262,10 +263,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
-        expectedException.expect(MalformedRecordException.class);
-        expectedException.expectMessage("Not parsable data: 'weather value 1465839830100400200'");
-
-        recordReader.nextRecord();
+        MalformedRecordException malformedRecordException = Assertions.assertThrows(MalformedRecordException.class, recordReader::nextRecord);
+        MatcherAssert.assertThat(malformedRecordException.getMessage(), Matchers.startsWith("Not parsable data: 'weather value 1465839830100400200'."));
     }
 
     @Test
@@ -276,13 +275,13 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
+        Assertions.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(1, fields.size());
-        Assert.assertEquals(82f, fields.get("value"));
+        Assertions.assertEquals(1, fields.size());
+        Assertions.assertEquals(82f, fields.get("value"));
     }
 
     @Test
@@ -293,13 +292,13 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
+        Assertions.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(1, fields.size());
-        Assert.assertEquals(83L, fields.get("value"));
+        Assertions.assertEquals(1, fields.size());
+        Assertions.assertEquals(83L, fields.get("value"));
     }
 
     @Test
@@ -314,11 +313,11 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         Record record = recordReader.nextRecord();
 
-        Assert.assertEquals(5, ((Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET)).size());
+        Assertions.assertEquals(5, ((Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET)).size());
 
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
-        Assert.assertEquals(7, fields.size());
-        Assert.assertEquals(250685575168L, fields.get("total"));
+        Assertions.assertEquals(7, fields.size());
+        Assertions.assertEquals(250685575168L, fields.get("total"));
     }
 
     @Test
@@ -329,13 +328,13 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
+        Assertions.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(1, fields.size());
-        Assert.assertEquals("84", fields.get("value"));
+        Assertions.assertEquals(1, fields.size());
+        Assertions.assertEquals("84", fields.get("value"));
     }
 
     @Test
@@ -347,22 +346,22 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
+        Assertions.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(10, fields.size());
-        Assert.assertEquals(true, fields.get("true1"));
-        Assert.assertEquals(true, fields.get("true2"));
-        Assert.assertEquals(true, fields.get("true3"));
-        Assert.assertEquals(true, fields.get("true4"));
-        Assert.assertEquals(true, fields.get("true5"));
-        Assert.assertEquals(false, fields.get("false1"));
-        Assert.assertEquals(false, fields.get("false2"));
-        Assert.assertEquals(false, fields.get("false3"));
-        Assert.assertEquals(false, fields.get("false4"));
-        Assert.assertEquals(false, fields.get("false5"));
+        Assertions.assertEquals(10, fields.size());
+        Assertions.assertEquals(true, fields.get("true1"));
+        Assertions.assertEquals(true, fields.get("true2"));
+        Assertions.assertEquals(true, fields.get("true3"));
+        Assertions.assertEquals(true, fields.get("true4"));
+        Assertions.assertEquals(true, fields.get("true5"));
+        Assertions.assertEquals(false, fields.get("false1"));
+        Assertions.assertEquals(false, fields.get("false2"));
+        Assertions.assertEquals(false, fields.get("false3"));
+        Assertions.assertEquals(false, fields.get("false4"));
+        Assertions.assertEquals(false, fields.get("false5"));
     }
 
     @Test
@@ -373,17 +372,17 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
+        Assertions.assertEquals(MAP, schema.getDataType(InfluxLineProtocolRecordReader.FIELD_SET).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(1, fields.size());
-        Assert.assertEquals(84f, fields.get("value"));
+        Assertions.assertEquals(1, fields.size());
+        Assertions.assertEquals(84f, fields.get("value"));
 
         Map tags = (Map) record.getValue(InfluxLineProtocolRecordReader.TAG_SET);
-        Assert.assertTrue(tags.isEmpty());
-        Assert.assertNull(record.getValue(InfluxLineProtocolRecordReader.TIMESTAMP));
+        Assertions.assertTrue(tags.isEmpty());
+        Assertions.assertNull(record.getValue(InfluxLineProtocolRecordReader.TIMESTAMP));
     }
 
     @Test
@@ -393,11 +392,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
-        expectedException.expect(MalformedRecordException.class);
-        expectedException
-                .expectMessage("Not parsable data: 'weather,location=us-midwest temperature=\"82 1465839830100400200'");
-
-        recordReader.nextRecord();
+        MalformedRecordException malformedRecordException = Assertions.assertThrows(MalformedRecordException.class, recordReader::nextRecord);
+        Assertions.assertEquals("Not parsable data: 'weather,location=us-midwest temperature=\"82 1465839830100400200'.", malformedRecordException.getMessage());
     }
 
     @Test
@@ -410,8 +406,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(2, fields.size());
-        Assert.assertEquals("Cel\\,sius", fields.get("measure"));
+        Assertions.assertEquals(2, fields.size());
+        Assertions.assertEquals("Cel\\,sius", fields.get("measure"));
     }
 
     @Test
@@ -424,8 +420,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(2, fields.size());
-        Assert.assertEquals("Cel\\=sius", fields.get("measure"));
+        Assertions.assertEquals(2, fields.size());
+        Assertions.assertEquals("Cel\\=sius", fields.get("measure"));
     }
 
     @Test
@@ -438,8 +434,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(2, fields.size());
-        Assert.assertEquals("Cel\\ sius", fields.get("measure"));
+        Assertions.assertEquals(2, fields.size());
+        Assertions.assertEquals("Cel\\ sius", fields.get("measure"));
     }
 
     @Test
@@ -452,8 +448,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(1, fields.size());
-        Assert.assertEquals("7 days,  5:38", fields.get("uptime_format"));
+        Assertions.assertEquals(1, fields.size());
+        Assertions.assertEquals("7 days,  5:38", fields.get("uptime_format"));
     }
 
     @Test
@@ -466,8 +462,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(1, fields.size());
-        Assert.assertEquals(" 2:25", fields.get("uptime_format"));
+        Assertions.assertEquals(1, fields.size());
+        Assertions.assertEquals(" 2:25", fields.get("uptime_format"));
     }
 
     @Test
@@ -480,8 +476,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         Record record = recordReader.nextRecord();
         Map fields = (Map) record.getValue(InfluxLineProtocolRecordReader.FIELD_SET);
 
-        Assert.assertEquals(2, fields.size());
-        Assert.assertEquals("Cel\\\"sius", fields.get("measure"));
+        Assertions.assertEquals(2, fields.size());
+        Assertions.assertEquals("Cel\\\"sius", fields.get("measure"));
     }
 
     @Test
@@ -490,10 +486,10 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(LONG, schema.getDataType(InfluxLineProtocolRecordReader.TIMESTAMP).get().getFieldType());
+        Assertions.assertEquals(LONG, schema.getDataType(InfluxLineProtocolRecordReader.TIMESTAMP).get().getFieldType());
 
         Record record = recordReader.nextRecord();
-        Assert.assertEquals(1465839830100400200L, record.getValue(InfluxLineProtocolRecordReader.TIMESTAMP));
+        Assertions.assertEquals(1465839830100400200L, record.getValue(InfluxLineProtocolRecordReader.TIMESTAMP));
     }
 
     @Test
@@ -504,12 +500,12 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(LONG, schema.getDataType(InfluxLineProtocolRecordReader.TIMESTAMP).get().getFieldType());
+        Assertions.assertEquals(LONG, schema.getDataType(InfluxLineProtocolRecordReader.TIMESTAMP).get().getFieldType());
 
         Record record = recordReader.nextRecord();
         String influxFormat = TimeUtil.toInfluxDBTimeFormat((Long) record.getValue(InfluxLineProtocolRecordReader.TIMESTAMP));
 
-        Assert.assertEquals("2016-10-31T06:52:20.020Z", influxFormat);
+        Assertions.assertEquals("2016-10-31T06:52:20.020Z", influxFormat);
     }
 
     @Test
@@ -519,11 +515,8 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
 
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
-        expectedException.expect(MalformedRecordException.class);
-        expectedException
-                .expectMessage("Not parsable data: 'weather,location=us-midwest temperature=82 wrong_format'");
-
-       recordReader.nextRecord();
+        MalformedRecordException malformedRecordException = Assertions.assertThrows(MalformedRecordException.class, recordReader::nextRecord);
+        Assertions.assertEquals("Not parsable data: 'weather,location=us-midwest temperature=82 wrong_format'.", malformedRecordException.getMessage());
     }
 
     @Test
@@ -534,10 +527,10 @@ public class TestInfluxLineProtocolRecordReader extends AbstractTestInfluxLinePr
         RecordReader recordReader = readerFactory.createRecordReader(variables, toInputData(data), -1,logger);
 
         RecordSchema schema = recordReader.getSchema();
-        Assert.assertEquals(LONG, schema.getDataType(InfluxLineProtocolRecordReader.TIMESTAMP).get().getFieldType());
+        Assertions.assertEquals(LONG, schema.getDataType(InfluxLineProtocolRecordReader.TIMESTAMP).get().getFieldType());
 
         Record record = recordReader.nextRecord();
-        Assert.assertNull(record.getValue(InfluxLineProtocolRecordReader.TIMESTAMP));
+        Assertions.assertNull(record.getValue(InfluxLineProtocolRecordReader.TIMESTAMP));
     }
 
     @Nullable

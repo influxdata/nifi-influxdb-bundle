@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.domain.HealthCheck;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.processor.AbstractProcessor;
@@ -30,16 +28,14 @@ import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.exception.ProcessException;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 
-public abstract class AbstractTestStandardInfluxDatabaseService_2 {
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.domain.HealthCheck;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+public abstract class AbstractTestStandardInfluxDatabaseService_2 {
 
     protected StandardInfluxDatabaseService_2 service;
     protected TestRunner testRunner;
@@ -70,7 +66,7 @@ public abstract class AbstractTestStandardInfluxDatabaseService_2 {
 
         HealthCheck result = client.health();
 
-        Assert.assertEquals("Unexpected health check: " + result, HealthCheck.StatusEnum.PASS, result.getStatus());
+        Assertions.assertEquals(HealthCheck.StatusEnum.PASS, result.getStatus(), "Unexpected health check: " + result);
     }
 
     public static class ServiceProcessor extends AbstractProcessor {

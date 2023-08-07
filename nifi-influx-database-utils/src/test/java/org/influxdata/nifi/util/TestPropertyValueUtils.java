@@ -35,9 +35,9 @@ import org.apache.nifi.util.MockVariableRegistry;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.influxdata.nifi.processors.MapperOptions;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestPropertyValueUtils {
     private static final PropertyDescriptor TEST_ENUM_PROPERTY = new PropertyDescriptor.Builder()
@@ -69,7 +69,7 @@ public class TestPropertyValueUtils {
     private TestRunner testRunner;
     private ProcessContext processContext;
 
-    @Before
+    @BeforeEach
     public void before() {
 
         testRunner = TestRunners.newTestRunner(TestProcessor.class);
@@ -84,7 +84,7 @@ public class TestPropertyValueUtils {
         PropertyEnum propertyValue = PropertyValueUtils
                 .getEnumValue(TEST_ENUM_PROPERTY, processContext, PropertyEnum.class, PropertyEnum.ONE);
 
-        Assert.assertEquals(PropertyEnum.TWO, propertyValue);
+        Assertions.assertEquals(PropertyEnum.TWO, propertyValue);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class TestPropertyValueUtils {
         PropertyEnum propertyValue = PropertyValueUtils
                 .getEnumValue(TEST_ENUM_PROPERTY, processContext, PropertyEnum.class, PropertyEnum.ONE);
 
-        Assert.assertEquals(PropertyEnum.ONE, propertyValue);
+        Assertions.assertEquals(PropertyEnum.ONE, propertyValue);
     }
 
     @Test
@@ -104,15 +104,15 @@ public class TestPropertyValueUtils {
         PropertyEnum propertyValue = PropertyValueUtils
                 .getEnumValue(TEST_ENUM_PROPERTY, processContext, PropertyEnum.class, PropertyEnum.ONE);
 
-        Assert.assertEquals(PropertyEnum.ONE, propertyValue);
+        Assertions.assertEquals(PropertyEnum.ONE, propertyValue);
     }
 
     @Test
     public void enumValueNull() {
-        
+
         PropertyEnum enumValue = PropertyValueUtils.getEnumValue(PropertyEnum.class, null, null);
 
-        Assert.assertNull(enumValue);
+        Assertions.assertNull(enumValue);
     }
 
     @Test
@@ -122,9 +122,9 @@ public class TestPropertyValueUtils {
 
         List<String> list = PropertyValueUtils.getList(TEST_LIST_PROPERTY, processContext, null);
 
-        Assert.assertEquals(2, list.size());
-        Assert.assertEquals("one", list.get(0));
-        Assert.assertEquals("two", list.get(1));
+        Assertions.assertEquals(2, list.size());
+        Assertions.assertEquals("one", list.get(0));
+        Assertions.assertEquals("two", list.get(1));
     }
 
     @Test
@@ -135,14 +135,14 @@ public class TestPropertyValueUtils {
 
         List<String> list = PropertyValueUtils.getList(TEST_LIST_PROPERTY, processContext, null);
 
-        Assert.assertEquals(0, list.size());
+        Assertions.assertEquals(0, list.size());
 
         // blank
         testRunner.setProperty(TEST_LIST_PROPERTY, " ");
 
         list = PropertyValueUtils.getList(TEST_LIST_PROPERTY, processContext, null);
 
-        Assert.assertEquals(0, list.size());
+        Assertions.assertEquals(0, list.size());
     }
 
     @Test
@@ -152,9 +152,9 @@ public class TestPropertyValueUtils {
 
         List<String> list = PropertyValueUtils.getList(TEST_LIST_PROPERTY, processContext, null);
 
-        Assert.assertEquals(2, list.size());
-        Assert.assertEquals("one", list.get(0));
-        Assert.assertEquals("two", list.get(1));
+        Assertions.assertEquals(2, list.size());
+        Assertions.assertEquals("one", list.get(0));
+        Assertions.assertEquals("two", list.get(1));
     }
 
     @Test
@@ -164,9 +164,9 @@ public class TestPropertyValueUtils {
 
         List<String> list = PropertyValueUtils.getList(TEST_LIST_PROPERTY, processContext, null);
 
-        Assert.assertEquals(2, list.size());
-        Assert.assertEquals("one", list.get(0));
-        Assert.assertEquals("two", list.get(1));
+        Assertions.assertEquals(2, list.size());
+        Assertions.assertEquals("one", list.get(0));
+        Assertions.assertEquals("two", list.get(1));
     }
 
     @Test
@@ -184,10 +184,10 @@ public class TestPropertyValueUtils {
 
         List<String> list = PropertyValueUtils.getList(TEST_LIST_PROPERTY, processContext, flowFile);
 
-        Assert.assertEquals(3, list.size());
-        Assert.assertEquals("three", list.get(0));
-        Assert.assertEquals("two", list.get(1));
-        Assert.assertEquals("one", list.get(2));
+        Assertions.assertEquals(3, list.size());
+        Assertions.assertEquals("three", list.get(0));
+        Assertions.assertEquals("two", list.get(1));
+        Assertions.assertEquals("one", list.get(2));
     }
 
     @Test
@@ -209,19 +209,19 @@ public class TestPropertyValueUtils {
 
         MapperOptions options = PropertyValueUtils.getMapperOptions(context, null);
 
-        Assert.assertNotNull(options);
-        Assert.assertEquals("my-measurement", options.getMeasurement());
-        Assert.assertEquals(TimeUnit.HOURS, options.getPrecision());
-        Assert.assertEquals("log-time", options.getTimestamp());
-        Assert.assertEquals(Arrays.asList("value", "value2", "value3"), options.getFields());
-        Assert.assertEquals(Arrays.asList("tag", "tag2"), options.getTags());
-        Assert.assertEquals(InfluxDBUtils.MissingItemsBehaviour.IGNORE, options.getMissingFields());
-        Assert.assertEquals(InfluxDBUtils.MissingItemsBehaviour.FAIL, options.getMissingTags());
-        Assert.assertEquals(InfluxDBUtils.ComplexFieldBehaviour.WARN, options.getComplexFieldBehaviour());
-        Assert.assertEquals(InfluxDBUtils.NullValueBehaviour.FAIL, options.getNullValueBehaviour());
+        Assertions.assertNotNull(options);
+        Assertions.assertEquals("my-measurement", options.getMeasurement());
+        Assertions.assertEquals(TimeUnit.HOURS, options.getPrecision());
+        Assertions.assertEquals("log-time", options.getTimestamp());
+        Assertions.assertEquals(Arrays.asList("value", "value2", "value3"), options.getFields());
+        Assertions.assertEquals(Arrays.asList("tag", "tag2"), options.getTags());
+        Assertions.assertEquals(InfluxDBUtils.MissingItemsBehaviour.IGNORE, options.getMissingFields());
+        Assertions.assertEquals(InfluxDBUtils.MissingItemsBehaviour.FAIL, options.getMissingTags());
+        Assertions.assertEquals(InfluxDBUtils.ComplexFieldBehaviour.WARN, options.getComplexFieldBehaviour());
+        Assertions.assertEquals(InfluxDBUtils.NullValueBehaviour.FAIL, options.getNullValueBehaviour());
     }
 
-    @Test(expected = PropertyValueUtils.IllegalConfigurationException.class)
+    @Test
     public void mapperOptionsEmptyFields() throws PropertyValueUtils.IllegalConfigurationException {
 
         Map<PropertyDescriptor, String> props = new HashMap<PropertyDescriptor, String>() {{
@@ -238,10 +238,12 @@ public class TestPropertyValueUtils {
 
         MockConfigurationContext context = new MockConfigurationContext(props, null, new MockVariableRegistry());
 
-        PropertyValueUtils.getMapperOptions(context, null);
+        Assertions.assertThrows(PropertyValueUtils.IllegalConfigurationException.class, () -> {
+            PropertyValueUtils.getMapperOptions(context, null);
+        });
     }
 
-    @Test(expected = PropertyValueUtils.IllegalConfigurationException.class)
+    @Test
     public void mapperOptionsEmptyMeasurement() throws PropertyValueUtils.IllegalConfigurationException {
 
         Map<PropertyDescriptor, String> props = new HashMap<PropertyDescriptor, String>() {{
@@ -258,7 +260,9 @@ public class TestPropertyValueUtils {
 
         MockConfigurationContext context = new MockConfigurationContext(props, null, new MockVariableRegistry());
 
-        PropertyValueUtils.getMapperOptions(context, null);
+        Assertions.assertThrows(PropertyValueUtils.IllegalConfigurationException.class, () -> {
+            PropertyValueUtils.getMapperOptions(context, null);
+        });
     }
 
     public static class TestProcessor extends AbstractProcessor {

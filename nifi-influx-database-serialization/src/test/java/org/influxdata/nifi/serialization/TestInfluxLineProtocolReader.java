@@ -39,8 +39,9 @@ import org.apache.nifi.serialization.record.RecordSchema;
 import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocolReader {
@@ -50,7 +51,7 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
 
         RecordReader reader = readerFactory.createRecordReader(variables, null, -1, logger);
 
-        Assert.assertNotNull(reader);
+        Assertions.assertNotNull(reader);
     }
 
     @Test
@@ -59,7 +60,7 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
         FlowFile flowFile = Mockito.mock(FlowFile.class);
         RecordReader reader = readerFactory.createRecordReader(flowFile, null, logger);
 
-        Assert.assertNotNull(reader);
+        Assertions.assertNotNull(reader);
     }
 
     @Test
@@ -70,7 +71,7 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
 
         RecordSchema schema = reader.getSchema();
 
-        Assert.assertNotNull(schema);
+        Assertions.assertNotNull(schema);
     }
 
     @Test
@@ -106,35 +107,35 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
         DataFileStream<GenericData.Record> avroReader = new DataFileStream<>(
                 new ByteArrayInputStream(success.toByteArray()), new GenericDatumReader<>());
 
-        Assert.assertTrue(avroReader.hasNext());
+        Assertions.assertTrue(avroReader.hasNext());
 
         GenericData.Record next = avroReader.next();
 
         // measurement
-        Assert.assertEquals(new Utf8("weather"), next.get("measurement"));
+        Assertions.assertEquals(new Utf8("weather"), next.get("measurement"));
 
         // tags
-        Assert.assertEquals(1, ((Map) next.get("tags")).size());
-        Assert.assertEquals(new Utf8("us-midwest"), ((Map) next.get("tags")).get(new Utf8("location")));
+        Assertions.assertEquals(1, ((Map) next.get("tags")).size());
+        Assertions.assertEquals(new Utf8("us-midwest"), ((Map) next.get("tags")).get(new Utf8("location")));
 
         // fields
-        Assert.assertEquals(4, ((Map) next.get("fields")).size());
-        Assert.assertEquals(true, ((Map) next.get("fields")).get(new Utf8("field-bool")));
-        Assert.assertEquals(new Utf8("hello"), ((Map) next.get("fields")).get(new Utf8("field-string")));
-        Assert.assertEquals(85L, ((Map) next.get("fields")).get(new Utf8("field-integer")));
-        Assert.assertEquals(82.5F, ((Map) next.get("fields")).get(new Utf8("field-float")));
+        Assertions.assertEquals(4, ((Map) next.get("fields")).size());
+        Assertions.assertEquals(true, ((Map) next.get("fields")).get(new Utf8("field-bool")));
+        Assertions.assertEquals(new Utf8("hello"), ((Map) next.get("fields")).get(new Utf8("field-string")));
+        Assertions.assertEquals(85L, ((Map) next.get("fields")).get(new Utf8("field-integer")));
+        Assertions.assertEquals(82.5F, ((Map) next.get("fields")).get(new Utf8("field-float")));
 
         // timestamp
-        Assert.assertEquals(1465839830100400200L, next.get("timestamp"));
+        Assertions.assertEquals(1465839830100400200L, next.get("timestamp"));
 
-        Assert.assertFalse(avroReader.hasNext());
+        Assertions.assertFalse(avroReader.hasNext());
 
         // Read via Embedded reader
 		AvroReaderWithEmbeddedSchema avroReaderWithEmbeddedSchema = new AvroReaderWithEmbeddedSchema(new ByteArrayInputStream(success.toByteArray()));
 		Record record = avroReaderWithEmbeddedSchema.nextRecord();
 
-		Assert.assertNotNull(record);
-		Assert.assertNull(avroReaderWithEmbeddedSchema.nextRecord());
+		Assertions.assertNotNull(record);
+		Assertions.assertNull(avroReaderWithEmbeddedSchema.nextRecord());
     }
 
     @Test
@@ -165,7 +166,7 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
         convertRunner.assertTransferCount("success", 1);
 
         MockFlowFile success = convertRunner.getFlowFilesForRelationship("success").get(0);
-        Assert.assertEquals(String.valueOf(2), success.getAttribute("record.count"));
+        Assertions.assertEquals(String.valueOf(2), success.getAttribute("record.count"));
     }
 
     @Test
@@ -196,6 +197,6 @@ public class TestInfluxLineProtocolReader extends AbstractTestInfluxLineProtocol
         convertRunner.assertTransferCount("failure", 1);
 
         MockFlowFile success = convertRunner.getFlowFilesForRelationship("failure").get(0);
-        Assert.assertNull(success.getAttribute("record.count"));
+        Assertions.assertNull(success.getAttribute("record.count"));
     }
 }
