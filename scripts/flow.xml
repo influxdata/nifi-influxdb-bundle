@@ -139,7 +139,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0</version>
+          <version>1.26.0-SNAPSHOT</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -341,7 +341,7 @@ and be able to write data selectively.
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0</version>
+          <version>1.26.0-SNAPSHOT</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1955,7 +1955,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0</version>
+          <version>1.26.0-SNAPSHOT</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2022,7 +2022,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0</version>
+          <version>1.26.0-SNAPSHOT</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2425,7 +2425,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0</version>
+          <version>1.26.0-SNAPSHOT</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -2674,7 +2674,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0</version>
+          <version>1.26.0-SNAPSHOT</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2827,7 +2827,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0</version>
+          <version>1.26.0-SNAPSHOT</version>
         </bundle>
         <maxConcurrentTasks>1</maxConcurrentTasks>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3250,7 +3250,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0</version>
+          <version>1.26.0-SNAPSHOT</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3436,7 +3436,7 @@ curl -i -X GET -G http://localhost:8234 \
         <bundle>
           <group>org.influxdata.nifi</group>
           <artifact>nifi-influx-database-nar</artifact>
-          <version>1.25.0</version>
+          <version>1.26.0-SNAPSHOT</version>
         </bundle>
         <enabled>true</enabled>
         <property>
@@ -3474,7 +3474,7 @@ curl -i -X GET -G http://localhost:8234 \
       <bundle>
         <group>org.influxdata.nifi</group>
         <artifact>nifi-influx-database-nar</artifact>
-        <version>1.25.0</version>
+        <version>1.26.0-SNAPSHOT</version>
       </bundle>
       <enabled>true</enabled>
       <property>
