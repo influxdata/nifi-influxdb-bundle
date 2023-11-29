@@ -103,7 +103,7 @@
 		<!-- skip until remove org.json from Java client -->
         <enforcer.skip>true</enforcer.skip>
 
-        <nifi.version>1.23.2</nifi.version>
+        <nifi.version>1.24.0</nifi.version>
 
         <plugin.surefire.version>2.22.2</plugin.surefire.version>
         <plugin.jacoco.version>0.8.8</plugin.jacoco.version>
