@@ -1,4 +1,4 @@
-## v1.26.0 [unreleased]
+## v1.26.0 [2023-12-05]
 
 ### Others
 1. [#135](https://github.com/influxdata/nifi-influxdb-bundle/pull/135): Update to Apache NiFi 1.24.0
