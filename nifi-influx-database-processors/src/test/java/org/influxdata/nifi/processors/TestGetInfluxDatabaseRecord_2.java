@@ -23,12 +23,17 @@ import java.util.List;
 
 import com.influxdb.query.FluxRecord;
 
+import java.util.Map;
+import java.util.HashMap;
+
+import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.provenance.ProvenanceEventRecord;
 import org.apache.nifi.provenance.ProvenanceEventType;
 import org.apache.nifi.serialization.record.Record;
 import org.apache.nifi.serialization.record.RecordFieldType;
 import org.apache.nifi.serialization.record.RecordSchema;
 import org.apache.nifi.serialization.record.type.ArrayDataType;
+import org.apache.nifi.util.MockFlowFile;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -80,6 +85,45 @@ public class TestGetInfluxDatabaseRecord_2 extends AbstractTestGetInfluxDatabase
         Assert.assertEquals(Date.from(Instant.ofEpochSecond(123456789)), nifiRecord.getValue("instant_value"));
         Assert.assertEquals(10000L, nifiRecord.getValue("duration_value"));
         Assert.assertEquals("InfluxDB rocks!", nifiRecord.getValue("string_value"));
+    }
+
+    
+    @Test
+    public void singleFlowFileAttributes() {
+
+        // Create input flowfile
+        Map<String, String> inputAttributes = new HashMap<>();
+        inputAttributes.put("Testattribute", "testvalue");
+        runner.enqueue("someContent", inputAttributes);
+
+        // Add FluxRecords to queryOnResponseRecords
+        FluxRecord fluxRecord1 = new FluxRecord(0);
+        fluxRecord1.getValues().put("value", 1L);
+
+        queryOnResponseRecords.add(fluxRecord1);
+
+        runner.run();
+
+        // Verify that the flowfile has the expected attributes
+        runner.assertAllFlowFilesTransferred(REL_SUCCESS, 1);
+        Assert.assertEquals(1, writer.getRecordsWritten().size());
+
+        for (FlowFile outputFlowFile: runner.getFlowFilesForRelationship(REL_SUCCESS))
+        {
+            Map<String, String> outputAttributes = outputFlowFile.getAttributes();
+    
+            for (Map.Entry<String, String> entry : inputAttributes.entrySet()) {
+                Assert.assertTrue(outputAttributes.containsKey(entry.getKey()));
+                Assert.assertEquals(entry.getValue(), outputAttributes.get(entry.getKey()));
+            }
+        }
+
+        Record nifiRecord = writer.getRecordsWritten().get(0);
+        RecordSchema schema = nifiRecord.getSchema();
+
+        Assert.assertEquals(1, schema.getFieldCount());
+        Assert.assertEquals(RecordFieldType.LONG, schema.getField("value").get().getDataType().getFieldType());
+        Assert.assertEquals(1L, nifiRecord.getValue("value"));
     }
 
     @Test
@@ -186,6 +230,69 @@ public class TestGetInfluxDatabaseRecord_2 extends AbstractTestGetInfluxDatabase
 
         runner.assertAllFlowFilesTransferred(REL_SUCCESS, 4);
         Assert.assertEquals(6, writer.getRecordsWritten().size());
+
+        for (int i = 0; i < 6; i++) {
+            Record nifiRecord = writer.getRecordsWritten().get(i);
+            RecordSchema schema = nifiRecord.getSchema();
+
+            Assert.assertEquals(RecordFieldType.LONG, schema.getField("value").get().getDataType().getFieldType());
+            Assert.assertEquals((long) i + 1, nifiRecord.getValue("value"));
+        }
+
+    }
+
+    @Test
+    public void useMoreFlowFilesWithAttributes() {
+
+        FluxRecord fluxRecord1 = new FluxRecord(0);
+        fluxRecord1.getValues().put("value", 1L);
+
+        FluxRecord fluxRecord2 = new FluxRecord(0);
+        fluxRecord2.getValues().put("value", 2L);
+
+        FluxRecord fluxRecord3 = new FluxRecord(0);
+        fluxRecord3.getValues().put("value", 3L);
+
+        FluxRecord fluxRecord4 = new FluxRecord(0);
+        fluxRecord4.getValues().put("value", 4L);
+
+        FluxRecord fluxRecord5 = new FluxRecord(0);
+        fluxRecord5.getValues().put("value", 5L);
+
+        FluxRecord fluxRecord6 = new FluxRecord(0);
+        fluxRecord6.getValues().put("value", 6L);
+
+        queryOnResponseRecords.add(fluxRecord1);
+        queryOnResponseRecords.add(fluxRecord2);
+        queryOnResponseRecords.add(fluxRecord3);
+        queryOnResponseRecords.add(fluxRecord4);
+        queryOnResponseRecords.add(fluxRecord5);
+        queryOnResponseRecords.add(fluxRecord6);
+
+        // Create input flowfile
+        Map<String, String> inputAttributes = new HashMap<>();
+        inputAttributes.put("Testattribute", "testvalue");
+        runner.enqueue("someContent", inputAttributes);
+        
+        runner.setProperty(GetInfluxDatabase_2.RECORDS_PER_FLOWFILE, "2");
+
+        runner.enqueue("");
+        runner.run();
+
+        runner.assertAllFlowFilesTransferred(REL_SUCCESS, 4);
+        Assert.assertEquals(6, writer.getRecordsWritten().size());
+
+        List<MockFlowFile> outputFlowFiles = runner.getFlowFilesForRelationship(REL_SUCCESS);
+
+        for (FlowFile outputFlowFile: runner.getFlowFilesForRelationship(REL_SUCCESS))
+        {
+            Map<String, String> outputAttributes = outputFlowFile.getAttributes();
+    
+            for (Map.Entry<String, String> entry : inputAttributes.entrySet()) {
+                Assert.assertTrue(outputAttributes.containsKey(entry.getKey()));
+                Assert.assertEquals(entry.getValue(), outputAttributes.get(entry.getKey()));
+            }
+        }
 
         for (int i = 0; i < 6; i++) {
             Record nifiRecord = writer.getRecordsWritten().get(i);
