@@ -288,9 +288,14 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
             if (recordsPerFlowFile == -1 || createdFlowFile) {
                 this.flowFile = flowFile;
             } else {
-                this.flowFile = session.create();
+                FlowFile newflowFile = session.create();
+                if (!createdFlowFile) {
+                    newflowFile = session.putAllAttributes(newflowFile, flowFile.getAttributes());
+                }
+                this.flowFile = newflowFile;
                 this.flowFiles.add(this.flowFile);
             }
+
             this.org = org;
             this.recordsPerFlowFile = recordsPerFlowFile;
             this.query = query;
@@ -375,7 +380,9 @@ public abstract class AbstractGetInfluxDatabase_2 extends AbstractInfluxDatabase
             recordIndex++;
             if (recordsPerFlowFile != -1 && recordIndex > recordsPerFlowFile) {
                 closeRecordWriter();
-                flowFile = session.create();
+                FlowFile newflowFile = session.create();
+                newflowFile = session.putAllAttributes(newflowFile, flowFile.getAttributes());
+                flowFile = newflowFile;
                 flowFiles.add(flowFile);
                 recordIndex = 1;
             }
