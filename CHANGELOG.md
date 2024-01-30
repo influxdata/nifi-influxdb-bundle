@@ -1,4 +1,4 @@
-## v1.27.0 [unreleased]
+## v1.27.0 [2024-01-30]
 
 ### Bug Fixes
 1. [#147](https://github.com/influxdata/nifi-influxdb-bundle/pull/147): Copy Attributes on Splitting Result Sets
