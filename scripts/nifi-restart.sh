@@ -23,7 +23,7 @@ DEFAULT_INFLUXDB_VERSION="1.8"
 INFLUXDB_VERSION="${INFLUXDB_VERSION:-$DEFAULT_INFLUXDB_VERSION}"
 INFLUXDB_IMAGE=influxdb:${INFLUXDB_VERSION}
 
-DEFAULT_NIFI_VERSION="1.24.0"
+DEFAULT_NIFI_VERSION="1.25.0"
 NIFI_VERSION="${NIFI_VERSION:-$DEFAULT_NIFI_VERSION}"
 NIFI_IMAGE=apache/nifi:${NIFI_VERSION}
 
@@ -66,8 +66,8 @@ docker rm nifi || true
 docker kill influxdb || true
 docker rm influxdb || true
 
-docker kill influxdb_v2 || true
-docker rm influxdb_v2 || true
+docker kill influxdbv2 || true
+docker rm influxdbv2 || true
 
 echo
 echo "Starting InfluxDB..."
@@ -95,7 +95,7 @@ docker pull ${INFLUXDB_V2_IMAGE} || true
 docker run \
        --detach \
        --env INFLUXD_HTTP_BIND_ADDRESS=:9999 \
-       --name influxdb_v2 \
+       --name influxdbv2 \
        --publish 9999:9999 \
        ${INFLUXDB_V2_IMAGE}
 
@@ -150,7 +150,7 @@ echo
 echo "Build Apache NiFi with demo..."
 echo
 
-ORGID=$(docker exec -it influxdb_v2 influx org find -t my-token --host http://localhost:9999 | grep my-org  | awk '{ print $1 }')
+ORGID=$(docker exec -it influxdbv2 influx org find -t my-token --host http://localhost:9999 | grep my-org  | awk '{ print $1 }')
 cp "${SCRIPT_PATH}"/flow.xml "${SCRIPT_PATH}"/flow.edited.xml
 sed -i.backup "s/influxdb-org-replacement-id/${ORGID}/g" "${SCRIPT_PATH}"/flow.edited.xml
 gzip < "${SCRIPT_PATH}"/flow.edited.xml > "${SCRIPT_PATH}"/flow.xml.gz
@@ -174,7 +174,7 @@ docker run \
     --publish 8123:8123 \
     --publish 8234:8234 \
     --link=influxdb \
-    --link=influxdb_v2 \
+    --link=influxdbv2 \
     --link=kafka \
     nifi
 
