@@ -3486,7 +3486,7 @@ curl -i -X GET -G http://localhost:8234 \
       </property>
       <property>
         <name>influxdb-url</name>
-        <value>http://influxdb_v2:9999</value>
+        <value>http://influxdbv2:9999</value>
       </property>
       <property>
         <name>influxdb-connection-timeout</name>
