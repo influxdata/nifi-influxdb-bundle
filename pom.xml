@@ -106,7 +106,7 @@
         <nifi.version>1.25.0</nifi.version>
 
         <plugin.surefire.version>3.2.5</plugin.surefire.version>
-        <plugin.jacoco.version>0.8.11</plugin.jacoco.version>
+        <plugin.jacoco.version>0.8.12</plugin.jacoco.version>
     </properties>
 
     <dependencyManagement>
