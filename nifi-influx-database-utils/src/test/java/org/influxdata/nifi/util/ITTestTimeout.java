@@ -16,7 +16,11 @@
  */
 package org.influxdata.nifi.util;
 
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.query.FluxTable;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class ITTestTimeout {
     static final String INFLUX_DB_2_URL = "http://localhost:9999";
@@ -25,8 +29,8 @@ public class ITTestTimeout {
 
     @Test
     public void testReadTimeout() {
-        var influxDBClient = InfluxDBUtils.makeConnectionV2(INFLUX_DB_2_URL, INFLUX_DB_2_TOKEN, 60, null, null);
-        var unused = influxDBClient.getQueryApi().query("import \"array\"\n" +
+        InfluxDBClient influxDBClient = InfluxDBUtils.makeConnectionV2(INFLUX_DB_2_URL, INFLUX_DB_2_TOKEN, 60, null, null);
+        List<FluxTable> unused = influxDBClient.getQueryApi().query("import \"array\"\n" +
                 "import \"experimental/json\"\n" +
                 "import \"http/requests\"\n" +
                 "response = requests.get(url: \"http://httpbin:8080/delay/20\")\n" +
