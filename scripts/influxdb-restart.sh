@@ -31,6 +31,8 @@ DEFAULT_INFLUXDB_V2_VERSION="latest"
 INFLUXDB_V2_VERSION="${INFLUXDB_V2_VERSION:-$DEFAULT_INFLUXDB_V2_VERSION}"
 INFLUXDB_V2_IMAGE=influxdb:${INFLUXDB_V2_VERSION}
 
+HTTPBIN_IMAGE=mccutchen/go-httpbin
+
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 docker kill influxdb || true
@@ -42,8 +44,26 @@ docker rm influxdb-secured || true
 docker kill influxdb_v2 || true
 docker rm influxdb_v2 || true
 
+docker kill httpbin || true
+docker rm httpbin || true
+
 docker pull ${INFLUXDB_IMAGE} || true
 docker pull ${INFLUXDB_V2_IMAGE} || true
+docker pull ${HTTPBIN_IMAGE} || true
+
+#
+# Testing helper service
+#
+echo
+echo "Starting httpbin service ..."
+echo
+
+docker run \
+	--detach \
+	--name httpbin \
+	--publish 8080:8080 \
+	--env=MAX_DURATION=60s \
+	${HTTPBIN_IMAGE}
 
 echo
 echo "Starting unsecured InfluxDB..."
@@ -87,6 +107,7 @@ docker run \
        --env INFLUXD_HTTP_BIND_ADDRESS=:9999 \
        --name influxdb_v2 \
        --link=influxdb \
+       --link httpbin \
        --publish 9999:9999 \
        ${INFLUXDB_V2_IMAGE}
 
