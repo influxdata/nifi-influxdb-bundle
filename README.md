@@ -269,7 +269,7 @@ Allows sharing connection configuration to InfluxDB 1.x  among more NiFi process
 | SSL Context Service | The SSL Context Service used to provide client certificate information for TLS/SSL connections |
 | Client Auth | The client authentication policy to use for the SSL Context. Only used if an SSL Context Service is provided. |
 | **InfluxDB connection URL** | InfluxDB URL to connect to. Eg: http://influxdb:8086 |
-| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
+| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection and reading/writing to the InfluxDB |
 | Username | Username which is used to authorize against the InfluxDB |
 | Password | Password for the username which is used to authorize against the InfluxDB. If the authorization fail the FlowFile will be penalized and routed to 'retry' relationship. |
 
@@ -284,7 +284,7 @@ Allows sharing connection configuration to InfluxDB 2.0 among more NiFi processo
 | SSL Context Service | The SSL Context Service used to provide client certificate information for TLS/SSL connections |
 | Client Auth | The client authentication policy to use for the SSL Context. Only used if an SSL Context Service is provided. |
 | **InfluxDB connection URL** | InfluxDB URL to connect to. Eg: http://influxdb:8086 |
-| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
+| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection and reading/writing to the InfluxDB |
 | **InfluxDB Access Token** | Access Token used for authenticating/authorizing the InfluxDB request sent by NiFi. |
 
 ### PutInfluxDatabase
@@ -297,7 +297,7 @@ Processor to write the content of a FlowFile in 'line protocol'. Please check de
 | --- | --- |
 | **Database Name** | InfluxDB database to connect to |
 | **InfluxDB connection URL** | InfluxDB URL to connect to. Eg: http://influxdb:8086 |
-| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection to the InfluxDB |
+| **InfluxDB Max Connection Time Out** | The maximum time for establishing connection and reading/writing to the InfluxDB |
 | Username | Username for accessing InfluxDB |
 | Password | Password for user |
 | **Character Set** | Specifies the character set of the document data |

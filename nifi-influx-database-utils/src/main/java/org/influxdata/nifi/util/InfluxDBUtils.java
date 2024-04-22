@@ -287,6 +287,8 @@ public final class InfluxDBUtils {
         OkHttpClient.Builder builder = new OkHttpClient
                 .Builder()
                 .connectTimeout(connectionTimeout, TimeUnit.SECONDS)
+                .readTimeout(connectionTimeout, TimeUnit.SECONDS)
+                .writeTimeout(connectionTimeout, TimeUnit.SECONDS)
                 // add interceptor with "User-Agent" header
                 .addInterceptor(chain -> {
                     Request request = chain
@@ -323,7 +325,11 @@ public final class InfluxDBUtils {
                                                   long connectionTimeout,
                                                   Consumer<OkHttpClient.Builder> configurer,
                                                   final String clientType) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(connectionTimeout, TimeUnit.SECONDS);
+        OkHttpClient.Builder builder = new OkHttpClient
+                .Builder()
+                .connectTimeout(connectionTimeout, TimeUnit.SECONDS)
+                .readTimeout(connectionTimeout, TimeUnit.SECONDS)
+                .writeTimeout(connectionTimeout, TimeUnit.SECONDS);
         if (configurer != null) {
             configurer.accept(builder);
         }
