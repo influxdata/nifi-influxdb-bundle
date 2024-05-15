@@ -3,6 +3,9 @@
 ### Bug Fixes
 1. [#163](https://github.com/influxdata/nifi-influxdb-bundle/pull/163): Max connection timeout also used as read/write timeout.
 
+### Others
+1. [#156](https://github.com/influxdata/nifi-influxdb-bundle/pull/166): Update to Apache NiFi 1.26.0
+
 ## v1.28.0 [2024-03-01]
 
 ### Others

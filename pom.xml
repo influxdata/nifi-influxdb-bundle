@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.nifi</groupId>
         <artifactId>nifi-nar-bundles</artifactId>
-        <version>1.25.0</version>
+        <version>1.26.0</version>
     </parent>
 
     <artifactId>nifi-influx-database-bundle</artifactId>
@@ -103,7 +103,7 @@
 		<!-- skip until remove org.json from Java client -->
         <enforcer.skip>true</enforcer.skip>
 
-        <nifi.version>1.25.0</nifi.version>
+        <nifi.version>1.26.0</nifi.version>
 
         <plugin.surefire.version>3.2.5</plugin.surefire.version>
         <plugin.jacoco.version>0.8.12</plugin.jacoco.version>
