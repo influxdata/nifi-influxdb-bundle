@@ -1,4 +1,4 @@
-## v1.29.0 [unreleased]
+## v1.29.0 [2024-05-17]
 
 ### Bug Fixes
 1. [#163](https://github.com/influxdata/nifi-influxdb-bundle/pull/163): Max connection timeout also used as read/write timeout.
